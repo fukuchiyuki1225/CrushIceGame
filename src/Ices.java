@@ -115,11 +115,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		Game.hammer.changeHammerIcon();
+		Game.game.getHammer().changeHammerIcon();;
 	}
 
 	public void mousePressed(MouseEvent e) {
-		Game.hammer.changeHammerIcon();
+		Game.game.getHammer().changeHammerIcon();;
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -155,6 +155,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 		Point p = e.getPoint();
 		SwingUtilities.convertPointToScreen(p, e.getComponent());
 		SwingUtilities.convertPointFromScreen(p, e.getComponent().getParent());
-		Game.hammer.setHammerLocation(p);
+		Game.game.getHammer().setHammerLocation(p);
 	}
 }

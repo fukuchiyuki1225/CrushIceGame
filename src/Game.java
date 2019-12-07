@@ -18,10 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
+	public static Game game;
 	private Cursor cursor;
-
-	static Hammer hammer;
-	static Penguin penguin;
+	private Hammer hammer;
+	private Penguin penguin;
 	private Ices ices;
 	static Container c;
 	PrintWriter out;
@@ -101,8 +101,16 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 
 	public static void main(String[] args) {
-		Game game = new Game();
+		game = new Game();
 		game.setVisible(true);
+	}
+
+	public Hammer getHammer() {
+		return this.hammer;
+	}
+
+	public Penguin getPenguin() {
+		return this.penguin;
 	}
 
 	public void mouseClicked(MouseEvent e) {
