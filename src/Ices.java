@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -13,19 +14,23 @@ import javax.swing.SwingUtilities;
 public class Ices implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, blueIce, whiteHover, blueHover, brokenIce;
 	private JButton ices[][];
+	private Rectangle[] collision;
 	private JLabel breakIce;
 	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
 	private Hammer hammer;
+	private Penguin penguin;
 	private Random random;
 
-	public Ices(Hammer hammer) {
+	public Ices(Hammer hammer, Penguin penguin) {
 		whiteIce = new ImageIcon("img/white_ice.png");
 		blueIce = new ImageIcon("img/blue_ice.png");
 		whiteHover = new ImageIcon("img/white_hover.png");
 		blueHover = new ImageIcon("img/blue_hover.png");
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
+		collision = new Rectangle[63];
 		this.hammer = hammer;
+		this.penguin = penguin;
 		random = new Random();
 		for (int j = 0; j < 7; j++) {
 			for (int i = 0; i < 9; i++) {
@@ -44,6 +49,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				} else {
 					ices[j][i].setBounds(i * 75 + 50, j * 86 + 100, 100, 100);
 				}
+				collision[i + j * 9] = new Rectangle(ices[j][i].getX(), ices[j][i].getY(), ices[j][i].getWidth(), ices[j][i].getHeight());
 				ices[j][i].addMouseListener(this);
 				ices[j][i].addMouseMotionListener(this);
 				ices[j][i].setContentAreaFilled(false);
@@ -115,6 +121,19 @@ public class Ices implements MouseListener, MouseMotionListener {
 			spinTheRoulette();
 		}
 		breakIce.setText("”’F" + breakWhite + "@ÂF" + breakBlue);
+		checkFall(penguin.getCollision());
+	}
+
+	public void checkFall(Rectangle penguin_c) {
+		int i = 0;
+		for (Rectangle ice_c : collision) {
+			if (ices[i / 9][i % 7].getIcon() == brokenIce) {
+				if (ice_c.intersects(penguin_c)) {
+					penguin.penguinFall();
+				}
+			}
+			i++;
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
