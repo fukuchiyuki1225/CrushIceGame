@@ -8,13 +8,13 @@ import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-public class Ices implements MouseListener, MouseMotionListener {
+public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, blueIce, whiteHover, blueHover, brokenIce;
 	private JButton ices[][];
-	private Rectangle[] collision;
 	private JLabel breakIce;
 	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
 	private Hammer hammer;
@@ -28,7 +28,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 		blueHover = new ImageIcon("img/blue_hover.png");
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
-		collision = new Rectangle[63];
 		this.hammer = hammer;
 		this.penguin = penguin;
 		random = new Random();
@@ -49,7 +48,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 				} else {
 					ices[j][i].setBounds(i * 75 + 50, j * 86 + 100, 100, 100);
 				}
-				collision[i + j * 9] = new Rectangle(ices[j][i].getX(), ices[j][i].getY(), ices[j][i].getWidth(), ices[j][i].getHeight());
 				ices[j][i].addMouseListener(this);
 				ices[j][i].addMouseMotionListener(this);
 				ices[j][i].setContentAreaFilled(false);
@@ -121,31 +119,47 @@ public class Ices implements MouseListener, MouseMotionListener {
 			spinTheRoulette();
 		}
 		breakIce.setText("îíÅF" + breakWhite + "Å@ê¬ÅF" + breakBlue);
-		checkFall(penguin.getCollision());
+		checkPenguinFall(penguin);
 	}
 
-	public void checkFall(Rectangle penguin_c) {
-		int i = 0;
-		for (Rectangle ice_c : collision) {
-			if (ices[i / 9][i % 7].getIcon() == brokenIce) {
-				if (ice_c.intersects(penguin_c)) {
-					penguin.penguinFall();
+	public void checkPenguinFall(Penguin penguin) {
+		loop: for (JButton[] icesArray : ices) {
+			for (JButton ice : icesArray) {
+				if (ice.getIcon() == brokenIce) {
+					int x1, x2, y1, y2;
+					if (penguin.getPenguinX() < ice.getX()) {
+						x1 = ice.getX();
+						x2 = penguin.getPenguinX();
+					} else {
+						x1 = penguin.getPenguinX();
+						x2 = ice.getX();
+					}
+					if (penguin.getPenguinY() < ice.getY()) {
+						y1 = ice.getY();
+						y2 = penguin.getPenguinY();
+					} else {
+						y1 = penguin.getPenguinY();
+						y2 = ice.getY();
+					}
+					if (Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < 40) {
+						penguin.penguinFall();
+						break loop;
+					}
 				}
 			}
-			i++;
 		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();;
+		hammer.changeHammerIcon();
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();;
+		hammer.changeHammerIcon();
 	}
 
 	public void mouseExited(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
+		JButton jb = (JButton) e.getComponent();
 		if (jb.getIcon() == whiteHover) {
 			jb.setIcon(whiteIce);
 		} else if (jb.getIcon() == blueHover) {
@@ -154,7 +168,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
+		JButton jb = (JButton) e.getComponent();
 		if (jb.getIcon() == whiteIce) {
 			jb.setIcon(whiteHover);
 		} else if (jb.getIcon() == blueIce) {
@@ -163,7 +177,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
+		JButton jb = (JButton) e.getComponent();
 		System.out.println(jb.getActionCommand());
 		breakIce(jb);
 	}
