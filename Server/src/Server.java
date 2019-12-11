@@ -94,7 +94,7 @@ class Server {
 				n++;
 			}
 		} catch (Exception e) {
-			System.out.println("ソケット作成時にエラーが発生しました：" + e);
+			System.out.println("繧ｽ繧ｱ繝�繝井ｽ懈�先凾縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆" + e);
 		}
 	}
 }
