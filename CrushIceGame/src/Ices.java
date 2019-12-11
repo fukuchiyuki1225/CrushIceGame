@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -7,18 +8,20 @@ import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
-public class Ices implements MouseListener, MouseMotionListener {
+public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, blueIce, whiteHover, blueHover, brokenIce;
 	private JButton ices[][];
 	private JLabel breakIce;
 	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
 	private Hammer hammer;
+	private Penguin penguin;
 	private Random random;
 
-	public Ices(Hammer hammer) {
+	public Ices(Hammer hammer, Penguin penguin) {
 		whiteIce = new ImageIcon("img/white_ice.png");
 		blueIce = new ImageIcon("img/blue_ice.png");
 		whiteHover = new ImageIcon("img/white_hover.png");
@@ -26,6 +29,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
 		this.hammer = hammer;
+		this.penguin = penguin;
 		random = new Random();
 		for (int j = 0; j < 7; j++) {
 			for (int i = 0; i < 9; i++) {
@@ -36,7 +40,8 @@ public class Ices implements MouseListener, MouseMotionListener {
 					ices[j][i] = new JButton(blueIce);
 					countBlue++;
 				}
-				Game.c.add(ices[j][i]);
+				Game.j.setLayer(ices[j][i], 100);
+				Game.j.add(ices[j][i]);
 				ices[j][i].setBorderPainted(false);
 				if (i % 2 == 0) {
 					ices[j][i].setBounds(i * 75 + 50, j * 86 + 43 + 100, 100, 100);
@@ -50,7 +55,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 			}
 		}
 		breakIce = new JLabel("白：" + breakWhite + "　青：" + breakBlue);
-		Game.c.add(breakIce);
+		Game.j.add(breakIce);
 		breakIce.setBounds(900, 300, 200, 200);
 		spinTheRoulette();
 		System.out.println("白：" + countWhite + "　青：" + countBlue);
@@ -114,18 +119,47 @@ public class Ices implements MouseListener, MouseMotionListener {
 			spinTheRoulette();
 		}
 		breakIce.setText("白：" + breakWhite + "　青：" + breakBlue);
+		checkPenguinFall(penguin);
+	}
+
+	public void checkPenguinFall(Penguin penguin) {
+		loop: for (JButton[] icesArray : ices) {
+			for (JButton ice : icesArray) {
+				if (ice.getIcon() == brokenIce) {
+					int x1, x2, y1, y2;
+					if (penguin.getPenguinX() < ice.getX()) {
+						x1 = ice.getX();
+						x2 = penguin.getPenguinX();
+					} else {
+						x1 = penguin.getPenguinX();
+						x2 = ice.getX();
+					}
+					if (penguin.getPenguinY() < ice.getY()) {
+						y1 = ice.getY();
+						y2 = penguin.getPenguinY();
+					} else {
+						y1 = penguin.getPenguinY();
+						y2 = ice.getY();
+					}
+					if (Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < 40) {
+						penguin.penguinFall();
+						break loop;
+					}
+				}
+			}
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();;
+		hammer.changeHammerIcon();
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();;
+		hammer.changeHammerIcon();
 	}
 
 	public void mouseExited(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
+		JButton jb = (JButton) e.getComponent();
 		if (jb.getIcon() == whiteHover) {
 			jb.setIcon(whiteIce);
 		} else if (jb.getIcon() == blueHover) {
@@ -134,7 +168,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
+		JButton jb = (JButton) e.getComponent();
 		if (jb.getIcon() == whiteIce) {
 			jb.setIcon(whiteHover);
 		} else if (jb.getIcon() == blueIce) {
@@ -143,7 +177,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
+		JButton jb = (JButton) e.getComponent();
 		System.out.println(jb.getActionCommand());
 		breakIce(jb);
 	}

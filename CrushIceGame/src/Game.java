@@ -1,7 +1,10 @@
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,6 +18,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
@@ -22,7 +26,8 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	private Hammer hammer;
 	private Penguin penguin;
 	private Ices ices;
-	static Container c;
+	static JLayeredPane j;
+	private Container c;
 	PrintWriter out;
 
 	public Game() {
@@ -42,14 +47,16 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		setLocationRelativeTo(null);
 
 		c = getContentPane();
-		c.setBackground(Color.CYAN);
-		c.addMouseListener(this);
-		c.addMouseMotionListener(this);
-		c.setLayout(null);
+		j = new JLayeredPane();
+		c.add(j);
+		c.setBackground(new Color(0, 245, 245));
+		j.addMouseListener(this);
+		j.addMouseMotionListener(this);
+		j.setLayout(null);
 
 		hammer = new Hammer();
 		penguin = new Penguin();
-		ices = new Ices(this.hammer);
+		ices = new Ices(hammer, penguin);
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
 		setCursor(cursor);
@@ -98,9 +105,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		}
 	}
 
-
 	public static void main(String[] args) {
-		// game = new Game();
 		Game game = new Game();
 		game.setVisible(true);
 	}

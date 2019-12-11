@@ -11,7 +11,8 @@ public class Hammer {
 		hammerIcon = new ImageIcon("img/pick_hammer.png");
 		hammerIcon2 = new ImageIcon("img/pick_hammer_2.png");
 		hammer = new JLabel(hammerIcon);
-		Game.c.add(hammer);
+		Game.j.setLayer(hammer, 1000);
+		Game.j.add(hammer);
 		hammer.setBounds(0, 0, 150, 170);
 	}
 
