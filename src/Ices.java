@@ -36,7 +36,8 @@ public class Ices implements MouseListener, MouseMotionListener {
 					ices[j][i] = new JButton(blueIce);
 					countBlue++;
 				}
-				Game.c.add(ices[j][i]);
+				Game.j.setLayer(ices[j][i], 100);
+				Game.j.add(ices[j][i]);
 				ices[j][i].setBorderPainted(false);
 				if (i % 2 == 0) {
 					ices[j][i].setBounds(i * 75 + 50, j * 86 + 43 + 100, 100, 100);
@@ -50,7 +51,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 			}
 		}
 		breakIce = new JLabel("白：" + breakWhite + "　青：" + breakBlue);
-		Game.c.add(breakIce);
+		Game.j.add(breakIce);
 		breakIce.setBounds(900, 300, 200, 200);
 		spinTheRoulette();
 		System.out.println("白：" + countWhite + "　青：" + countBlue);
