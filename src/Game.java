@@ -46,7 +46,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		c = getContentPane();
 		j = new JLayeredPane();
 		c.add(j);
-		c.setBackground(Color.CYAN);
+		c.setBackground(new Color(0, 245, 245));
 		j.addMouseListener(this);
 		j.addMouseMotionListener(this);
 		j.setLayout(null);

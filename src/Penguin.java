@@ -12,7 +12,7 @@ public class Penguin {
 		Game.j.setLayer(penguin, 500);
 		Game.j.add(penguin);
 		penguin.setBounds(350, 375, 100, 100);
-		collision = new Rectangle(penguin.getX(), penguin.getY() + 50, penguin.getWidth(), penguin.getHeight() - 50);
+		collision = new Rectangle(penguin.getX() - 50, penguin.getY(), penguin.getWidth(), penguin.getHeight() - 50);
 	}
 
 	public Rectangle getCollision() {
