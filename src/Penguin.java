@@ -23,4 +23,6 @@ public class Penguin {
 		System.out.println("fall");
 		penguin.setVisible(false);
 	}
+
+	// checkFallˆÚA
 }
