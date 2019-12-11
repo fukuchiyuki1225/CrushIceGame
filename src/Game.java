@@ -18,7 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
-	public static Game game;
 	private Cursor cursor;
 	private Hammer hammer;
 	private Penguin penguin;
@@ -50,7 +49,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 		hammer = new Hammer();
 		penguin = new Penguin();
-		ices = new Ices();
+		ices = new Ices(this.hammer);
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
 		setCursor(cursor);
@@ -101,16 +100,9 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 
 	public static void main(String[] args) {
-		game = new Game();
+		// game = new Game();
+		Game game = new Game();
 		game.setVisible(true);
-	}
-
-	public Hammer getHammer() {
-		return this.hammer;
-	}
-
-	public Penguin getPenguin() {
-		return this.penguin;
 	}
 
 	public void mouseClicked(MouseEvent e) {

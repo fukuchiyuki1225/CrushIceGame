@@ -15,15 +15,17 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private JButton ices[][];
 	private JLabel breakIce;
 	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
+	private Hammer hammer;
 	private Random random;
 
-	public Ices() {
+	public Ices(Hammer hammer) {
 		whiteIce = new ImageIcon("img/white_ice.png");
 		blueIce = new ImageIcon("img/blue_ice.png");
 		whiteHover = new ImageIcon("img/white_hover.png");
 		blueHover = new ImageIcon("img/blue_hover.png");
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
+		this.hammer = hammer;
 		random = new Random();
 		for (int j = 0; j < 7; j++) {
 			for (int i = 0; i < 9; i++) {
@@ -115,11 +117,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		Game.game.getHammer().changeHammerIcon();;
+		hammer.changeHammerIcon();;
 	}
 
 	public void mousePressed(MouseEvent e) {
-		Game.game.getHammer().changeHammerIcon();;
+		hammer.changeHammerIcon();;
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -155,6 +157,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 		Point p = e.getPoint();
 		SwingUtilities.convertPointToScreen(p, e.getComponent());
 		SwingUtilities.convertPointFromScreen(p, e.getComponent().getParent());
-		Game.game.getHammer().setHammerLocation(p);
+		hammer.setHammerLocation(p);
 	}
 }
