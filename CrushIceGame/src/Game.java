@@ -16,7 +16,6 @@ import java.net.UnknownHostException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	private Cursor cursor;
