@@ -58,6 +58,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		breakIce.setBounds(900, 300, 200, 200);
 		spinTheRoulette();
 		System.out.println("”’F" + countWhite + "@ÂF" + countBlue);
+		System.out.println("0:0 " + ices[0][0].getLocation());
+		System.out.println("6:8 " + ices[6][8].getLocation());
 	}
 
 	public void spinTheRoulette() {
