@@ -55,30 +55,36 @@ public class Penguin extends JLabel {
 
 	public static class PenguinMove implements ActionListener {
 		private Penguin penguin;
-		private double startTime, diff, time;
-		private double x0, x1, y0, y1;
+		private double startTime, diff, time, x0, x1, y0, y1, x, lx;
 		private boolean inertiaFlag;
 		private int inertia;
 		public PenguinMove(Penguin penguin) {
 			this.penguin = penguin;
 			startTime = System.currentTimeMillis();
-			x0 = 50;
-			x1 = 650 - 100;
+			time = 5000;
+			/*x0 = 50;
+			x1 = 650;
 			y0 = 143;
-			y1 = 659 - 100;
+			y1 = 659;*/
+			x0 = 650;
+			x1 = 50;
+			y0 = 143;
+			y1 = 659;
+			lx = (x0 < x1) ? x1 : x0;
 			inertiaFlag = true;
-			inertia = 100;
+			// inertia = 100;
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			diff = System.currentTimeMillis() - startTime;
-			time = 5000;
-			if (x1 * (diff / time) < x1) {
-				penguin.penguin.setLocation((int)(Math.ceil(x1 * (diff / time))), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x1 * (diff / time)))));
+			x = x1 * (diff / time);
+			System.out.println(x);
+			if (x < lx) {
+				penguin.penguin.setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
 				penguin.penguinFall();
 			}
 
-			if (x1 * (diff / time) >= x1 && inertiaFlag) {
+			/*if (x >= x1 && inertiaFlag) {
 				penguin.penguin.setLocation(penguin.penguin.getX() + 1, penguin.penguin.getY() + 1);
 				if (inertia == 0) {
 					inertiaFlag = false;
@@ -86,7 +92,7 @@ public class Penguin extends JLabel {
 					inertia--;
 				}
 				penguin.penguinFall();
-			}
+			}*/
 		}
 	}
 }
