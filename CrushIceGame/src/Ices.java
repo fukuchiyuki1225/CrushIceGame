@@ -1,5 +1,4 @@
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -97,13 +96,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		breakIce.setText("白：" + breakWhite + "　青：" + breakBlue);
 	}
 
-	public boolean blokenIceCountCheck() {
-		if (breakWhite == 0 && breakBlue == 0) {
-			return true;
-		}
-		return false;
-	}
-
 	public void breakIce(JButton jb) {
 		Icon icon = jb.getIcon();
 		if (icon == whiteHover && breakWhite > 0) {
@@ -115,7 +107,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			breakBlue--;
 			countBlue--;
 		}
-		if (blokenIceCountCheck()) {
+		if (breakWhite == 0 && breakBlue == 0) {
 			spinTheRoulette();
 		}
 		breakIce.setText("白：" + breakWhite + "　青：" + breakBlue);

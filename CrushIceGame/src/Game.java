@@ -1,10 +1,7 @@
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -49,7 +46,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		c = getContentPane();
 		j = new JLayeredPane();
 		c.add(j);
-		c.setBackground(new Color(0, 245, 245));
+		c.setBackground(new Color(115, 245, 245));
 		j.addMouseListener(this);
 		j.addMouseMotionListener(this);
 		j.setLayout(null);
