@@ -28,7 +28,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	PrintWriter out;
 
 	public Game() {
-		String myName = JOptionPane.showInputDialog(null, "名前を入力してください.", "名前の入力", JOptionPane.QUESTION_MESSAGE);
+		/*String myName = JOptionPane.showInputDialog(null, "名前を入力してください.", "名前の入力", JOptionPane.QUESTION_MESSAGE);
 		if (myName.equals("")) {
 			myName = "No name";
 		}
@@ -36,7 +36,9 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		String addr = JOptionPane.showInputDialog(null, "サーバーのIPアドレスを入力してください.", "サーバーのIPアドレス", JOptionPane.QUESTION_MESSAGE);
 		if (addr.equals("")) {
 			addr = "localhost";
-		}
+		}*/
+		String myName = "No name";
+		String addr = "localhost";
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");

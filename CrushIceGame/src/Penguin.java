@@ -52,18 +52,22 @@ public class Penguin extends JLabel {
 			}
 		}
 	}
-	
+
 	public static class PenguinMove implements ActionListener {
 		private Penguin penguin;
 		private double startTime, diff, time;
 		private double x0, x1, y0, y1;
+		private boolean inertiaFlag;
+		private int inertia;
 		public PenguinMove(Penguin penguin) {
 			this.penguin = penguin;
 			startTime = System.currentTimeMillis();
 			x0 = 50;
-			x1 = 650;
+			x1 = 650 - 100;
 			y0 = 143;
-			y1 = 659;
+			y1 = 659 - 100;
+			inertiaFlag = true;
+			inertia = 100;
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -71,6 +75,16 @@ public class Penguin extends JLabel {
 			time = 5000;
 			if (x1 * (diff / time) < x1) {
 				penguin.penguin.setLocation((int)(Math.ceil(x1 * (diff / time))), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x1 * (diff / time)))));
+				penguin.penguinFall();
+			}
+
+			if (x1 * (diff / time) >= x1 && inertiaFlag) {
+				penguin.penguin.setLocation(penguin.penguin.getX() + 1, penguin.penguin.getY() + 1);
+				if (inertia == 0) {
+					inertiaFlag = false;
+				} else {
+					inertia--;
+				}
 				penguin.penguinFall();
 			}
 		}
