@@ -17,10 +17,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private JLabel breakIce;
 	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
 	private Hammer hammer;
-	private Penguin penguin;
 	private Random random;
 
-	public Ices(Hammer hammer, Penguin penguin) {
+	public Ices(Hammer hammer) {
 		whiteIce = new ImageIcon("img/white_ice.png");
 		blueIce = new ImageIcon("img/blue_ice.png");
 		whiteHover = new ImageIcon("img/white_hover.png");
@@ -28,7 +27,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
 		this.hammer = hammer;
-		this.penguin = penguin;
 		random = new Random();
 		for (int j = 0; j < 7; j++) {
 			for (int i = 0; i < 9; i++) {
@@ -111,10 +109,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			spinTheRoulette();
 		}
 		breakIce.setText("”’F" + breakWhite + "@ÂF" + breakBlue);
-		checkPenguinFall(penguin);
+		// checkPenguinFall(penguin);
 	}
 
-	public void checkPenguinFall(Penguin penguin) {
+	/*public void checkPenguinFall(Penguin penguin) {
 		loop: for (JButton[] icesArray : ices) {
 			for (JButton ice : icesArray) {
 				if (ice.getIcon() == brokenIce) {
@@ -140,6 +138,14 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				}
 			}
 		}
+	}*/
+
+	public JButton[][] getIces() {
+		return ices;
+	}
+
+	public Icon getBrokenIceIcon() {
+		return brokenIce;
 	}
 
 	public void mouseReleased(MouseEvent e) {

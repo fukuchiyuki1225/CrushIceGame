@@ -52,8 +52,8 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		j.setLayout(null);
 
 		hammer = new Hammer();
-		penguin = new Penguin();
-		ices = new Ices(hammer, penguin);
+		ices = new Ices(hammer);
+		penguin = new Penguin(ices);
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
 		setCursor(cursor);
