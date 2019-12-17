@@ -1,4 +1,6 @@
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, blueIce, whiteHover, blueHover, brokenIce;
@@ -17,9 +20,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private JLabel breakIce;
 	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
 	private Hammer hammer;
+	private Penguin penguin;
 	private Random random;
 
-	public Ices(Hammer hammer) {
+	public Ices(Hammer hammer, Penguin penguin) {
 		whiteIce = new ImageIcon("img/white_ice.png");
 		blueIce = new ImageIcon("img/blue_ice.png");
 		whiteHover = new ImageIcon("img/white_hover.png");
@@ -27,6 +31,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
 		this.hammer = hammer;
+		this.penguin = penguin;
 		random = new Random();
 		for (int j = 0; j < 7; j++) {
 			for (int i = 0; i < 9; i++) {
@@ -109,36 +114,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			spinTheRoulette();
 		}
 		breakIce.setText("”’F" + breakWhite + "@ÂF" + breakBlue);
-		// checkPenguinFall(penguin);
+		Timer timer = new Timer(10, new PenguinMove(penguin, this));
+		timer.start();
 	}
-
-	/*public void checkPenguinFall(Penguin penguin) {
-		loop: for (JButton[] icesArray : ices) {
-			for (JButton ice : icesArray) {
-				if (ice.getIcon() == brokenIce) {
-					int x1, x2, y1, y2;
-					if (penguin.getPenguinX() < ice.getX()) {
-						x1 = ice.getX();
-						x2 = penguin.getPenguinX();
-					} else {
-						x1 = penguin.getPenguinX();
-						x2 = ice.getX();
-					}
-					if (penguin.getPenguinY() < ice.getY()) {
-						y1 = ice.getY();
-						y2 = penguin.getPenguinY();
-					} else {
-						y1 = penguin.getPenguinY();
-						y2 = ice.getY();
-					}
-					if (Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < 40) {
-						penguin.penguinFall();
-						break loop;
-					}
-				}
-			}
-		}
-	}*/
 
 	public JButton[][] getIces() {
 		return ices;
@@ -190,5 +168,36 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		SwingUtilities.convertPointToScreen(p, e.getComponent());
 		SwingUtilities.convertPointFromScreen(p, e.getComponent().getParent());
 		hammer.setHammerLocation(p);
+	}
+
+	public static class PenguinMove implements ActionListener {
+		private Penguin penguin;
+		private Ices ices;
+		private double startTime, diff, time, x0, x1, y0, y1, x;
+		public PenguinMove(Penguin penguin, Ices ices) {
+			this.penguin = penguin;
+			this.ices = ices;
+			startTime = System.currentTimeMillis();
+			time = 5000;
+			x0 = 50;
+			x1 = 650;
+			y0 = 143;
+			y1 = 659;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			diff = System.currentTimeMillis() - startTime;
+			x = x1 * (diff / time);
+			if (x < x1) {
+				System.out.println(x);
+				penguin.getPenguin().setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
+				penguin.penguinFall(ices);
+			}
+
+			if (x >= x1) {
+				penguin.getPenguin().setLocation(penguin.getPenguin().getX() + 1, penguin.getPenguin().getY() + 1);
+				penguin.penguinFall(ices);
+			}
+		}
 	}
 }

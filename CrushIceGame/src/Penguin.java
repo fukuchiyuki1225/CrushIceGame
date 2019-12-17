@@ -1,30 +1,22 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 public class Penguin extends JLabel {
 	private JLabel penguin;
-	private Ices ices;
 
-	public Penguin(Ices ices) {
+	public Penguin() {
 		penguin = new JLabel(new ImageIcon("img/penguin.png"));
-		this.ices = ices;
 		Game.j.setLayer(penguin, 500);
 		Game.j.add(penguin);
 		penguin.setBounds(350, 375, 100, 100);
-		Timer timer = new Timer(10, new PenguinMove(this));
-		timer.start();
 	}
 
 	public double lerp(double x0, double y0, double x1, double y1, double x) {
 		return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 	}
 
-	public void penguinFall() {
+	public void penguinFall(Ices ices) {
 		loop : for (JButton[] icesArray : ices.getIces()) {
 			for (JButton ice : icesArray) {
 				if (ice.getIcon() == ices.getBrokenIceIcon()) {
@@ -53,46 +45,7 @@ public class Penguin extends JLabel {
 		}
 	}
 
-	public static class PenguinMove implements ActionListener {
-		private Penguin penguin;
-		private double startTime, diff, time, x0, x1, y0, y1, x, lx;
-		private boolean inertiaFlag;
-		private int inertia;
-		public PenguinMove(Penguin penguin) {
-			this.penguin = penguin;
-			startTime = System.currentTimeMillis();
-			time = 5000;
-			/*x0 = 50;
-			x1 = 650;
-			y0 = 143;
-			y1 = 659;*/
-			x0 = 650;
-			x1 = 50;
-			y0 = 143;
-			y1 = 659;
-			lx = (x0 < x1) ? x1 : x0;
-			inertiaFlag = true;
-			// inertia = 100;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			diff = System.currentTimeMillis() - startTime;
-			x = x1 * (diff / time);
-			System.out.println(x);
-			if (x < lx) {
-				penguin.penguin.setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
-				penguin.penguinFall();
-			}
-
-			/*if (x >= x1 && inertiaFlag) {
-				penguin.penguin.setLocation(penguin.penguin.getX() + 1, penguin.penguin.getY() + 1);
-				if (inertia == 0) {
-					inertiaFlag = false;
-				} else {
-					inertia--;
-				}
-				penguin.penguinFall();
-			}*/
-		}
+	public JLabel getPenguin() {
+		return penguin;
 	}
 }
