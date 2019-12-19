@@ -36,7 +36,6 @@ public class Penguin extends JLabel {
 						y2 = ice.getY();
 					}
 					if (Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < 40) {
-						System.out.println("fall");
 						penguin.setVisible(false);
 						break loop;
 					}
