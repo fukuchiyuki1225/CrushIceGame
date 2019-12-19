@@ -114,7 +114,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			spinTheRoulette();
 		}
 		breakIce.setText("îíÅF" + breakWhite + "Å@ê¬ÅF" + breakBlue);
-		Timer timer = new Timer(10, new PenguinMove(penguin, this));
+		Timer timer = new Timer(10, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 		timer.start();
 	}
 
@@ -172,32 +172,64 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public static class PenguinMove implements ActionListener {
 		private Penguin penguin;
+		private JLabel penguinLabel;
 		private Ices ices;
 		private double startTime, diff, time, x0, x1, y0, y1, x;
-		public PenguinMove(Penguin penguin, Ices ices) {
+		public PenguinMove(Penguin penguin, Ices ices, int jbNum) {
 			this.penguin = penguin;
+			penguinLabel = penguin.getPenguin();
 			this.ices = ices;
 			startTime = System.currentTimeMillis();
-			time = 5000;
-			x0 = 50;
-			x1 = 650;
+			time = 3000;
+			/*x0 = 50;
+			x1 = 50;
 			y0 = 143;
-			y1 = 659;
+			y1 = 650;*/
+			x0 = penguinLabel.getX();
+			y0 = penguinLabel.getY();
+			System.out.println("jbNum:" + jbNum + "  y:" + jbNum % 9 + " x:" + jbNum / 9);
+			x1 = ices.ices[jbNum / 9][jbNum % 9].getX();
+			y1 = ices.ices[jbNum / 9][jbNum % 9].getY();
+			System.out.println("x0: " + x0 +"  x1: " + x1);
+			System.out.println("y0: " + y0 +"  y1: " + y1);
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			diff = System.currentTimeMillis() - startTime;
-			x = x1 * (diff / time);
-			if (x < x1) {
-				System.out.println(x);
-				penguin.getPenguin().setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
-				penguin.penguinFall(ices);
-			}
-
-			if (x >= x1) {
-				penguin.getPenguin().setLocation(penguin.getPenguin().getX() + 1, penguin.getPenguin().getY() + 1);
-				penguin.penguinFall(ices);
-			}
+			if (x0 < x1) {
+				x = x0 + x1 * (diff / time);
+				if (x < x1) {
+					penguinLabel.setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
+					penguin.penguinFall(ices);
+				}
+				/*if (x >= x1) {
+					penguin.getPenguin().setLocation(penguin.getPenguin().getX() + 1, penguin.getPenguin().getY() + 1);
+					penguin.penguinFall(ices);
+				}*/
+			} else {
+				x = x0 * (1 - (diff / time));
+				if (x > x1) {
+					penguinLabel.setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
+					penguin.penguinFall(ices);
+				}
+				/*if (x <= x1) {
+					penguin.getPenguin().setLocation(penguin.getPenguin().getX() - 1, penguin.getPenguin().getY() - 1);
+					penguin.penguinFall(ices);
+				}*/
+			} /*else {
+				if (y0 < y1) {
+					if (penguinLabel.getY() < y1) {
+						penguinLabel.setLocation((int)x0, penguinLabel.getY() + 1);
+						penguin.penguinFall(ices);
+					}
+				} else {
+					if (penguinLabel.getY() > y1) {
+						penguinLabel.setLocation((int)x0, penguinLabel.getY() - 1);
+						penguin.penguinFall(ices);
+					}
+				}
+				System.out.println("2: " + x);
+			}*/
 		}
 	}
 }
