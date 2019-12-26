@@ -16,26 +16,30 @@ public class Penguin extends JLabel {
 		return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
 	}
 
+	public int calcDistance(double x0, double y0, double x1, double y1) {
+		return (int) Math.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
+	}
+
 	public void penguinFall(Ices ices) {
 		loop : for (JButton[] icesArray : ices.getIces()) {
 			for (JButton ice : icesArray) {
 				if (ice.getIcon() == ices.getBrokenIceIcon()) {
-					int x1, x2, y1, y2;
+					int x0, x1, y0, y1;
 					if (penguin.getX() < ice.getX()) {
-						x1 = ice.getX();
-						x2 = penguin.getX();
-					} else {
+						x0 = ice.getX();
 						x1 = penguin.getX();
-						x2 = ice.getX();
+					} else {
+						x0 = penguin.getX();
+						x1 = ice.getX();
 					}
 					if (penguin.getY() < ice.getY()) {
-						y1 = ice.getY();
-						y2 = penguin.getY();
-					} else {
+						y0 = ice.getY();
 						y1 = penguin.getY();
-						y2 = ice.getY();
+					} else {
+						y0 = penguin.getY();
+						y1 = ice.getY();
 					}
-					if (Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < 40) {
+					if (calcDistance(x0, y0, x1, y1) < 40) {
 						penguin.setVisible(false);
 						break loop;
 					}
