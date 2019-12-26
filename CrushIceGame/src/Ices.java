@@ -242,61 +242,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					ices.setMoveFlag(false);
 				}
 			}
-
-			/*diff = System.currentTimeMillis() - startTime;
-			if (x0 < x1) {
-				x = x0 + x1 * (diff / time);
-				if (x < x1) {
-					penguinLabel.setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
-					penguin.penguinFall(ices);
-				} else {
-					ices.moveFlag = false;
-				}
-				else if (ices.moveFlag) {
-					penguinLabel.setLocation((int)x1, (int)y1);
-					ices.moveFlag = false;
-				}
-				if (x >= x1) {
-					penguin.getPenguin().setLocation(penguin.getPenguin().getX() + 1, penguin.getPenguin().getY() + 1);
-					penguin.penguinFall(ices);
-				}
-			} else if (x0 > x1){
-				x = x0 * (1 - (diff / time));
-				if (x > x1) {
-					penguinLabel.setLocation((int)(Math.ceil(x)), (int)(Math.ceil(penguin.lerp(x0, y0, x1, y1, x))));
-					System.out.println("x0 > x1");
-					penguin.penguinFall(ices);
-				} else {
-					ices.moveFlag = false;
-				}
-				else if (ices.moveFlag){
-					penguinLabel.setLocation((int)x1, (int)y1);
-					ices.moveFlag = false;
-				}
-				if (x <= x1) {
-					penguin.getPenguin().setLocation(penguin.getPenguin().getX() - 1, penguin.getPenguin().getY() - 1);
-					penguin.penguinFall(ices);
-				}
-			} else if (x0 == x1){
-				if (y0 < y1) {
-					if (penguinLabel.getY() < y1) {
-						penguinLabel.setLocation((int)x0, penguinLabel.getY() + 1);
-						System.out.println("x0==x1");
-						penguin.penguinFall(ices);
-					}
-				} else if (y0 > y1) {
-					if (penguinLabel.getY() > y1) {
-						penguinLabel.setLocation((int)x0, penguinLabel.getY() - 1);
-						System.out.println("x0==x1 2");
-						penguin.penguinFall(ices);
-					}
-				} else if (ices.moveFlag) {
-					penguinLabel.setLocation((int)x1, (int)y1);
-					System.out.println("x0==x1 3");
-					ices.moveFlag = false;
-				}
-			}
-			System.out.println(ices.moveFlag);*/
 		}
 	}
 }
