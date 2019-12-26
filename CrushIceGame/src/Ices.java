@@ -187,20 +187,15 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		private Penguin penguin;
 		private JLabel penguinLabel;
 		private Ices ices;
-		private double startTime, diff, time, x0, x1, y0, y1, x, y;
+		private double x0, x1, y0, y1, x, y;
 		public PenguinMove(Penguin penguin, Ices ices, int jbNum) {
 			this.penguin = penguin;
 			penguinLabel = penguin.getPenguin();
 			this.ices = ices;
-			startTime = System.currentTimeMillis();
-			time = 10000;
 			x0 = penguinLabel.getX();
 			y0 = penguinLabel.getY();
-			System.out.println("jbNum:" + jbNum + "  y:" + jbNum % 9 + " x:" + jbNum / 9);
 			x1 = ices.ices[jbNum / 9][jbNum % 9].getX();
 			y1 = ices.ices[jbNum / 9][jbNum % 9].getY();
-			System.out.println("x0: " + x0 +"  x1: " + x1);
-			// ices.moveFlag = true;
 			ices.setMoveFlag(true);
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
@@ -229,7 +224,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					x++;
 					System.out.println((int)Math.ceil(penguin.lerp(x0, y0, x1, y1, x)));
 				} else {
-					// ices.moveFlag = false;
 					ices.setMoveFlag(false);
 				}
 			} else if (x0 > x1) {
@@ -238,10 +232,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					x--;
 					System.out.println((int)Math.ceil(penguin.lerp(x1, y1, x0, y0, x)));
 				} else {
-					// ices.moveFlag = false;
 					ices.setMoveFlag(false);
 				}
 			}
+			penguin.penguinFall(ices);
 		}
 	}
 }
