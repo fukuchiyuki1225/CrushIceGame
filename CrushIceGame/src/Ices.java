@@ -17,8 +17,9 @@ import javax.swing.Timer;
 public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, blueIce, whiteHover, blueHover, brokenIce;
 	private JButton ices[][];
-	private JLabel breakIce;
-	private int countWhite = 0, countBlue = 0, roulette, breakWhite = 0, breakBlue = 0;
+	private JLabel whiteLabel, whiteLabel2, blueLabel, blueLabel2;
+	private int[][] hitCount, mustHitNum;
+	private int countWhite, countBlue, roulette, breakWhite, breakBlue;
 	private Hammer hammer;
 	private Penguin penguin;
 	private Random random;
@@ -32,8 +33,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		blueHover = new ImageIcon("img/blue_hover.png");
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
+		hitCount = new int[7][9];
+		mustHitNum = new int[7][9];
 		this.hammer = hammer;
 		this.penguin = penguin;
+
 		random = new Random();
 		for (int j = 0; j < 7; j++) {
 			for (int i = 0; i < 9; i++) {
@@ -56,14 +60,40 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				ices[j][i].addMouseMotionListener(this);
 				ices[j][i].setContentAreaFilled(false);
 				ices[j][i].setActionCommand(Integer.toString(i + j * 9));
+				mustHitNum[j][i] = random.nextInt(5) + 1;
+				hitCount[j][i] = 0;
 			}
 		}
-		breakIce = new JLabel("白：" + breakWhite + "　青：" + breakBlue);
-		Game.j.setLayer(breakIce, 800);
-		Game.j.add(breakIce);
-		breakIce.setBounds(900, 300, 200, 200);
+
+		whiteLabel = new JLabel(whiteIce);
+		whiteLabel.setText(Integer.toString(breakWhite));
+		whiteLabel.setHorizontalTextPosition(JLabel.CENTER);
+		Game.j.setLayer(whiteLabel, 800);
+		Game.j.add(whiteLabel);
+		whiteLabel.setBounds(925, 358, 100, 100);
+
+		whiteLabel2 = new JLabel(whiteIce);
+		whiteLabel2.setText("白");
+		whiteLabel2.setHorizontalTextPosition(JLabel.CENTER);
+		Game.j.setLayer(whiteLabel2, 800);
+		Game.j.add(whiteLabel2);
+		whiteLabel2.setBounds(850, 315, 100, 100);
+
+		blueLabel = new JLabel(blueIce);
+		blueLabel.setText(Integer.toString(breakBlue));
+		blueLabel.setHorizontalTextPosition(JLabel.CENTER);
+		Game.j.setLayer(blueLabel, 800);
+		Game.j.add(blueLabel);
+		blueLabel.setBounds(925, 444, 100, 100);
+
+		blueLabel2 = new JLabel(blueIce);
+		blueLabel2.setText("青");
+		blueLabel2.setHorizontalTextPosition(JLabel.CENTER);
+		Game.j.setLayer(blueLabel2, 800);
+		Game.j.add(blueLabel2);
+		blueLabel2.setBounds(850, 401, 100, 100);
+
 		spinTheRoulette();
-		System.out.println("白：" + countWhite + "　青：" + countBlue);
 		moveFlag = false;
 	}
 
@@ -100,28 +130,39 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		default:
 			break;
 		}
-		breakIce.setText("白：" + breakWhite + "　青：" + breakBlue);
+		if (countWhite < breakWhite) {
+			breakWhite = countWhite;
+		}
+		if (countBlue < breakBlue) {
+			breakBlue = countBlue;
+		}
+		whiteLabel.setText(Integer.toString(breakWhite));
+		blueLabel.setText(Integer.toString(breakBlue));
 	}
 
 	public void breakIce(JButton jb) {
 		Icon icon = jb.getIcon();
-		if (icon == whiteHover && breakWhite > 0) {
-			jb.setIcon(brokenIce);
-			breakWhite--;
-			countWhite--;
-		} else if (icon == blueHover && breakBlue > 0) {
-			jb.setIcon(brokenIce);
-			breakBlue--;
-			countBlue--;
-		}
-		if (breakWhite == 0 && breakBlue == 0) {
-			spinTheRoulette();
-		}
-		breakIce.setText("白：" + breakWhite + "　青：" + breakBlue);
-		if (!moveFlag) {
+		int jbNum = Integer.parseInt(jb.getActionCommand());
+		if (!moveFlag && jb.getIcon() != brokenIce) {
 			timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 			timer.start();
 		}
+		hitCount[jbNum / 9][jbNum % 9]++;
+		if (hitCount[jbNum / 9][jbNum % 9] >= mustHitNum[jbNum / 9][jbNum % 9]) {
+			if (icon == whiteHover && breakWhite > 0) {
+				breakWhite--;
+				countWhite--;
+			} else if (icon == blueHover && breakBlue > 0) {
+				breakBlue--;
+				countBlue--;
+			}
+			jb.setIcon(brokenIce);
+		}
+		if (breakWhite <= 0 && breakBlue <= 0) {
+			spinTheRoulette();
+		}
+		whiteLabel.setText(Integer.toString(breakWhite));
+		blueLabel.setText(Integer.toString(breakBlue));
 	}
 
 	public JButton[][] getIces() {
