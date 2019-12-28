@@ -210,49 +210,35 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			} else {
 				speed = 0.2;
 			}*/
-			speed = 0.3;
+			speed = 0.2;
 			System.out.println(distance);
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (Math.abs(x1 - x0) < 25) {
-				if (y0 < y1) {
-					if (speed > 0) {
+			if (speed > 0) {
+				if (Math.abs(x1 - x0) < 25) {
+					if (y0 < y1) {
 						penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 						y += speed;
 						setSpeed(speed - 0.002);
-					} else {
-						ices.setMoveFlag(false);
-					}
-				} else if (y0 > y1) {
-					if (speed > 0) {
+					} else if (y0 > y1) {
 						penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 						y -= speed;
 						setSpeed(speed - 0.002);
-					} else {
-						ices.setMoveFlag(false);
 					}
-				}
-			} else if (x0 < x1) {
-				if (speed > 0) {
+				} else if (x0 < x1) {
 					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(penguin.lerp(x0, y0, x1, y1, x)));
 					x += speed;
 					setSpeed(speed - 0.002);
-				} else {
-					ices.setMoveFlag(false);
-				}
-			} else if (x0 > x1) {
-				if (speed > 0) {
+				} else if (x0 > x1) {
 					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(penguin.lerp(x1, y1, x0, y0, x)));
 					x -= speed;
 					setSpeed(speed - 0.002);
-				} else {
-					ices.setMoveFlag(false);
 				}
+				penguin.penguinFall(ices);
 			} else {
 				ices.setMoveFlag(false);
 			}
-			penguin.penguinFall(ices);
 		}
 
 		public void setSpeed(double speed) {
@@ -262,4 +248,5 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 	}
+
 }
