@@ -59,6 +59,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 		breakIce = new JLabel("îíÅF" + breakWhite + "Å@ê¬ÅF" + breakBlue);
+		Game.j.setLayer(breakIce, 800);
 		Game.j.add(breakIce);
 		breakIce.setBounds(900, 300, 200, 200);
 		spinTheRoulette();
@@ -200,7 +201,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
 			distance = penguin.calcDistance(x0, y0, x1, y1);
-			if (distance > 800) {
+			/*if (distance > 800) {
 				speed = 1.0;
 			} else if (distance > 450) {
 				speed = 0.5;
@@ -208,23 +209,26 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				speed = 0.4;
 			} else {
 				speed = 0.2;
-			}
+			}*/
+			speed = 0.3;
 			System.out.println(distance);
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			if (Math.abs(x1 - x0) < 50) {
+			if (Math.abs(x1 - x0) < 25) {
 				if (y0 < y1) {
-					if (y <= y1) {
+					if (speed > 0) {
 						penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
-						y++;
+						y += speed;
+						setSpeed(speed - 0.002);
 					} else {
 						ices.setMoveFlag(false);
 					}
 				} else if (y0 > y1) {
-					if (y >= y1) {
+					if (speed > 0) {
 						penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
-						y--;
+						y -= speed;
+						setSpeed(speed - 0.002);
 					} else {
 						ices.setMoveFlag(false);
 					}
@@ -233,7 +237,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				if (speed > 0) {
 					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(penguin.lerp(x0, y0, x1, y1, x)));
 					x += speed;
-					setSpeed(speed - 0.002);;
+					setSpeed(speed - 0.002);
 				} else {
 					ices.setMoveFlag(false);
 				}

@@ -21,6 +21,9 @@ public class Penguin extends JLabel {
 	}
 
 	public void penguinFall(Ices ices) {
+		if (penguin.getX() < 10 || penguin.getX() > 700 || penguin.getY() < 90 || penguin.getY() > 700) {
+			penguin.setVisible(false);
+		}
 		loop : for (JButton[] icesArray : ices.getIces()) {
 			for (JButton ice : icesArray) {
 				if (ice.getIcon() == ices.getBrokenIceIcon()) {

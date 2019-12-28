@@ -15,6 +15,7 @@ import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
@@ -24,6 +25,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	private Ices ices;
 	static JLayeredPane j;
 	private Container c;
+	private ImageIcon backGround;
 	PrintWriter out;
 
 	public Game() {
@@ -51,6 +53,12 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		j.addMouseListener(this);
 		j.addMouseMotionListener(this);
 		j.setLayout(null);
+
+		backGround = new ImageIcon("img/sea.png");
+		JLabel backLabel = new JLabel(backGround);
+		j.setLayer(backLabel, 0);
+		j.add(backLabel);
+		backLabel.setBounds(0, 0, 1200, 900);
 
 		hammer = new Hammer();
 		penguin = new Penguin();
