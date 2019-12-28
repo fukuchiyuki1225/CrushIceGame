@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class Ices extends JFrame implements MouseListener, MouseMotionListener {
-	private ImageIcon whiteIce, blueIce, whiteHover, blueHover, brokenIce;
+	private ImageIcon whiteIce, whiteIce2, whiteIce3, whiteHover, whiteHover2, whiteHover3, blueIce, blueIce2, blueIce3, blueHover, blueHover2, blueHover3, brokenIce;
 	private JButton ices[][];
 	private JLabel whiteLabel, whiteLabel2, blueLabel, blueLabel2;
 	private int[][] hitCount, mustHitNum;
@@ -28,9 +28,17 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public Ices(Hammer hammer, Penguin penguin) {
 		whiteIce = new ImageIcon("img/white_ice.png");
-		blueIce = new ImageIcon("img/blue_ice.png");
+		whiteIce2 = new ImageIcon("img/white_ice_2.png");
+		whiteIce3 = new ImageIcon("img/white_ice_3.png");
 		whiteHover = new ImageIcon("img/white_hover.png");
+		whiteHover2 = new ImageIcon("img/white_hover_2.png");
+		whiteHover3 = new ImageIcon("img/white_hover_3.png");
+		blueIce = new ImageIcon("img/blue_ice.png");
+		blueIce2 = new ImageIcon("img/blue_ice_2.png");
+		blueIce3 = new ImageIcon("img/blue_ice_3.png");
 		blueHover = new ImageIcon("img/blue_hover.png");
+		blueHover2 = new ImageIcon("img/blue_hover_2.png");
+		blueHover3 = new ImageIcon("img/blue_hover_3.png");
 		brokenIce = new ImageIcon("img/broken_ice.png");
 		ices = new JButton[7][9];
 		hitCount = new int[7][9];
@@ -143,24 +151,46 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	public void breakIce(JButton jb) {
 		Icon icon = jb.getIcon();
 		int jbNum = Integer.parseInt(jb.getActionCommand());
-		if (!moveFlag && jb.getIcon() != brokenIce) {
-			timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
-			timer.start();
-		}
-		hitCount[jbNum / 9][jbNum % 9]++;
-		if (hitCount[jbNum / 9][jbNum % 9] >= mustHitNum[jbNum / 9][jbNum % 9]) {
-			if (icon == whiteHover && breakWhite > 0) {
-				breakWhite--;
-				countWhite--;
-			} else if (icon == blueHover && breakBlue > 0) {
-				breakBlue--;
-				countBlue--;
+		int diff = 0;
+
+		if (((icon == whiteHover || icon == whiteHover2 || icon == whiteHover3) && breakWhite > 0) || ((icon == blueHover || icon == blueHover2 || icon == blueHover3) && breakBlue > 0)) {
+			if (!moveFlag) {
+				timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
+				timer.start();
 			}
-			jb.setIcon(brokenIce);
+			hitCount[jbNum / 9][jbNum % 9]++;
+			if (hitCount[jbNum / 9][jbNum % 9] >= mustHitNum[jbNum / 9][jbNum % 9]) {
+				if (icon == whiteHover || icon == whiteHover2 || icon == whiteHover3) {
+					breakWhite--;
+					countWhite--;
+				} else if (icon == blueHover || icon == blueHover2 || icon == blueHover3) {
+					breakBlue--;
+					countBlue--;
+				}
+				jb.setIcon(brokenIce);
+			}
+			diff = mustHitNum[jbNum / 9][jbNum % 9] - hitCount[jbNum / 9][jbNum % 9];
+			if (diff > 0) {
+				if (diff < 3) {
+					if (icon == whiteHover2) {
+						jb.setIcon(whiteHover3);
+					} else if (icon == blueHover2) {
+						jb.setIcon(blueHover3);
+					}
+				} else if (diff < 5) {
+					if (icon == whiteHover) {
+						jb.setIcon(whiteHover2);
+					} else if (icon == blueHover) {
+						jb.setIcon(blueHover2);
+					}
+				}
+			}
 		}
+
 		if (breakWhite <= 0 && breakBlue <= 0) {
 			spinTheRoulette();
 		}
+
 		whiteLabel.setText(Integer.toString(breakWhite));
 		blueLabel.setText(Integer.toString(breakBlue));
 	}
@@ -190,20 +220,42 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public void mouseExited(MouseEvent e) {
 		JButton jb = (JButton) e.getComponent();
-		if (jb.getIcon() == whiteHover) {
-			jb.setIcon(whiteIce);
-		} else if (jb.getIcon() == blueHover) {
-			jb.setIcon(blueIce);
+		Icon icon = jb.getIcon();
+		Icon chIcon = icon;
+		if (icon == whiteHover) {
+			chIcon = whiteIce;
+		} else if (icon == whiteHover2) {
+			chIcon = whiteIce2;
+		} else if (icon == whiteHover3) {
+			chIcon = whiteIce3;
+		} else if (icon == blueHover) {
+			chIcon = blueIce;
+		} else if (icon == blueHover2) {
+			chIcon = blueIce2;
+		} else if (icon == blueHover3) {
+			chIcon = blueIce3;
 		}
+		jb.setIcon(chIcon);
 	}
 
 	public void mouseEntered(MouseEvent e) {
 		JButton jb = (JButton) e.getComponent();
-		if (jb.getIcon() == whiteIce) {
-			jb.setIcon(whiteHover);
-		} else if (jb.getIcon() == blueIce) {
-			jb.setIcon(blueHover);
+		Icon icon = jb.getIcon();
+		Icon chIcon = icon;
+		if (icon == whiteIce) {
+			chIcon = whiteHover;
+		} else if (icon == whiteIce2) {
+			chIcon = whiteHover2;
+		} else if (icon == whiteIce3) {
+			chIcon = whiteHover3;
+		} else if (icon == blueIce) {
+			chIcon = blueHover;
+		} else if (icon == blueIce2) {
+			chIcon = blueHover2;
+		} else if (icon == blueIce3) {
+			chIcon = blueHover3;
 		}
+		jb.setIcon(chIcon);
 	}
 
 	public void mouseClicked(MouseEvent e) {
