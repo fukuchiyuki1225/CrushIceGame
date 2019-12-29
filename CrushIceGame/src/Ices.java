@@ -77,32 +77,24 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		whiteLabel = new JLabel(whiteIce);
 		whiteLabel.setText(Integer.toString(breakWhite));
 		whiteLabel.setHorizontalTextPosition(JLabel.CENTER);
-		/*GameScreen.j.setLayer(whiteLabel, 800);
-		GameScreen.j.add(whiteLabel);*/
 		gs.addComponent(whiteLabel, 800);
 		whiteLabel.setBounds(925, 358, 100, 100);
 
 		whiteLabel2 = new JLabel(whiteIce);
 		whiteLabel2.setText("îí");
 		whiteLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		/*GameScreen.j.setLayer(whiteLabel2, 800);
-		GameScreen.j.add(whiteLabel2);*/
 		gs.addComponent(whiteLabel2, 800);
 		whiteLabel2.setBounds(850, 315, 100, 100);
 
 		blueLabel = new JLabel(blueIce);
 		blueLabel.setText(Integer.toString(breakBlue));
 		blueLabel.setHorizontalTextPosition(JLabel.CENTER);
-		/*GameScreen.j.setLayer(blueLabel, 800);
-		GameScreen.j.add(blueLabel);*/
 		gs.addComponent(blueLabel, 800);
 		blueLabel.setBounds(925, 444, 100, 100);
 
 		blueLabel2 = new JLabel(blueIce);
 		blueLabel2.setText("ê¬");
 		blueLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		/*GameScreen.j.setLayer(blueLabel2, 800);
-		GameScreen.j.add(blueLabel2);*/
 		gs.addComponent(blueLabel2, 800);
 		blueLabel2.setBounds(850, 401, 100, 100);
 
