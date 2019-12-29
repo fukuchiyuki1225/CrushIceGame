@@ -27,19 +27,19 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Timer timer;
 
 	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
-		whiteIce = new ImageIcon("img/white_ice.png");
-		whiteIce2 = new ImageIcon("img/white_ice_2.png");
-		whiteIce3 = new ImageIcon("img/white_ice_3.png");
-		whiteHover = new ImageIcon("img/white_hover.png");
-		whiteHover2 = new ImageIcon("img/white_hover_2.png");
-		whiteHover3 = new ImageIcon("img/white_hover_3.png");
-		blueIce = new ImageIcon("img/blue_ice.png");
-		blueIce2 = new ImageIcon("img/blue_ice_2.png");
-		blueIce3 = new ImageIcon("img/blue_ice_3.png");
-		blueHover = new ImageIcon("img/blue_hover.png");
-		blueHover2 = new ImageIcon("img/blue_hover_2.png");
-		blueHover3 = new ImageIcon("img/blue_hover_3.png");
-		brokenIce = new ImageIcon("img/broken_ice.png");
+		whiteIce = new ImageIcon(ImageLoader.readImage("white_ice.png"));
+		whiteIce2 = new ImageIcon(ImageLoader.readImage("white_ice_2.png"));
+		whiteIce3 = new ImageIcon(ImageLoader.readImage("white_ice_3.png"));
+		whiteHover = new ImageIcon(ImageLoader.readImage("white_hover.png"));
+		whiteHover2 = new ImageIcon(ImageLoader.readImage("white_hover_2.png"));
+		whiteHover3 = new ImageIcon(ImageLoader.readImage("white_hover_3.png"));
+		blueIce = new ImageIcon(ImageLoader.readImage("blue_ice.png"));
+		blueIce2 = new ImageIcon(ImageLoader.readImage("blue_ice_2.png"));
+		blueIce3 = new ImageIcon(ImageLoader.readImage("blue_ice_3.png"));
+		blueHover = new ImageIcon(ImageLoader.readImage("blue_hover.png"));
+		blueHover2 = new ImageIcon(ImageLoader.readImage("blue_hover_2.png"));
+		blueHover3 = new ImageIcon(ImageLoader.readImage("blue_hover_3.png"));
+		brokenIce = new ImageIcon(ImageLoader.readImage("broken_ice.png"));
 		ices = new JButton[7][9];
 		hitCount = new int[7][9];
 		mustHitNum = new int[7][9];

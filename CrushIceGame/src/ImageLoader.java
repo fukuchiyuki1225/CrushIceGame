@@ -10,7 +10,6 @@ public class ImageLoader {
 		BufferedImage bi = null;
 		try {
 			URL url = il.getClass().getClassLoader().getResource(path);
-			System.out.println(url);
 			bi = ImageIO.read(url);
 		} catch (Exception e) {
 			e.getStackTrace();
