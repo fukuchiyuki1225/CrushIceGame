@@ -42,7 +42,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		j.add(backLabel);
 		backLabel.setBounds(0, 0, 1200, 900);
 
-		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.readImage("surcor.png")).getImage(), new Point(), "");
+		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.readImage("cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
 
 		hammer = new Hammer(this);
