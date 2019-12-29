@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -19,7 +20,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Cursor cursor;
 	private Hammer hammer;
 	private Penguin penguin;
-	private Ices ices;
+	// private Ices ices;
 
 	public GameScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,9 +45,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
 		setCursor(cursor);
 
-		hammer = new Hammer();
-		penguin = new Penguin();
-		ices = new Ices(hammer, penguin);
+		hammer = new Hammer(this);
+		penguin = new Penguin(this);
+		new Ices(hammer, penguin, this);
+	}
+
+	public void addComponent(Component comp, int layer) {
+		j.setLayer(comp, layer);
+		j.add(comp);
 	}
 
 	public void mouseDragged(MouseEvent e) {
