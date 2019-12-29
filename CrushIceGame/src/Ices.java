@@ -262,8 +262,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
 	}
 
 	public void mouseMoved(MouseEvent e) {
