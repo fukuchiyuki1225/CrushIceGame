@@ -56,8 +56,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					ices[j][i] = new JButton(blueIce);
 					countBlue++;
 				}
-				Game.j.setLayer(ices[j][i], 100);
-				Game.j.add(ices[j][i]);
+				GameScreen.j.setLayer(ices[j][i], 100);
+				GameScreen.j.add(ices[j][i]);
 				ices[j][i].setBorderPainted(false);
 				if (i % 2 == 0) {
 					ices[j][i].setBounds(i * 75 + 50, j * 86 + 43 + 100, 100, 100);
@@ -76,29 +76,29 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		whiteLabel = new JLabel(whiteIce);
 		whiteLabel.setText(Integer.toString(breakWhite));
 		whiteLabel.setHorizontalTextPosition(JLabel.CENTER);
-		Game.j.setLayer(whiteLabel, 800);
-		Game.j.add(whiteLabel);
+		GameScreen.j.setLayer(whiteLabel, 800);
+		GameScreen.j.add(whiteLabel);
 		whiteLabel.setBounds(925, 358, 100, 100);
 
 		whiteLabel2 = new JLabel(whiteIce);
 		whiteLabel2.setText("îí");
 		whiteLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		Game.j.setLayer(whiteLabel2, 800);
-		Game.j.add(whiteLabel2);
+		GameScreen.j.setLayer(whiteLabel2, 800);
+		GameScreen.j.add(whiteLabel2);
 		whiteLabel2.setBounds(850, 315, 100, 100);
 
 		blueLabel = new JLabel(blueIce);
 		blueLabel.setText(Integer.toString(breakBlue));
 		blueLabel.setHorizontalTextPosition(JLabel.CENTER);
-		Game.j.setLayer(blueLabel, 800);
-		Game.j.add(blueLabel);
+		GameScreen.j.setLayer(blueLabel, 800);
+		GameScreen.j.add(blueLabel);
 		blueLabel.setBounds(925, 444, 100, 100);
 
 		blueLabel2 = new JLabel(blueIce);
 		blueLabel2.setText("ê¬");
 		blueLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		Game.j.setLayer(blueLabel2, 800);
-		Game.j.add(blueLabel2);
+		GameScreen.j.setLayer(blueLabel2, 800);
+		GameScreen.j.add(blueLabel2);
 		blueLabel2.setBounds(850, 401, 100, 100);
 
 		spinTheRoulette();

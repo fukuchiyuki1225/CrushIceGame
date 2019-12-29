@@ -19,13 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
-	private Cursor cursor;
+	/*private Cursor cursor;
 	private Hammer hammer;
 	private Penguin penguin;
 	private Ices ices;
 	static JLayeredPane j;
 	private Container c;
-	private ImageIcon backGround;
+	private ImageIcon backGround;*/
 	PrintWriter out;
 
 	public Game() {
@@ -38,10 +38,14 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		if (addr.equals("")) {
 			addr = "localhost";
 		}*/
+
 		String myName = "No name";
 		String addr = "localhost";
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GameScreen gs = new GameScreen();
+		gs.setVisible(true);
+
+		/*setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");
 		setSize(1200, 900);
 		setLocationRelativeTo(null);
@@ -65,7 +69,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		ices = new Ices(hammer, penguin);
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
-		setCursor(cursor);
+		setCursor(cursor);*/
 
 		Socket socket = null;
 		try {
@@ -112,8 +116,9 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public static void main(String[] args) {
-		Game game = new Game();
-		game.setVisible(true);
+		/*Game game = new Game();
+		game.setVisible(true);*/
+		new Game();
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -121,11 +126,11 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();
+		// hammer.changeHammerIcon();
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();
+		// hammer.changeHammerIcon();
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -137,12 +142,11 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		Point p = e.getPoint();
-		hammer.setHammerLocation(p);
+		/*Point p = e.getPoint();
+		hammer.setHammerLocation(p);*/
 	}
 }

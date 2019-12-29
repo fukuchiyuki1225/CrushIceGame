@@ -7,8 +7,8 @@ public class Penguin extends JLabel {
 
 	public Penguin() {
 		penguin = new JLabel(new ImageIcon("img/penguin.png"));
-		Game.j.setLayer(penguin, 500);
-		Game.j.add(penguin);
+		GameScreen.j.setLayer(penguin, 500);
+		GameScreen.j.add(penguin);
 		penguin.setBounds(350, 375, 100, 100);
 	}
 
