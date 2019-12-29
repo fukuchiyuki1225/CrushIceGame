@@ -1,11 +1,3 @@
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,64 +5,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 
-public class Game extends JFrame implements MouseListener, MouseMotionListener {
-	/*private Cursor cursor;
-	private Hammer hammer;
-	private Penguin penguin;
-	private Ices ices;
-	static JLayeredPane j;
-	private Container c;
-	private ImageIcon backGround;*/
+public class Game {
 	PrintWriter out;
 
 	public Game() {
-		/*String myName = JOptionPane.showInputDialog(null, "名前を入力してください.", "名前の入力", JOptionPane.QUESTION_MESSAGE);
-		if (myName.equals("")) {
-			myName = "No name";
-		}
-
-		String addr = JOptionPane.showInputDialog(null, "サーバーのIPアドレスを入力してください.", "サーバーのIPアドレス", JOptionPane.QUESTION_MESSAGE);
-		if (addr.equals("")) {
-			addr = "localhost";
-		}*/
-
 		String myName = "No name";
 		String addr = "localhost";
-
-		GameScreen gs = new GameScreen();
-		gs.setVisible(true);
-
-		/*setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("クラッシュアイスゲーム");
-		setSize(1200, 900);
-		setLocationRelativeTo(null);
-
-		c = getContentPane();
-		j = new JLayeredPane();
-		c.add(j);
-		c.setBackground(new Color(115, 245, 245));
-		j.addMouseListener(this);
-		j.addMouseMotionListener(this);
-		j.setLayout(null);
-
-		backGround = new ImageIcon("img/sea.png");
-		JLabel backLabel = new JLabel(backGround);
-		j.setLayer(backLabel, 0);
-		j.add(backLabel);
-		backLabel.setBounds(0, 0, 1200, 900);
-
-		hammer = new Hammer();
-		penguin = new Penguin();
-		ices = new Ices(hammer, penguin);
-
-		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
-		setCursor(cursor);*/
-
 		Socket socket = null;
 		try {
 			socket = new Socket(addr, 10000);
@@ -82,6 +23,9 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
 		mrt.start();
+
+		GameScreen gs = new GameScreen();
+		gs.setVisible(true);
 	}
 
 	public class MesgRecvThread extends Thread {
@@ -116,37 +60,6 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public static void main(String[] args) {
-		/*Game game = new Game();
-		game.setVisible(true);*/
 		new Game();
-	}
-
-	public void mouseClicked(MouseEvent e) {
-
-	}
-
-	public void mousePressed(MouseEvent e) {
-		// hammer.changeHammerIcon();
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		// hammer.changeHammerIcon();
-	}
-
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	public void mouseExited(MouseEvent e) {
-
-	}
-
-	public void mouseDragged(MouseEvent e) {
-
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		/*Point p = e.getPoint();
-		hammer.setHammerLocation(p);*/
 	}
 }
