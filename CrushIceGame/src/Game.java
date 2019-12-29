@@ -1,10 +1,7 @@
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,8 +15,8 @@ import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	private Cursor cursor;
@@ -28,10 +25,11 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	private Ices ices;
 	static JLayeredPane j;
 	private Container c;
+	private ImageIcon backGround;
 	PrintWriter out;
 
 	public Game() {
-		String myName = JOptionPane.showInputDialog(null, "名前を入力してください.", "名前の入力", JOptionPane.QUESTION_MESSAGE);
+		/*String myName = JOptionPane.showInputDialog(null, "名前を入力してください.", "名前の入力", JOptionPane.QUESTION_MESSAGE);
 		if (myName.equals("")) {
 			myName = "No name";
 		}
@@ -39,7 +37,9 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		String addr = JOptionPane.showInputDialog(null, "サーバーのIPアドレスを入力してください.", "サーバーのIPアドレス", JOptionPane.QUESTION_MESSAGE);
 		if (addr.equals("")) {
 			addr = "localhost";
-		}
+		}*/
+		String myName = "No name";
+		String addr = "localhost";
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");
@@ -49,10 +49,16 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 		c = getContentPane();
 		j = new JLayeredPane();
 		c.add(j);
-		c.setBackground(new Color(0, 245, 245));
+		c.setBackground(new Color(115, 245, 245));
 		j.addMouseListener(this);
 		j.addMouseMotionListener(this);
 		j.setLayout(null);
+
+		backGround = new ImageIcon("img/sea.png");
+		JLabel backLabel = new JLabel(backGround);
+		j.setLayer(backLabel, 0);
+		j.add(backLabel);
+		backLabel.setBounds(0, 0, 1200, 900);
 
 		hammer = new Hammer();
 		penguin = new Penguin();
