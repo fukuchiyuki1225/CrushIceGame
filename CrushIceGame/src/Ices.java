@@ -106,7 +106,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void spinTheRoulette() {
-		roulette = random.nextInt(7);
+		roulette = random.nextInt(6);
 		switch (roulette) {
 		case 0:
 			breakWhite = 0;
@@ -127,13 +127,13 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			breakWhite = 0;
 			breakBlue = 1;
 			break;
-		case 5:
+		/*case 5:
 			breakWhite = 0;
 			breakBlue = 0;
-			break;
-		case 6:
-			breakWhite = 5;
-			breakBlue = 5;
+			break;*/
+		case 5:
+			breakWhite = 3;
+			breakBlue = 3;
 			break;
 		default:
 			break;
