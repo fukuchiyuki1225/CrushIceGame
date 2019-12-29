@@ -8,8 +8,8 @@ public class Hammer {
 	private JLabel hammer;
 
 	public Hammer(GameScreen gs) {
-		hammerIcon = new ImageIcon(ImageLoader.readImage("pick_hammer.png"));
-		hammerIcon2 = new ImageIcon(ImageLoader.readImage("pick_hammer_2.png"));
+		hammerIcon = new ImageIcon(ImageLoader.readImage("img/pick_hammer.png"));
+		hammerIcon2 = new ImageIcon(ImageLoader.readImage("img/pick_hammer_2.png"));
 		hammer = new JLabel(hammerIcon);
 		/*GameScreen.j.setLayer(hammer, 1000);
 		GameScreen.j.add(hammer);*/
