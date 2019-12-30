@@ -24,6 +24,6 @@ public class Hammer {
 	}
 
 	public void setHammerLocation(Point p) {
-		hammer.setLocation(p.x - 50, p.y - 70);
+		hammer.setLocation(p.x - 50, p.y - 120);
 	}
 }
