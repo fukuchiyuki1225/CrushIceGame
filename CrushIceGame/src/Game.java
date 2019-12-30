@@ -43,8 +43,6 @@ public class Game {
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
 				out.println(myName);
-				// String myNumStr = br.readLine();
-				// int myNumber = Integer.parseInt(myNumStr);
 				while (true) {
 					String inputLine = br.readLine();
 					if (inputLine != null) {

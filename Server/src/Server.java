@@ -22,7 +22,7 @@ class ClientProcThread extends Thread {
 
 	public void run() {
 		try {
-			myOut.println("You are a client No." +number);
+			myOut.println(number);
 			name = myIn.readLine();
 
 			while (true) {
@@ -94,7 +94,7 @@ class Server {
 				n++;
 			}
 		} catch (Exception e) {
-			System.out.println("繧ｽ繧ｱ繝�繝井ｽ懈�先凾縺ｫ繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆" + e);
+			System.out.println("ソケット作成時にエラーが発生しました：" + e);
 		}
 	}
 }

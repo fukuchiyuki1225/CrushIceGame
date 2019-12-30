@@ -56,8 +56,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					ices[j][i] = new JButton(blueIce);
 					countBlue++;
 				}
-				/*GameScreen.j.setLayer(ices[j][i], 100);
-				GameScreen.j.add(ices[j][i]);*/
 				gs.addComponent(ices[j][i], 100);
 				ices[j][i].setBorderPainted(false);
 				if (i % 2 == 0) {
@@ -169,9 +167,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			diff = mustHitNum[jbNum / 9][jbNum % 9] - hitCount[jbNum / 9][jbNum % 9];
 			if (diff > 0) {
 				if (diff < 3) {
-					if (icon == whiteHover2) {
+					if (icon == whiteHover || icon == whiteHover2) {
 						jb.setIcon(whiteHover3);
-					} else if (icon == blueHover2) {
+					} else if (icon == blueHover || icon == blueHover2) {
 						jb.setIcon(blueHover3);
 					}
 				} else if (diff < 5) {
