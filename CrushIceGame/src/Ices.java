@@ -18,6 +18,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, whiteIce2, whiteIce3, whiteHover, whiteHover2, whiteHover3, blueIce, blueIce2, blueIce3, blueHover, blueHover2, blueHover3, brokenIce;
 	private ImageIcon white0, white1, white2, white3, blue0, blue1, blue2, blue3;
 	private JButton ices[][];
+	private final int icesX = 9, icesY = 7;
 	private JLabel whiteLabel, whiteLabel2, blueLabel, blueLabel2;
 	private int[][] hitCount, mustHitNum;
 	private int countWhite, countBlue, roulette, breakWhite, breakBlue;
@@ -28,6 +29,55 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Timer timer;
 
 	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
+		loadIceIcon();
+		ices = new JButton[icesY][icesX];
+		hitCount = new int[icesY][icesX];
+		mustHitNum = new int[icesY][icesX];
+		this.hammer = hammer;
+		this.penguin = penguin;
+
+		random = new Random();
+		for (int j = 0; j < 7; j++) {
+			for (int i = 0; i < icesX; i++) {
+				if (random.nextInt(2) == 0) {
+					ices[j][i] = new JButton(whiteIce);
+					countWhite++;
+				} else {
+					ices[j][i] = new JButton(blueIce);
+					countBlue++;
+				}
+				if (i % 2 == 0) {
+					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 100, 100, 100);
+				} else {
+					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 100, 100, 100);
+				}
+				ices[j][i].setBorderPainted(false);
+				ices[j][i].addMouseListener(this);
+				ices[j][i].addMouseMotionListener(this);
+				ices[j][i].setContentAreaFilled(false);
+				ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
+				mustHitNum[j][i] = random.nextInt(5) + 1;
+				hitCount[j][i] = 0;
+			}
+		}
+
+		whiteLabel = new JLabel(white0);
+		gs.addComponent(whiteLabel, 800, 925, 358, 100, 100);
+
+		whiteLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png")));
+		gs.addComponent(whiteLabel2, 850, 850, 315, 100, 100);
+
+		blueLabel = new JLabel(blue0);
+		gs.addComponent(blueLabel, 800, 925, 444, 100, 100);
+
+		blueLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png")));
+		gs.addComponent(blueLabel2, 850, 850, 401, 100, 100);
+
+		spinTheRoulette();
+		moveFlag = false;
+	}
+
+	private void loadIceIcon() {
 		whiteIce = new ImageIcon(ImageLoader.readImage("img/white_ice.png"));
 		whiteIce2 = new ImageIcon(ImageLoader.readImage("img/white_ice_2.png"));
 		whiteIce3 = new ImageIcon(ImageLoader.readImage("img/white_ice_3.png"));
@@ -49,51 +99,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		blue1 = new ImageIcon(ImageLoader.readImage("img/blue_1.png"));
 		blue2 = new ImageIcon(ImageLoader.readImage("img/blue_2.png"));
 		blue3 = new ImageIcon(ImageLoader.readImage("img/blue_3.png"));
-		ices = new JButton[7][9];
-		hitCount = new int[7][9];
-		mustHitNum = new int[7][9];
-		this.hammer = hammer;
-		this.penguin = penguin;
-
-		random = new Random();
-		for (int j = 0; j < 7; j++) {
-			for (int i = 0; i < 9; i++) {
-				if (random.nextInt(2) == 0) {
-					ices[j][i] = new JButton(whiteIce);
-					countWhite++;
-				} else {
-					ices[j][i] = new JButton(blueIce);
-					countBlue++;
-				}
-				if (i % 2 == 0) {
-					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 100, 100, 100);
-				} else {
-					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 100, 100, 100);
-				}
-				ices[j][i].setBorderPainted(false);
-				ices[j][i].addMouseListener(this);
-				ices[j][i].addMouseMotionListener(this);
-				ices[j][i].setContentAreaFilled(false);
-				ices[j][i].setActionCommand(Integer.toString(i + j * 9));
-				mustHitNum[j][i] = random.nextInt(5) + 1;
-				hitCount[j][i] = 0;
-			}
-		}
-
-		whiteLabel = new JLabel(white0);
-		gs.addComponent(whiteLabel, 800, 925, 358, 100, 100);
-
-		whiteLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png")));
-		gs.addComponent(whiteLabel2, 850, 850, 315, 100, 100);
-
-		blueLabel = new JLabel(blue0);
-		gs.addComponent(blueLabel, 800, 925, 444, 100, 100);
-
-		blueLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png")));
-		gs.addComponent(blueLabel2, 850, 850, 401, 100, 100);
-
-		spinTheRoulette();
-		moveFlag = false;
 	}
 
 	public void spinTheRoulette() {
@@ -183,8 +188,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 				timer.start();
 			}
-			hitCount[jbNum / 9][jbNum % 9]++;
-			if (hitCount[jbNum / 9][jbNum % 9] >= mustHitNum[jbNum / 9][jbNum % 9]) {
+			hitCount[jbNum / icesX][jbNum % icesX]++;
+			if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 				if (icon == whiteHover || icon == whiteHover2 || icon == whiteHover3) {
 					breakWhite--;
 					countWhite--;
@@ -194,7 +199,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				}
 				jb.setIcon(brokenIce);
 			}
-			diff = mustHitNum[jbNum / 9][jbNum % 9] - hitCount[jbNum / 9][jbNum % 9];
+			diff = mustHitNum[jbNum / icesX][jbNum % icesX] - hitCount[jbNum / icesX][jbNum % icesX];
 			if (diff > 0) {
 				if (diff < 3) {
 					if (icon == whiteHover || icon == whiteHover2) {
@@ -222,6 +227,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public JButton[][] getIces() {
 		return ices;
+	}
+
+	public int getIcesX() {
+		return icesX;
 	}
 
 	public Icon getBrokenIceIcon() {
@@ -310,8 +319,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			this.ices = ices;
 			x0 = penguinLabel.getX();
 			y0 = penguinLabel.getY();
-			x1 = ices.ices[jbNum / 9][jbNum % 9].getX();
-			y1 = ices.ices[jbNum / 9][jbNum % 9].getY();
+			x1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getX();
+			y1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getY();
 			ices.setMoveFlag(true);
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
@@ -321,24 +330,27 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (speed > 0) {
 				if (Math.abs(x1 - x0) < 25) {
+					penguin.penguinMove(x, y);
 					if (y0 < y1) {
-						penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
+						// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 						y += speed;
-						setSpeed(speed - 0.002);
-					} else if (y0 > y1) {
-						penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
+					} else if (y0 >= y1) {
+						// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 						y -= speed;
-						setSpeed(speed - 0.002);
+						// setSpeed(speed - 0.002);
 					}
 				} else if (x0 < x1) {
-					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x0, y0, x1, y1, x)));
+					penguin.penguinMove(x, Calculation.lerp(x0, y0, x1, y1, x));
+					// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x0, y0, x1, y1, x)));
 					x += speed;
-					setSpeed(speed - 0.002);
-				} else if (x0 > x1) {
-					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x1, y1, x0, y0, x)));
+					// setSpeed(speed - 0.002);
+				} else if (x0 >= x1) {
+					penguin.penguinMove(x, Calculation.lerp(x1, y1, x0, y0, x));
+					// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x1, y1, x0, y0, x)));
 					x -= speed;
-					setSpeed(speed - 0.002);
+					// setSpeed(speed - 0.002);
 				}
+				setSpeed(speed - 0.002);
 				penguin.penguinFall(ices);
 			} else {
 				ices.setMoveFlag(false);

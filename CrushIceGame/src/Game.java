@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
 public class Game {
 	PrintWriter out;
 
@@ -13,6 +12,7 @@ public class Game {
 		String myName = "No name";
 		String addr = "localhost";
 		Socket socket = null;
+
 		try {
 			socket = new Socket(addr, 10000);
 		} catch (UnknownHostException e) {

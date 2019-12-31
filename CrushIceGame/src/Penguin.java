@@ -13,8 +13,9 @@ public class Penguin extends JLabel {
 	public void penguinFall(Ices ices) {
 		if (penguin.getX() < 10 || penguin.getX() > 700 || penguin.getY() < 90 || penguin.getY() > 700) {
 			penguin.setVisible(false);
+			return;
 		}
-		loop : for (JButton[] icesArray : ices.getIces()) {
+		for (JButton[] icesArray : ices.getIces()) {
 			for (JButton ice : icesArray) {
 				if (ice.getIcon() == ices.getBrokenIceIcon()) {
 					int x0, x1, y0, y1;
@@ -24,11 +25,15 @@ public class Penguin extends JLabel {
 					y1 = penguin.getY() < ice.getY() ? penguin.getY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
 						penguin.setVisible(false);
-						break loop;
+						return;
 					}
 				}
 			}
 		}
+	}
+
+	public void penguinMove(double x, double y) {
+		penguin.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 	}
 
 	public JLabel getPenguin() {
