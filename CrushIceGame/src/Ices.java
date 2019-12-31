@@ -16,6 +16,7 @@ import javax.swing.Timer;
 
 public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon whiteIce, whiteIce2, whiteIce3, whiteHover, whiteHover2, whiteHover3, blueIce, blueIce2, blueIce3, blueHover, blueHover2, blueHover3, brokenIce;
+	private ImageIcon white0, white1, white2, white3, blue0, blue1, blue2, blue3;
 	private JButton ices[][];
 	private JLabel whiteLabel, whiteLabel2, blueLabel, blueLabel2;
 	private int[][] hitCount, mustHitNum;
@@ -40,6 +41,14 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		blueHover2 = new ImageIcon(ImageLoader.readImage("img/blue_hover_2.png"));
 		blueHover3 = new ImageIcon(ImageLoader.readImage("img/blue_hover_3.png"));
 		brokenIce = new ImageIcon(ImageLoader.readImage("img/broken_ice.png"));
+		white0 = new ImageIcon(ImageLoader.readImage("img/white_0.png"));
+		white1 = new ImageIcon(ImageLoader.readImage("img/white_1.png"));
+		white2 = new ImageIcon(ImageLoader.readImage("img/white_2.png"));
+		white3 = new ImageIcon(ImageLoader.readImage("img/white_3.png"));
+		blue0 = new ImageIcon(ImageLoader.readImage("img/blue_0.png"));
+		blue1 = new ImageIcon(ImageLoader.readImage("img/blue_1.png"));
+		blue2 = new ImageIcon(ImageLoader.readImage("img/blue_2.png"));
+		blue3 = new ImageIcon(ImageLoader.readImage("img/blue_3.png"));
 		ices = new JButton[7][9];
 		hitCount = new int[7][9];
 		mustHitNum = new int[7][9];
@@ -72,28 +81,28 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 
-		whiteLabel = new JLabel(whiteIce);
-		whiteLabel.setText(Integer.toString(breakWhite));
-		whiteLabel.setHorizontalTextPosition(JLabel.CENTER);
+		whiteLabel = new JLabel(white0);
+		/*whiteLabel.setText(Integer.toString(breakWhite));
+		whiteLabel.setHorizontalTextPosition(JLabel.CENTER);*/
 		gs.addComponent(whiteLabel, 800);
 		whiteLabel.setBounds(925, 358, 100, 100);
 
-		whiteLabel2 = new JLabel(whiteIce);
-		whiteLabel2.setText("îí");
-		whiteLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		gs.addComponent(whiteLabel2, 800);
+		whiteLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png")));
+		/*whiteLabel2.setText("îí");
+		whiteLabel2.setHorizontalTextPosition(JLabel.CENTER);*/
+		gs.addComponent(whiteLabel2, 850);
 		whiteLabel2.setBounds(850, 315, 100, 100);
 
-		blueLabel = new JLabel(blueIce);
-		blueLabel.setText(Integer.toString(breakBlue));
-		blueLabel.setHorizontalTextPosition(JLabel.CENTER);
+		blueLabel = new JLabel(blue0);
+		/*blueLabel.setText(Integer.toString(breakBlue));
+		blueLabel.setHorizontalTextPosition(JLabel.CENTER);*/
 		gs.addComponent(blueLabel, 800);
 		blueLabel.setBounds(925, 444, 100, 100);
 
-		blueLabel2 = new JLabel(blueIce);
-		blueLabel2.setText("ê¬");
-		blueLabel2.setHorizontalTextPosition(JLabel.CENTER);
-		gs.addComponent(blueLabel2, 800);
+		blueLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png")));
+		/*blueLabel2.setText("ê¬");
+		blueLabel2.setHorizontalTextPosition(JLabel.CENTER);*/
+		gs.addComponent(blueLabel2, 850);
 		blueLabel2.setBounds(850, 401, 100, 100);
 
 		spinTheRoulette();
@@ -122,7 +131,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			breakWhite = 0;
 			breakBlue = 1;
 			break;
-		/*case 5:
+			/*case 5:
 			breakWhite = 0;
 			breakBlue = 0;
 			break;*/
@@ -139,8 +148,46 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		if (countBlue < breakBlue) {
 			breakBlue = countBlue;
 		}
-		whiteLabel.setText(Integer.toString(breakWhite));
-		blueLabel.setText(Integer.toString(breakBlue));
+		setCountIcon(0, breakWhite);
+		setCountIcon(1, breakBlue);
+	}
+
+	public void setCountIcon(int color, int count) {
+		if (color == 0) {
+			switch(count) {
+			case 0:
+				whiteLabel.setIcon(white0);
+				break;
+			case 1:
+				whiteLabel.setIcon(white1);
+				break;
+			case 2:
+				whiteLabel.setIcon(white2);
+				break;
+			case 3:
+				whiteLabel.setIcon(white3);
+				break;
+			default:
+				break;
+			}
+		} else {
+			switch(count) {
+			case 0:
+				blueLabel.setIcon(blue0);
+				break;
+			case 1:
+				blueLabel.setIcon(blue1);
+				break;
+			case 2:
+				blueLabel.setIcon(blue2);
+				break;
+			case 3:
+				blueLabel.setIcon(blue3);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	public void breakIce(JButton jb) {
@@ -182,12 +229,12 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 
+		setCountIcon(0, breakWhite);
+		setCountIcon(1, breakBlue);
+
 		if (breakWhite <= 0 && breakBlue <= 0) {
 			spinTheRoulette();
 		}
-
-		whiteLabel.setText(Integer.toString(breakWhite));
-		blueLabel.setText(Integer.toString(breakBlue));
 	}
 
 	public JButton[][] getIces() {
