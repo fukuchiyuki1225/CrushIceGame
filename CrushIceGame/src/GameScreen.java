@@ -39,9 +39,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 		backGround = new ImageIcon(ImageLoader.readImage("img/sea.png"));
 		JLabel backLabel = new JLabel(backGround);
-		j.setLayer(backLabel, 0);
-		j.add(backLabel);
-		backLabel.setBounds(0, 0, 1200, 900);
+		addComponent(backLabel, 0, 0, 0, 1200, 900);
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.readImage("img/cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
@@ -51,9 +49,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		new Ices(hammer, penguin, this);
 	}
 
-	public void addComponent(Component comp, int layer) {
+	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
 		j.setLayer(comp, layer);
 		j.add(comp);
+		comp.setBounds(x, y, width, height);
 	}
 
 	public void mouseDragged(MouseEvent e) {

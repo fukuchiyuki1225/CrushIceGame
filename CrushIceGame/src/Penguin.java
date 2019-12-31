@@ -7,8 +7,7 @@ public class Penguin extends JLabel {
 
 	public Penguin(GameScreen gs) {
 		penguin = new JLabel(new ImageIcon(ImageLoader.readImage("img/penguin.png")));
-		gs.addComponent(penguin, 500);
-		penguin.setBounds(350, 375, 100, 100);
+		gs.addComponent(penguin, 500, 350, 375, 100, 100);
 	}
 
 	public void penguinFall(Ices ices) {

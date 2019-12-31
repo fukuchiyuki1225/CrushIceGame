@@ -65,13 +65,12 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					ices[j][i] = new JButton(blueIce);
 					countBlue++;
 				}
-				gs.addComponent(ices[j][i], 100);
-				ices[j][i].setBorderPainted(false);
 				if (i % 2 == 0) {
-					ices[j][i].setBounds(i * 75 + 50, j * 86 + 43 + 100, 100, 100);
+					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 100, 100, 100);
 				} else {
-					ices[j][i].setBounds(i * 75 + 50, j * 86 + 100, 100, 100);
+					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 100, 100, 100);
 				}
+				ices[j][i].setBorderPainted(false);
 				ices[j][i].addMouseListener(this);
 				ices[j][i].addMouseMotionListener(this);
 				ices[j][i].setContentAreaFilled(false);
@@ -82,20 +81,16 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 
 		whiteLabel = new JLabel(white0);
-		gs.addComponent(whiteLabel, 800);
-		whiteLabel.setBounds(925, 358, 100, 100);
+		gs.addComponent(whiteLabel, 800, 925, 358, 100, 100);
 
 		whiteLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png")));
-		gs.addComponent(whiteLabel2, 850);
-		whiteLabel2.setBounds(850, 315, 100, 100);
+		gs.addComponent(whiteLabel2, 850, 850, 315, 100, 100);
 
 		blueLabel = new JLabel(blue0);
-		gs.addComponent(blueLabel, 800);
-		blueLabel.setBounds(925, 444, 100, 100);
+		gs.addComponent(blueLabel, 800, 925, 444, 100, 100);
 
 		blueLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png")));
-		gs.addComponent(blueLabel2, 850);
-		blueLabel2.setBounds(850, 401, 100, 100);
+		gs.addComponent(blueLabel2, 850, 850, 401, 100, 100);
 
 		spinTheRoulette();
 		moveFlag = false;
