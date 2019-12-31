@@ -82,26 +82,18 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 
 		whiteLabel = new JLabel(white0);
-		/*whiteLabel.setText(Integer.toString(breakWhite));
-		whiteLabel.setHorizontalTextPosition(JLabel.CENTER);*/
 		gs.addComponent(whiteLabel, 800);
 		whiteLabel.setBounds(925, 358, 100, 100);
 
 		whiteLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png")));
-		/*whiteLabel2.setText("îí");
-		whiteLabel2.setHorizontalTextPosition(JLabel.CENTER);*/
 		gs.addComponent(whiteLabel2, 850);
 		whiteLabel2.setBounds(850, 315, 100, 100);
 
 		blueLabel = new JLabel(blue0);
-		/*blueLabel.setText(Integer.toString(breakBlue));
-		blueLabel.setHorizontalTextPosition(JLabel.CENTER);*/
 		gs.addComponent(blueLabel, 800);
 		blueLabel.setBounds(925, 444, 100, 100);
 
 		blueLabel2 = new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png")));
-		/*blueLabel2.setText("ê¬");
-		blueLabel2.setHorizontalTextPosition(JLabel.CENTER);*/
 		gs.addComponent(blueLabel2, 850);
 		blueLabel2.setBounds(850, 401, 100, 100);
 
@@ -131,10 +123,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			breakWhite = 0;
 			breakBlue = 1;
 			break;
-			/*case 5:
-			breakWhite = 0;
-			breakBlue = 0;
-			break;*/
 		case 5:
 			breakWhite = 3;
 			breakBlue = 3;
@@ -321,7 +309,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		private JLabel penguinLabel;
 		private Ices ices;
 		private double x0, x1, y0, y1, x, y, speed;
-		private int distance;
 		public PenguinMove(Penguin penguin, Ices ices, int jbNum) {
 			this.penguin = penguin;
 			penguinLabel = penguin.getPenguin();
@@ -333,18 +320,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			ices.setMoveFlag(true);
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
-			distance = penguin.calcDistance(x0, y0, x1, y1);
-			/*if (distance > 800) {
-				speed = 1.0;
-			} else if (distance > 450) {
-				speed = 0.5;
-			} else if (distance > 225) {
-				speed = 0.4;
-			} else {
-				speed = 0.2;
-			}*/
 			speed = 0.2;
-			System.out.println(distance);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -360,11 +336,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 						setSpeed(speed - 0.002);
 					}
 				} else if (x0 < x1) {
-					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(penguin.lerp(x0, y0, x1, y1, x)));
+					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x0, y0, x1, y1, x)));
 					x += speed;
 					setSpeed(speed - 0.002);
 				} else if (x0 > x1) {
-					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(penguin.lerp(x1, y1, x0, y0, x)));
+					penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x1, y1, x0, y0, x)));
 					x -= speed;
 					setSpeed(speed - 0.002);
 				}
