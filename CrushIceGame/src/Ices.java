@@ -305,19 +305,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					penguin.penguinMove(x, Calculation.lerp(x1, y1, x0, y0, x));
 					x -= speed;
 				}
-				setSpeed(speed - 0.002);
+				speed = speed < 0 ? 0 : speed - 0.002;
 				penguin.penguinFall(ices, ices.brokenIce);
 			} else {
 				ices.setMoveFlag(false);
 			}
 		}
-
-		public void setSpeed(double speed) {
-			this.speed = speed;
-			if (this.speed < 0) {
-				this.speed = 0;
-			}
-		}
 	}
-
 }
