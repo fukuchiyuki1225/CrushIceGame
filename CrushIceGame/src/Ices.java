@@ -310,15 +310,13 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public static class PenguinMove implements ActionListener {
 		private Penguin penguin;
-		private JLabel penguinLabel;
 		private Ices ices;
 		private double x0, x1, y0, y1, x, y, speed;
 		public PenguinMove(Penguin penguin, Ices ices, int jbNum) {
 			this.penguin = penguin;
-			penguinLabel = penguin.getPenguin();
 			this.ices = ices;
-			x0 = penguinLabel.getX();
-			y0 = penguinLabel.getY();
+			x0 = penguin.getPenguinX();
+			y0 = penguin.getPenguinY();
 			x1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getX();
 			y1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getY();
 			ices.setMoveFlag(true);
@@ -332,26 +330,19 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				if (Math.abs(x1 - x0) < 25) {
 					penguin.penguinMove(x, y);
 					if (y0 < y1) {
-						// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 						y += speed;
 					} else if (y0 >= y1) {
-						// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 						y -= speed;
-						// setSpeed(speed - 0.002);
 					}
 				} else if (x0 < x1) {
 					penguin.penguinMove(x, Calculation.lerp(x0, y0, x1, y1, x));
-					// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x0, y0, x1, y1, x)));
 					x += speed;
-					// setSpeed(speed - 0.002);
 				} else if (x0 >= x1) {
 					penguin.penguinMove(x, Calculation.lerp(x1, y1, x0, y0, x));
-					// penguinLabel.setLocation((int)Math.ceil(x), (int)Math.ceil(Calculation.lerp(x1, y1, x0, y0, x)));
 					x -= speed;
-					// setSpeed(speed - 0.002);
 				}
 				setSpeed(speed - 0.002);
-				penguin.penguinFall(ices);
+				penguin.penguinFall(ices, ices.brokenIce);
 			} else {
 				ices.setMoveFlag(false);
 			}
