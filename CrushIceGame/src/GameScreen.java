@@ -31,7 +31,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		c = getContentPane();
 		j = new JLayeredPane();
 		c.add(j);
-		c.setBackground(new Color(115, 245, 245));
 		j.addMouseListener(this);
 		j.addMouseMotionListener(this);
 		j.setLayout(null);
