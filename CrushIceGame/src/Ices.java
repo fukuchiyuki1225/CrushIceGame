@@ -1,3 +1,4 @@
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -203,6 +204,22 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	public void changeIceIcon(MouseEvent e) {
+		JButton jb = (JButton) e.getComponent();
+		Icon icon = jb.getIcon();
+		for (int j = 0; j <= blue; j++) {
+			for (int i = 0; i < 3; i++) {
+				if (icon == iceIcon[j][i]) {
+					jb.setIcon(hoverIcon[j][i]);
+					return;
+				} else if (icon == hoverIcon[j][i]) {
+					jb.setIcon(iceIcon[j][i]);
+					return;
+				}
+			}
+		}
+	}
+
 	public JButton[][] getIces() {
 		return ices;
 	}
@@ -231,29 +248,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseExited(MouseEvent e) {
-		JButton jb = (JButton) e.getComponent();
-		Icon icon = jb.getIcon();
-		for (int j = 0; j <= blue; j++) {
-			for (int i = 0; i < 3; i++) {
-				if (icon == hoverIcon[j][i]) {
-					jb.setIcon(iceIcon[j][i]);
-					return;
-				}
-			}
-		}
+		changeIceIcon(e);
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		JButton jb = (JButton) e.getComponent();
-		Icon icon = jb.getIcon();
-		for (int j = 0; j <= blue; j++) {
-			for (int i = 0; i < 3; i++) {
-				if (icon == iceIcon[j][i]) {
-					jb.setIcon(hoverIcon[j][i]);
-					return;
-				}
-			}
-		}
+		changeIceIcon(e);
 	}
 
 	public void mouseClicked(MouseEvent e) {
