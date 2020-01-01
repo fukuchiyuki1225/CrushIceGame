@@ -24,7 +24,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public GameScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");
-		setSize(1200, 900);
+		setSize(1200, 935);
 		setLocationRelativeTo(null);
 		setResizable(false);
 

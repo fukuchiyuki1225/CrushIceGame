@@ -46,9 +46,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				ices[j][i] = new JButton(iceIcon[rand][0]);
 				countIce[rand]++;
 				if (i % 2 == 0) {
-					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 100, 100, 100);
+					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
 				} else {
-					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 100, 100, 100);
+					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
 				}
 				ices[j][i].setBorderPainted(false);
 				ices[j][i].addMouseListener(this);
