@@ -1,4 +1,3 @@
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -157,14 +156,15 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 	}
 
-	public void breakIce(JButton jb) {
+	public void breakIce(MouseEvent e) {
+		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == brokenIce) {
 			return;
 		}
 		int jbNum = Integer.parseInt(jb.getActionCommand());
 		int diff = 0;
-
+		System.out.println("clicked: " + jbNum);
 		for (int j = 0; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
@@ -256,9 +256,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		JButton jb = (JButton) e.getComponent();
-		System.out.println(jb.getActionCommand());
-		breakIce(jb);
+		breakIce(e);
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -282,10 +280,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			y0 = penguin.getPenguinY();
 			x1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getX();
 			y1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getY();
-			ices.setMoveFlag(true);
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
 			speed = 0.2;
+			ices.setMoveFlag(true);
 		}
 
 		public void actionPerformed(ActionEvent e) {

@@ -17,7 +17,7 @@ public class Hammer {
 	public void changeHammerIcon() {
 		if (hammer.getIcon() == hammerIcon) {
 			hammer.setIcon(hammerIcon2);
-		} else {
+		} else if (hammer.getIcon() == hammerIcon2){
 			hammer.setIcon(hammerIcon);
 		}
 	}

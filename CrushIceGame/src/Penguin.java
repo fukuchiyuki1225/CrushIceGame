@@ -33,16 +33,16 @@ public class Penguin extends JLabel {
 		}
 	}
 
+	public void penguinMove(double x, double y) {
+		penguin.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
+	}
+
 	public int getPenguinX() {
 		return penguin.getX();
 	}
 
 	public int getPenguinY() {
 		return penguin.getY();
-	}
-
-	public void penguinMove(double x, double y) {
-		penguin.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
 	}
 
 	public JLabel getPenguin() {
