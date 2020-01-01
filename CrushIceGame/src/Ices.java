@@ -25,7 +25,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Random random;
 	private boolean moveFlag;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
-	private JLabel whiteLabel, blueLabel;
 	private JLabel[] numLabel;
 	private Timer timer;
 
@@ -61,17 +60,15 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 
-		whiteLabel = new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png")));
-		gs.addComponent(whiteLabel, 850, 850, 315, 100, 100);
-		blueLabel = new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png")));
-		gs.addComponent(blueLabel, 850, 850, 401, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.readImage("img/white.png"))), 850, 900, 515, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.readImage("img/blue.png"))), 850, 900, 601, 100, 100);
 
 		numLabel = new JLabel[] {
 				new JLabel(numIcon[white][0]),
 				new JLabel(numIcon[blue][0])
 		};
-		gs.addComponent(numLabel[0], 800, 925, 358, 100, 100);
-		gs.addComponent(numLabel[1], 800, 925, 444, 100, 100);
+		gs.addComponent(numLabel[white], 800, 975, 558, 100, 100);
+		gs.addComponent(numLabel[blue], 800, 975, 644, 100, 100);
 
 		spinTheRoulette();
 	}

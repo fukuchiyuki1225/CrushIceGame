@@ -16,7 +16,6 @@ import javax.swing.JLayeredPane;
 public class GameScreen extends JFrame implements MouseListener, MouseMotionListener {
 	private Container c;
 	static JLayeredPane j;
-	private ImageIcon backGround;
 	private Cursor cursor;
 	private Hammer hammer;
 	private Penguin penguin;
@@ -37,10 +36,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		j.addMouseMotionListener(this);
 		j.setLayout(null);
 
-		backGround = new ImageIcon(ImageLoader.readImage("img/sea.png"));
-		JLabel backLabel = new JLabel(backGround);
-		addComponent(backLabel, 0, 0, 0, 1200, 900);
-
+		addComponent(new JLabel(new ImageIcon(ImageLoader.readImage("img/sea.png"))), 0, 0, 0, 1200, 900);
+		addComponent(new JLabel(new ImageIcon(ImageLoader.readImage("img/logo.png"))), 900, 760, 50, 400, 315);
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.readImage("img/cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
 
