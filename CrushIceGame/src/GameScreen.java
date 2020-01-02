@@ -17,11 +17,13 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Container c;
 	static JLayeredPane j;
 	private Cursor cursor;
+	private MesgSend ms;
 	private Hammer hammer;
 	private Penguin penguin;
 	private Ices ices;
+	private int myTurn;
 
-	public GameScreen(MyTurn myTurn, Socket socket) {
+	public GameScreen(int num, Socket socket) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");
 		setSize(1200, 935);
@@ -37,12 +39,19 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 		addComponent(new JLabel(new ImageIcon(ImageLoader.readImage("img/sea.png"))), 0, 0, 0, 1200, 900);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.readImage("img/logo.png"))), 900, 760, 50, 400, 315);
+
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.readImage("img/cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
 
-		hammer = new Hammer(myTurn, this);
+		if (num % 2 == 0) {
+			myTurn = 0;
+		} else {
+			myTurn = 1;
+		}
+		ms = new MesgSend(socket);
+		hammer = new Hammer(this);
 		penguin = new Penguin(this);
-		ices = new Ices(hammer, penguin, myTurn, socket, this);
+		ices = new Ices(hammer, penguin, this);
 	}
 
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
@@ -53,6 +62,30 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public Ices getIces() {
 		return ices;
+	}
+
+	public Penguin getPenguin() {
+		return penguin;
+	}
+
+
+	public boolean isMyTurn() {
+		if (myTurn == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	public int getMyTurn() {
+		return myTurn;
+	}
+
+	public void setMyTurn() {
+		myTurn = 1 - myTurn;
+	}
+
+	public void send(String mesg) {
+		ms.send(mesg);
 	}
 
 	public void mouseDragged(MouseEvent e) {

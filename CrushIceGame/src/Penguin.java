@@ -5,9 +5,11 @@ import javax.swing.JLabel;
 
 public class Penguin extends JLabel {
 	private JLabel penguin;
+	private GameScreen gs;
 
 	public Penguin(GameScreen gs) {
 		penguin = new JLabel(new ImageIcon(ImageLoader.readImage("img/penguin.png")));
+		this.gs = gs;
 		gs.addComponent(penguin, 500, 350, 375, 100, 100);
 	}
 
@@ -25,7 +27,8 @@ public class Penguin extends JLabel {
 					y0 = penguin.getY() < ice.getY() ? ice.getY() : penguin.getY();
 					y1 = penguin.getY() < ice.getY() ? penguin.getY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
-						penguin.setVisible(false);
+						// penguin.setVisible(false);
+						gs.send("fall");
 						return;
 					}
 				}
@@ -35,6 +38,12 @@ public class Penguin extends JLabel {
 
 	public void penguinMove(double x, double y) {
 		penguin.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
+		gs.send("move" + " " + (int)Math.ceil(x) + " " + (int)Math.ceil(y));
+	}
+
+	public void penguinMove(int x, int y) {
+		if (gs.isMyTurn()) return;
+		penguin.setLocation(x, y);
 	}
 
 	public int getPenguinX() {

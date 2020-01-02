@@ -6,18 +6,18 @@ import javax.swing.JLabel;
 public class Hammer {
 	private ImageIcon hammerIcon, hammerIcon2;
 	private JLabel hammer;
-	private MyTurn myTurn;
+	private GameScreen gs;
 
-	public Hammer(MyTurn myTurn, GameScreen gs) {
+	public Hammer(GameScreen gs) {
 		hammerIcon = new ImageIcon(ImageLoader.readImage("img/pick_hammer.png"));
 		hammerIcon2 = new ImageIcon(ImageLoader.readImage("img/pick_hammer_2.png"));
 		hammer = new JLabel(hammerIcon);
+		this.gs = gs;
 		gs.addComponent(hammer, 1000, 0, 0, 200, 170);
-		this.myTurn = myTurn;
 	}
 
 	public void changeHammerIcon() {
-		if (!myTurn.isMyTurn()) return;
+		if (!gs.isMyTurn()) return;
 		if (hammer.getIcon() == hammerIcon) {
 			hammer.setIcon(hammerIcon2);
 		} else if (hammer.getIcon() == hammerIcon2){

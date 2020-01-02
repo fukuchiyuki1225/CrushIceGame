@@ -54,15 +54,37 @@ public class Game {
 					if (inputLine != null) {
 						String[] inputTokens = inputLine.split(" ");
 						String cmd = inputTokens[0];
-						if (cmd.equals("join")) {
+						switch (cmd) {
+						case "join":
 							if (!existGs && Integer.parseInt(inputTokens[1]) > 1) {
-								gs = new GameScreen(new MyTurn(myNumber), socket);
+								gs = new GameScreen(myNumber, socket);
 								gs.setVisible(true);
 								existGs = true;
 							}
-						}
-						if (cmd.equals("initialize")) {
+							break;
+						case "initialize":
 							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
+							break;
+						case "roulette":
+							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
+							break;
+						case "changeNumIcon":
+							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							break;
+						case "changeIceIcon":
+							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
+							break;
+						case "move":
+							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							break;
+						case "fall":
+							gs.getPenguin().getPenguin().setVisible(false);
+							break;
+						case "changeTurn":
+							gs.setMyTurn();
+							break;
+						default:
+							break;
 						}
 					} else {
 						break;
