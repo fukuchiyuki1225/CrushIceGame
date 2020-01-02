@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -7,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.net.Socket;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,9 +19,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Cursor cursor;
 	private Hammer hammer;
 	private Penguin penguin;
-	// private Ices ices;
+	private Ices ices;
 
-	public GameScreen() {
+	public GameScreen(MyTurn myTurn, Socket socket) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");
 		setSize(1200, 935);
@@ -40,15 +40,19 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.readImage("img/cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
 
-		hammer = new Hammer(this);
+		hammer = new Hammer(myTurn, this);
 		penguin = new Penguin(this);
-		new Ices(hammer, penguin, this);
+		ices = new Ices(hammer, penguin, myTurn, socket, this);
 	}
 
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
 		j.setLayer(comp, layer);
 		j.add(comp);
 		comp.setBounds(x, y, width, height);
+	}
+
+	public Ices getIces() {
+		return ices;
 	}
 
 	public void mouseDragged(MouseEvent e) {

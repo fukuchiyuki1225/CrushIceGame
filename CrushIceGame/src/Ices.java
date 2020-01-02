@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.net.Socket;
 import java.util.Random;
 
 import javax.swing.Icon;
@@ -19,6 +20,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon brokenIce;
 	private Hammer hammer;
 	private Penguin penguin;
+	private MyTurn myTurn;
+	private GameScreen gs;
 	private JButton ices[][];
 	private int[][] hitCount, mustHitNum;
 	private int[] countIce, breakIce;
@@ -27,11 +30,14 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabel;
 	private Timer timer;
+	private MesgSend ms;
 
-	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
+	public Ices(Hammer hammer, Penguin penguin, MyTurn myTurn, Socket socket, GameScreen gs) {
 		loadIceIcon();
 		this.hammer = hammer;
 		this.penguin = penguin;
+		this.myTurn = myTurn;
+		this.gs = gs;
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];
 		mustHitNum = new int[icesY][icesX];
@@ -39,24 +45,28 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		breakIce = new int[2];
 		random = new Random();
 		moveFlag = false;
+		ms = new MesgSend(socket);
 
-		for (int j = 0; j < 7; j++) {
-			for (int i = 0; i < icesX; i++) {
-				int rand = random.nextInt(2);
-				ices[j][i] = new JButton(iceIcon[rand][0]);
-				countIce[rand]++;
-				if (i % 2 == 0) {
-					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
-				} else {
-					gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
+		if (myTurn.isMyTurn()) {
+			for (int j = 0; j < 7; j++) {
+				for (int i = 0; i < icesX; i++) {
+					int rand = random.nextInt(2);
+					ices[j][i] = new JButton(iceIcon[rand][0]);
+					countIce[rand]++;
+					if (i % 2 == 0) {
+						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
+					} else {
+						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
+					}
+					ices[j][i].setBorderPainted(false);
+					ices[j][i].addMouseListener(this);
+					ices[j][i].addMouseMotionListener(this);
+					ices[j][i].setContentAreaFilled(false);
+					ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
+					mustHitNum[j][i] = random.nextInt(5) + 1;
+					hitCount[j][i] = 0;
+					ms.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum[j][i]);
 				}
-				ices[j][i].setBorderPainted(false);
-				ices[j][i].addMouseListener(this);
-				ices[j][i].addMouseMotionListener(this);
-				ices[j][i].setContentAreaFilled(false);
-				ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
-				mustHitNum[j][i] = random.nextInt(5) + 1;
-				hitCount[j][i] = 0;
 			}
 		}
 
@@ -115,6 +125,24 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		brokenIce = new ImageIcon(ImageLoader.readImage("img/broken_ice.png"));
 	}
 
+	public void initializeIce(int j, int i, int rand, int mustHitCount) {
+		if (myTurn.isMyTurn()) return;
+		ices[j][i] = new JButton(iceIcon[rand][0]);
+		countIce[rand]++;
+		if (i % 2 == 0) {
+			gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
+		} else {
+			gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
+		}
+		ices[j][i].setBorderPainted(false);
+		ices[j][i].addMouseListener(this);
+		ices[j][i].addMouseMotionListener(this);
+		ices[j][i].setContentAreaFilled(false);
+		ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
+		mustHitNum[j][i] = mustHitCount;
+		hitCount[j][i] = 0;
+	}
+
 	public void spinTheRoulette() {
 		int roulette = random.nextInt(6);
 		switch (roulette) {
@@ -154,6 +182,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void breakIce(MouseEvent e) {
+		if (!myTurn.isMyTurn()) return;
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == brokenIce) {
@@ -202,6 +231,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void changeIceIcon(MouseEvent e) {
+		if (!myTurn.isMyTurn()) return;
 		JButton jb = (JButton) e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = 0; j <= blue; j++) {
