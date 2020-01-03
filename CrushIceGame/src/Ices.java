@@ -24,7 +24,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private int[][] hitCount, mustHitNum;
 	private int[] countIce, breakIce;
 	private Random random;
-	private boolean moveFlag;
+	private boolean moveFlag, turnFlag;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabel;
 	private Timer timer;
@@ -41,6 +41,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		breakIce = new int[2];
 		random = new Random();
 		moveFlag = false;
+		turnFlag = false;
 
 		if (gs.isMyTurn()) {
 			for (int j = 0; j < 7; j++) {
@@ -245,8 +246,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 
 		if (breakIce[white] <= 0 && breakIce[blue] <= 0) {
+			turnFlag = true;
 			spinTheRoulette();
-			gs.send("changeTurn");
 		}
 	}
 
@@ -370,6 +371,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				}
 				speed = speed < 0 ? 0 : speed - 0.002;
 				penguin.penguinFall(ices, ices.brokenIce);
+			} else if (ices.turnFlag) {
+				ices.gs.send("changeTurn");
+				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
 			}

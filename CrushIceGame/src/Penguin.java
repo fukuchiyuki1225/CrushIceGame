@@ -27,7 +27,6 @@ public class Penguin extends JLabel {
 					y0 = penguin.getY() < ice.getY() ? ice.getY() : penguin.getY();
 					y1 = penguin.getY() < ice.getY() ? penguin.getY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
-						// penguin.setVisible(false);
 						gs.send("fall");
 						return;
 					}
