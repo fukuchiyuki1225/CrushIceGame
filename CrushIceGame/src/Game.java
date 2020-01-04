@@ -85,6 +85,8 @@ public class Game {
 							break;
 						case "changeTurn":
 							gs.setMyTurn();
+							gs.getIces().changeTurnLabel();
+							gs.getIces().spinTheRoulette();
 							break;
 						default:
 							break;
