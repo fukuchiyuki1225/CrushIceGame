@@ -1,11 +1,3 @@
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,61 +5,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-
-public class Game extends JFrame implements MouseListener, MouseMotionListener {
-	private Cursor cursor;
-	private Hammer hammer;
-	private Penguin penguin;
-	private Ices ices;
-	static JLayeredPane j;
-	private Container c;
-	private ImageIcon backGround;
+public class Game {
 	PrintWriter out;
 
 	public Game() {
-		/*String myName = JOptionPane.showInputDialog(null, "名前を入力してください.", "名前の入力", JOptionPane.QUESTION_MESSAGE);
-		if (myName.equals("")) {
-			myName = "No name";
-		}
-
-		String addr = JOptionPane.showInputDialog(null, "サーバーのIPアドレスを入力してください.", "サーバーのIPアドレス", JOptionPane.QUESTION_MESSAGE);
-		if (addr.equals("")) {
-			addr = "localhost";
-		}*/
 		String myName = "No name";
 		String addr = "localhost";
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("クラッシュアイスゲーム");
-		setSize(1200, 900);
-		setLocationRelativeTo(null);
-
-		c = getContentPane();
-		j = new JLayeredPane();
-		c.add(j);
-		c.setBackground(new Color(115, 245, 245));
-		j.addMouseListener(this);
-		j.addMouseMotionListener(this);
-		j.setLayout(null);
-
-		backGround = new ImageIcon("img/sea.png");
-		JLabel backLabel = new JLabel(backGround);
-		j.setLayer(backLabel, 0);
-		j.add(backLabel);
-		backLabel.setBounds(0, 0, 1200, 900);
-
-		hammer = new Hammer();
-		penguin = new Penguin();
-		ices = new Ices(hammer, penguin);
-
-		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("img/surcor.png").getImage(), new Point(), "");
-		setCursor(cursor);
-
 		Socket socket = null;
+
 		try {
 			socket = new Socket(addr, 10000);
 		} catch (UnknownHostException e) {
@@ -78,15 +23,21 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
 		mrt.start();
+
+		/*GameScreen gs = new GameScreen();
+		gs.setVisible(true);*/
 	}
 
 	public class MesgRecvThread extends Thread {
 		Socket socket;
 		String myName;
+		Boolean existGs;
+		GameScreen gs;
 
 		public MesgRecvThread(Socket socket, String myName) {
 			this.socket = socket;
 			this.myName = myName;
+			existGs = false;
 		}
 
 		public void run() {
@@ -95,12 +46,46 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
 				out.println(myName);
-				// String myNumStr = br.readLine();
-				// int myNumber = Integer.parseInt(myNumStr);
+				String myNumberStr = br.readLine();
+				int myNumber = Integer.parseInt(myNumberStr);
+				out.println("join" + " " + myNumber);
 				while (true) {
 					String inputLine = br.readLine();
 					if (inputLine != null) {
-
+						String[] inputTokens = inputLine.split(" ");
+						String cmd = inputTokens[0];
+						switch (cmd) {
+						case "join":
+							if (!existGs && Integer.parseInt(inputTokens[1]) > 1) {
+								gs = new GameScreen(myNumber, socket);
+								gs.setVisible(true);
+								existGs = true;
+							}
+							break;
+						case "initialize":
+							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
+							break;
+						case "roulette":
+							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
+							break;
+						case "changeNumIcon":
+							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							break;
+						case "changeIceIcon":
+							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
+							break;
+						case "move":
+							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							break;
+						case "fall":
+							gs.getPenguin().getPenguin().setVisible(false);
+							break;
+						case "changeTurn":
+							gs.setMyTurn();
+							break;
+						default:
+							break;
+						}
 					} else {
 						break;
 					}
@@ -112,37 +97,6 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public static void main(String[] args) {
-		Game game = new Game();
-		game.setVisible(true);
-	}
-
-	public void mouseClicked(MouseEvent e) {
-
-	}
-
-	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();
-	}
-
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	public void mouseExited(MouseEvent e) {
-
-	}
-
-	public void mouseDragged(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		Point p = e.getPoint();
-		hammer.setHammerLocation(p);
+		new Game();
 	}
 }
