@@ -15,7 +15,7 @@ import javax.swing.JLayeredPane;
 
 public class GameScreen extends JFrame implements MouseListener, MouseMotionListener {
 	private Container c;
-	static JLayeredPane j;
+	private JLayeredPane j;
 	private Cursor cursor;
 	private MesgSend ms;
 	private Hammer hammer;
