@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 public class GameScreen extends JFrame implements MouseListener, MouseMotionListener {
 	private Container c;
-	private JLayeredPane j, title, game;
+	private JLayeredPane title, game;
 	private Cursor cursor;
 	private MesgSend ms;
 	private Hammer hammer;
@@ -25,7 +25,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Ices ices;
 	private int myTurn;
 	private final int start = 0, help = 1, setting = 2, nomal = 0, hover = 1;
-	private JLabel titleBack, gameBack;
 	private JButton startBt, helpBt, settingBt;
 	private ImageIcon[][] UI;
 	private String currentScreen;
@@ -38,15 +37,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		setResizable(false);
 
 		c = getContentPane();
-		j = new JLayeredPane();
-		currentScreen = "game";
-		c.add(j);
-		j.addMouseListener(this);
-		j.addMouseMotionListener(this);
-		j.setLayout(null);
+		currentScreen = "title";
 
-		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
-		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
@@ -57,12 +49,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			myTurn = 1;
 		}
 
-		/*loadUI();
-		setTitleScreen();*/
+		loadUI();
+		setTitleScreen();
 		this.ms = ms;
 		hammer = new Hammer(this);
-		penguin = new Penguin(this);
-		ices = new Ices(hammer, penguin, this);
 	}
 
 	public void loadUI() {
@@ -86,10 +76,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		title.addMouseMotionListener(this);
 		title.setLayout(null);
 
-		titleBack = new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png")));
-		title.setLayer(titleBack, 0);
-		title.add(titleBack);
-		titleBack.setBounds(0, 0, 1200, 900);
+		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
 
 		startBt = new JButton(UI[nomal][start]);
 		startBt.setBorderPainted(false);
@@ -113,6 +100,21 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		addComponent(settingBt, 100, 100, 650, 458, 93);
 	}
 
+	public void setGameScreen() {
+		currentScreen = "game";
+		title.setVisible(false);
+		game = new JLayeredPane();
+		c.add(game);
+		game.addMouseListener(this);
+		game.addMouseMotionListener(this);
+		game.setLayout(null);
+		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
+		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
+		hammer = new Hammer(this);
+		penguin = new Penguin(this);
+		ices = new Ices(hammer, penguin, this);
+	}
+
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
 		switch (currentScreen) {
 		case "title":
@@ -120,8 +122,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			title.add(comp);
 			break;
 		case "game":
-			j.setLayer(comp, layer);
-			j.add(comp);
+			game.setLayer(comp, layer);
+			game.add(comp);
 			break;
 		default:
 			break;
@@ -187,7 +189,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void mouseClicked(MouseEvent e) {
-
+		JButton jb = (JButton)e.getComponent();
+		Icon icon = jb.getIcon();
+		if (icon == UI[hover][start] && currentScreen.equals("title")) {
+			send("join");
+		}
 	}
 
 	public void mousePressed(MouseEvent e) {

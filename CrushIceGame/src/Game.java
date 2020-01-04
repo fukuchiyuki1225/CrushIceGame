@@ -38,7 +38,7 @@ public class Game {
 		public MesgRecvThread(Socket socket, String myName) {
 			this.socket = socket;
 			this.myName = myName;
-			existGs = false;
+			// existGs = false;
 			ms = new MesgSend(socket);
 		}
 
@@ -59,13 +59,9 @@ public class Game {
 						String[] inputTokens = inputLine.split(" ");
 						String cmd = inputTokens[0];
 						switch (cmd) {
-						/*case "join":
-							if (!existGs && Integer.parseInt(inputTokens[1]) > 1) {
-								gs = new GameScreen(myNumber, socket);
-								gs.setVisible(true);
-								existGs = true;
-							}
-							break;*/
+						case "join":
+							gs.setGameScreen();
+							break;
 						case "initialize":
 							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
 							break;
