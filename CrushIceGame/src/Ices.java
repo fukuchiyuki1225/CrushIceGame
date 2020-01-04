@@ -173,15 +173,19 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		default:
 			break;
 		}
-		setNumIcon();
+		changeNumIcon();
 	}
 
 	public void changeBreakIce(int color, int num) {
 		breakIce[color] = num;
-		setNumIcon();
+		changeNumIcon();
 	}
 
-	public void setNumIcon() {
+	public void changeHitCount(int jbNum) {
+		hitCount[jbNum / icesX][jbNum % icesX]++;
+	}
+
+	public void changeNumIcon() {
 		for (int i = 0; i <= blue; i++) {
 			numLabel[i].setIcon(numIcon[i][breakIce[i]]);
 		}
@@ -207,7 +211,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 							timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 							timer.start();
 						}
-						hitCount[jbNum / icesX][jbNum % icesX]++;
+						gs.send("changeHitCount" + " " + jbNum);
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							breakIce[j]--;
 							countIce[j]--;

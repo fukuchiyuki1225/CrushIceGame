@@ -68,6 +68,9 @@ public class Game {
 						case "roulette":
 							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
 							break;
+						case "changeHitCount":
+							gs.getIces().changeHitCount(Integer.parseInt(inputTokens[1]));
+							break;
 						case "changeNumIcon":
 							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
