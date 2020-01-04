@@ -9,8 +9,8 @@ public class Hammer {
 	private GameScreen gs;
 
 	public Hammer(GameScreen gs) {
-		hammerIcon = new ImageIcon(ImageLoader.readImage("img/pick_hammer.png"));
-		hammerIcon2 = new ImageIcon(ImageLoader.readImage("img/pick_hammer_2.png"));
+		hammerIcon = new ImageIcon(ImageLoader.loadImage("img/pick_hammer.png"));
+		hammerIcon2 = new ImageIcon(ImageLoader.loadImage("img/pick_hammer_2.png"));
 		hammer = new JLabel(hammerIcon);
 		this.gs = gs;
 		gs.addComponent(hammer, 1000, 0, 0, 200, 170);
