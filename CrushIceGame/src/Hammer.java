@@ -28,4 +28,8 @@ public class Hammer {
 	public void setHammerLocation(Point p) {
 		hammer.setLocation(p.x - 50, p.y - 120);
 	}
+
+	public void cleanHammerIcon() {
+		hammer.setIcon(hammerIcon);
+	}
 }

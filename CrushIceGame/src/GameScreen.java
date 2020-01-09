@@ -147,7 +147,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		return penguin;
 	}
 
-
 	public boolean isMyTurn() {
 		if (myTurn == 1) {
 			return true;
@@ -163,6 +162,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		myTurn = 1 - myTurn;
 		turnLabel.setIcon(turnIcon[getMyTurn()]);
 		ices.spinTheRoulette();
+		ices.cleanIceIcon();
+		hammer.cleanHammerIcon();
 	}
 
 	public void send(String mesg) {

@@ -251,7 +251,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 		if (breakIce[white] <= 0 && breakIce[blue] <= 0) {
 			turnFlag = true;
-			// spinTheRoulette();
 		}
 	}
 
@@ -272,6 +271,20 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			break;
 		}
 		ices[jbNum / icesX][jbNum % icesX].setIcon(chIcon);
+	}
+
+	public void cleanIceIcon() {
+		for (int j = 0; j < icesY; j++) {
+			for (int i = 0; i < icesX; i++) {
+				for (int l = 0; l < 3; l++) {
+					for (int k = white; k <= blue; k++) {
+						if (ices[j][i].getIcon() == hoverIcon[k][l]) {
+							ices[j][i].setIcon(iceIcon[k][l]);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void hoverIceIcon(MouseEvent e) {
