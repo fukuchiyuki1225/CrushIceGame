@@ -16,7 +16,7 @@ import javax.swing.Timer;
 
 public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private ImageIcon[][] numIcon, iceIcon, hoverIcon;
-	private ImageIcon brokenIce, myTurn, yourTurn;
+	private ImageIcon brokenIce;
 	private Hammer hammer;
 	private Penguin penguin;
 	private GameScreen gs;
@@ -27,7 +27,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private boolean moveFlag, turnFlag;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabel;
-	private JLabel turnLabel;
 	private Timer timer;
 
 	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
@@ -77,16 +76,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		gs.addComponent(numLabel[white], 800, 975, 558, 100, 100);
 		gs.addComponent(numLabel[blue], 800, 975, 644, 100, 100);
 
-		turnLabel = new JLabel();
-		changeTurnLabel();
-		gs.addComponent(turnLabel, 800, 850, 400, 250, 120);
-
 		spinTheRoulette();
 	}
 
 	private void loadIceIcon() {
-		myTurn = new ImageIcon(ImageLoader.loadImage("img/my_turn.png"));
-		yourTurn = new ImageIcon(ImageLoader.loadImage("img/your_turn.png"));
 		iceIcon = new ImageIcon[][] {
 			{
 				new ImageIcon(ImageLoader.loadImage("img/white_ice.png")),
@@ -259,14 +252,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		if (breakIce[white] <= 0 && breakIce[blue] <= 0) {
 			turnFlag = true;
 			// spinTheRoulette();
-		}
-	}
-
-	public void changeTurnLabel() {
-		if (gs.isMyTurn()) {
-			turnLabel.setIcon(myTurn);
-		} else {
-			turnLabel.setIcon(yourTurn);
 		}
 	}
 

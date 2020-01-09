@@ -26,7 +26,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private int myTurn;
 	private final int start = 0, help = 1, setting = 2, nomal = 0, hover = 1;
 	private JButton startBt, helpBt, settingBt;
+	private JLabel turnLabel;
 	private ImageIcon[][] UI;
+	private ImageIcon[] turnIcon;
 	private String currentScreen;
 
 	public GameScreen(int num, MesgSend ms) {
@@ -68,6 +70,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				new ImageIcon(ImageLoader.loadImage("img/setting_2.png"))
 			}
 		};
+		turnIcon = new ImageIcon[] {
+				new ImageIcon(ImageLoader.loadImage("img/your_turn.png")),
+				new ImageIcon(ImageLoader.loadImage("img/my_turn.png"))
+		};
 	}
 
 	public void setTitleScreen() {
@@ -105,7 +111,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		title.setVisible(false);
 		game = new JLayeredPane();
 		c.add(game);
-		game.addMouseListener(this);
+		// game.addMouseListener(this);
 		game.addMouseMotionListener(this);
 		game.setLayout(null);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
@@ -113,6 +119,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		hammer = new Hammer(this);
 		penguin = new Penguin(this);
 		ices = new Ices(hammer, penguin, this);
+		turnLabel = new JLabel(turnIcon[getMyTurn()]);
+		addComponent(turnLabel, 800, 850, 400, 250, 120);
 	}
 
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
@@ -153,6 +161,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public void setMyTurn() {
 		myTurn = 1 - myTurn;
+		turnLabel.setIcon(turnIcon[getMyTurn()]);
+		ices.spinTheRoulette();
 	}
 
 	public void send(String mesg) {
