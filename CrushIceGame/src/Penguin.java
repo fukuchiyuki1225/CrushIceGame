@@ -5,15 +5,23 @@ import javax.swing.JLabel;
 
 public class Penguin extends JLabel {
 	private JLabel penguin;
+	private ImageIcon[] penguinIcon;
+	private boolean fallFlag;
 	private GameScreen gs;
 
 	public Penguin(GameScreen gs) {
-		penguin = new JLabel(new ImageIcon(ImageLoader.loadImage("img/penguin.png")));
+		penguinIcon = new ImageIcon[] {
+				new ImageIcon(ImageLoader.loadImage("img/penguin.png")),
+				new ImageIcon(ImageLoader.loadImage("img/penguin_2.png"))
+		};
+		penguin = new JLabel(penguinIcon[0]);
+		fallFlag = false;
 		this.gs = gs;
 		gs.addComponent(penguin, 500, 350, 375, 100, 100);
 	}
 
 	public void penguinFall(Ices ices, Icon brokenIce) {
+		if (fallFlag) return;
 		if (penguin.getX() < 10 || penguin.getX() > 700 || penguin.getY() < 90 || penguin.getY() > 700) {
 			penguin.setVisible(false);
 			return;
@@ -28,10 +36,19 @@ public class Penguin extends JLabel {
 					y1 = penguin.getY() < ice.getY() ? penguin.getY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
 						gs.send("fall");
+						fallFlag = true;
 						return;
 					}
 				}
 			}
+		}
+	}
+
+	public void setPenguinIcon() {
+		if (penguin.getIcon() == penguinIcon[0]) {
+			penguin.setIcon(penguinIcon[1]);
+		} else {
+			penguin.setIcon(penguinIcon[0]);
 		}
 	}
 

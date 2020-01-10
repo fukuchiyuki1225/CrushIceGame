@@ -81,10 +81,14 @@ public class Game {
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
 						case "fall":
-							gs.getPenguin().getPenguin().setVisible(false);
+							// gs.getPenguin().getPenguin().setVisible(false);
+							gs.setGameOverScreen();
 							break;
 						case "changeTurn":
 							gs.setMyTurn();
+							break;
+						case "toTitle":
+							gs.setTitleScreen();
 							break;
 						default:
 							break;

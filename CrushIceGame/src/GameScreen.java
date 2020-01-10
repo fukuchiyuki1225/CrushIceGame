@@ -17,15 +17,16 @@ import javax.swing.SwingUtilities;
 
 public class GameScreen extends JFrame implements MouseListener, MouseMotionListener {
 	private Container c;
-	private JLayeredPane title, game;
+	private JLayeredPane title, game, gameOver;
 	private Cursor cursor;
 	private MesgSend ms;
 	private Hammer hammer;
 	private Penguin penguin;
 	private Ices ices;
 	private int myTurn;
-	private final int start = 0, help = 1, setting = 2, nomal = 0, hover = 1;
-	private JButton startBt, helpBt, settingBt;
+	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
+	private JButton startBt, helpBt, settingBt, againBt, toTitleBt;
+	private JButton[] buttons;
 	private JLabel turnLabel;
 	private ImageIcon[][] UI;
 	private ImageIcon[] turnIcon;
@@ -41,6 +42,12 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		c = getContentPane();
 		currentScreen = "title";
 
+		title = null;
+		game = null;
+		gameOver = null;
+
+		hammer = new Hammer(this);
+		buttons = new JButton[toTitle + 1];
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), "");
 		setCursor(cursor);
@@ -51,23 +58,26 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			myTurn = 1;
 		}
 
-		loadUI();
+		loadImage();
 		setTitleScreen();
 		this.ms = ms;
-		hammer = new Hammer(this);
 	}
 
-	public void loadUI() {
+	public void loadImage() {
 		UI = new ImageIcon[][] {
 			{
 				new ImageIcon(ImageLoader.loadImage("img/start.png")),
 				new ImageIcon(ImageLoader.loadImage("img/help.png")),
-				new ImageIcon(ImageLoader.loadImage("img/setting.png"))
+				new ImageIcon(ImageLoader.loadImage("img/setting.png")),
+				new ImageIcon(ImageLoader.loadImage("img/again.png")),
+				new ImageIcon(ImageLoader.loadImage("img/to_title.png"))
 			},
 			{
 				new ImageIcon(ImageLoader.loadImage("img/start_2.png")),
 				new ImageIcon(ImageLoader.loadImage("img/help_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/setting_2.png"))
+				new ImageIcon(ImageLoader.loadImage("img/setting_2.png")),
+				new ImageIcon(ImageLoader.loadImage("img/again_2.png")),
+				new ImageIcon(ImageLoader.loadImage("img/to_title_2.png"))
 			}
 		};
 		turnIcon = new ImageIcon[] {
@@ -77,65 +87,172 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setTitleScreen() {
-		title = new JLayeredPane();
-		c.add(title);
-		title.addMouseMotionListener(this);
-		title.setLayout(null);
+		currentScreen = "title";
 
-		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
+		/*removeScreen(game);
+		removeScreen(gameOver);*/
+		removeScreen(game);
+		if (gameOver != null) {
+			gameOver.setVisible(false);
+		}
 
-		startBt = new JButton(UI[nomal][start]);
-		startBt.setBorderPainted(false);
-		startBt.setContentAreaFilled(false);
-		startBt.addMouseListener(this);
-		startBt.addMouseMotionListener(this);
-		addComponent(startBt, 100, 100, 450, 458, 93);
+		if (title == null) {
+			title = new JLayeredPane();
+			title.addMouseMotionListener(this);
+			c.add(title);
 
-		helpBt = new JButton(UI[nomal][help]);
-		helpBt.setBorderPainted(false);
-		helpBt.setContentAreaFilled(false);
-		helpBt.addMouseListener(this);
-		helpBt.addMouseMotionListener(this);
-		addComponent(helpBt, 100, 100, 550, 458, 93);
+			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
+			/*hammer = null;
+			hammer = new Hammer(this);*/
 
-		settingBt = new JButton(UI[nomal][setting]);
-		settingBt.setBorderPainted(false);
-		settingBt.setContentAreaFilled(false);
-		settingBt.addMouseListener(this);
-		settingBt.addMouseMotionListener(this);
-		addComponent(settingBt, 100, 100, 650, 458, 93);
+			/*startBt = new JButton(UI[nomal][start]);
+			startBt.setBorderPainted(false);
+			startBt.setContentAreaFilled(false);
+			startBt.addMouseListener(this);
+			startBt.addMouseMotionListener(this);*/
+			buttons[start] = new JButton(UI[nomal][start]);
+			buttons[start].setBorderPainted(false);
+			buttons[start].setContentAreaFilled(false);
+			buttons[start].addMouseListener(this);
+			buttons[start].addMouseMotionListener(this);
+
+			addComponent(buttons[start], 100, 100, 450, 458, 93);
+
+			/*helpBt = new JButton(UI[nomal][help]);
+			helpBt.setBorderPainted(false);
+			helpBt.setContentAreaFilled(false);
+			helpBt.addMouseListener(this);
+			helpBt.addMouseMotionListener(this);*/
+			buttons[help] = new JButton(UI[nomal][help]);
+			buttons[help].setBorderPainted(false);
+			buttons[help].setContentAreaFilled(false);
+			buttons[help].addMouseListener(this);
+			buttons[help].addMouseMotionListener(this);
+			addComponent(buttons[help], 100, 100, 550, 458, 93);
+
+			/*settingBt = new JButton(UI[nomal][setting]);
+			settingBt.setBorderPainted(false);
+			settingBt.setContentAreaFilled(false);
+			settingBt.addMouseListener(this);
+			settingBt.addMouseMotionListener(this);*/
+			buttons[setting] = new JButton(UI[nomal][setting]);
+			buttons[setting].setBorderPainted(false);
+			buttons[setting].setContentAreaFilled(false);
+			buttons[setting].addMouseListener(this);
+			buttons[setting].addMouseMotionListener(this);
+			addComponent(buttons[setting], 100, 100, 650, 458, 93);
+		}
+		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
+		System.out.println("title");
+
+		title.setVisible(true);
+		cleanButton();
+		repaint();
 	}
 
 	public void setGameScreen() {
 		currentScreen = "game";
+		/*removeScreen(title);
+		removeScreen(gameOver);*/
 		title.setVisible(false);
+		if (gameOver != null) {
+			gameOver.setVisible(false);
+		}
+
 		game = new JLayeredPane();
-		c.add(game);
-		// game.addMouseListener(this);
 		game.addMouseMotionListener(this);
-		game.setLayout(null);
+		c.add(game);
+		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
-		hammer = new Hammer(this);
+		/*hammer = null;
+		hammer = new Hammer(this);*/
+
 		penguin = new Penguin(this);
 		ices = new Ices(hammer, penguin, this);
 		turnLabel = new JLabel(turnIcon[getMyTurn()]);
 		addComponent(turnLabel, 800, 850, 400, 250, 120);
+
+		System.out.println("game");
+		game.setVisible(true);
+		repaint();
+	}
+
+	public void setGameOverScreen() {
+		currentScreen = "gameOver";
+		penguin.getPenguin().setVisible(false);
+
+		if (gameOver == null) {
+			gameOver = new JLayeredPane();
+			gameOver.addMouseMotionListener(this);
+			c.add(gameOver);
+
+/*//			againBt = new JButton(UI[nomal][again]);
+//			againBt.setBorderPainted(false);
+//			againBt.setContentAreaFilled(false);
+//			againBt.addMouseListener(this);
+//			againBt.addMouseMotionListener(this);
+*/			buttons[again] = new JButton(UI[nomal][again]);
+			buttons[again].setBorderPainted(false);
+			buttons[again].setContentAreaFilled(false);
+			buttons[again].addMouseListener(this);
+			buttons[again].addMouseMotionListener(this);
+			addComponent(buttons[again], 1200, 350, 400, 458, 93);
+
+			/*toTitleBt = new JButton(UI[nomal][toTitle]);
+			toTitleBt.setBorderPainted(false);
+			toTitleBt.setContentAreaFilled(false);
+			toTitleBt.addMouseListener(this);
+			toTitleBt.addMouseMotionListener(this);*/
+			buttons[toTitle] = new JButton(UI[nomal][toTitle]);
+			buttons[toTitle].setBorderPainted(false);
+			buttons[toTitle].setContentAreaFilled(false);
+			buttons[toTitle].addMouseListener(this);
+			buttons[toTitle].addMouseMotionListener(this);
+			addComponent(buttons[toTitle], 1200, 350, 500, 458, 93);
+		}
+		gameOver.setVisible(true);
+
+		if (isMyTurn()) {
+			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/lose.png"))), 1000, 0, 0, 1200, 900);
+		} else {
+			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/win.png"))), 1000, 0, 0, 1200, 900);
+		}
+
+		/*hammer = null;
+		hammer = new Hammer(this);*/
+		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
+
+		System.out.println("gameover");
+
+		removeScreen(game);
+		cleanButton();
+		repaint();
+	}
+
+	public void removeScreen(JLayeredPane j) {
+		if (j == null) return;
+		j.setVisible(false);
+		c.remove(j);
+		j = null;
 	}
 
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
+		JLayeredPane j = null;
 		switch (currentScreen) {
 		case "title":
-			title.setLayer(comp, layer);
-			title.add(comp);
+			j = title;
 			break;
 		case "game":
-			game.setLayer(comp, layer);
-			game.add(comp);
+			j = game;
 			break;
+		case "gameOver":
+			j = gameOver;
 		default:
 			break;
 		}
+		j.setLayer(comp, layer);
+		j.add(comp);
 		comp.setBounds(x, y, width, height);
 	}
 
@@ -145,6 +262,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public Penguin getPenguin() {
 		return penguin;
+	}
+
+	public String getCurrentScreen() {
+		return currentScreen;
 	}
 
 	public boolean isMyTurn() {
@@ -174,7 +295,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = nomal; j <= hover; j++) {
-			for (int i = start; i <= setting; i++) {
+			for (int i = start; i <= toTitle; i++) {
 				if (icon == UI[j][i]) {
 					if (j == nomal) {
 						jb.setIcon(UI[hover][i]);
@@ -184,6 +305,15 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 						return;
 					}
 				}
+			}
+		}
+	}
+
+	public void cleanButton() {
+		for (int i = start; i <= toTitle; i++) {
+			if (buttons[i] == null) break;
+			if (buttons[i].getIcon() == UI[hover][i]) {
+				buttons[i].setIcon(UI[nomal][i]);
 			}
 		}
 	}
@@ -205,6 +335,12 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		if (icon == UI[hover][start] && currentScreen.equals("title")) {
 			send("join");
 		}
+		if (icon == UI[hover][again] && currentScreen.equals("gameOver")) {
+			send("join");
+		}
+		if (icon == UI[hover][toTitle] && currentScreen.equals("gameOver")) {
+			send("toTitle");
+		}
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -216,10 +352,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		if (currentScreen.equals("title")) hoverUIIcon(e);
+		if (currentScreen.equals("title") || currentScreen.equals("gameOver")) hoverUIIcon(e);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		if (currentScreen.equals("title")) hoverUIIcon(e);
+		if (currentScreen.equals("title") || currentScreen.equals("gameOver")) hoverUIIcon(e);
 	}
 }

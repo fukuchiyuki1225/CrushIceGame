@@ -13,11 +13,11 @@ public class Hammer {
 		hammerIcon2 = new ImageIcon(ImageLoader.loadImage("img/pick_hammer_2.png"));
 		hammer = new JLabel(hammerIcon);
 		this.gs = gs;
-		gs.addComponent(hammer, 1000, 0, 0, 200, 170);
+		// gs.addComponent(hammer, 1500, 0, 0, 200, 170);
 	}
 
 	public void changeHammerIcon() {
-		if (!gs.isMyTurn()) return;
+		if (!gs.isMyTurn() && gs.getCurrentScreen().equals("game")) return;
 		if (hammer.getIcon() == hammerIcon) {
 			hammer.setIcon(hammerIcon2);
 		} else if (hammer.getIcon() == hammerIcon2){
@@ -31,5 +31,9 @@ public class Hammer {
 
 	public void cleanHammerIcon() {
 		hammer.setIcon(hammerIcon);
+	}
+
+	public JLabel getHammer() {
+		return hammer;
 	}
 }
