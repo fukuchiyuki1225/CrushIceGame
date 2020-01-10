@@ -25,7 +25,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Ices ices;
 	private int myTurn;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
-	private JButton startBt, helpBt, settingBt, againBt, toTitleBt;
 	private JButton[] buttons;
 	private JLabel turnLabel;
 	private ImageIcon[][] UI;
@@ -89,8 +88,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setTitleScreen() {
 		currentScreen = "title";
 
-		/*removeScreen(game);
-		removeScreen(gameOver);*/
 		removeScreen(game);
 		if (gameOver != null) {
 			gameOver.setVisible(false);
@@ -102,27 +99,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			c.add(title);
 
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
-			/*hammer = null;
-			hammer = new Hammer(this);*/
 
-			/*startBt = new JButton(UI[nomal][start]);
-			startBt.setBorderPainted(false);
-			startBt.setContentAreaFilled(false);
-			startBt.addMouseListener(this);
-			startBt.addMouseMotionListener(this);*/
 			buttons[start] = new JButton(UI[nomal][start]);
 			buttons[start].setBorderPainted(false);
 			buttons[start].setContentAreaFilled(false);
 			buttons[start].addMouseListener(this);
 			buttons[start].addMouseMotionListener(this);
-
 			addComponent(buttons[start], 100, 100, 450, 458, 93);
 
-			/*helpBt = new JButton(UI[nomal][help]);
-			helpBt.setBorderPainted(false);
-			helpBt.setContentAreaFilled(false);
-			helpBt.addMouseListener(this);
-			helpBt.addMouseMotionListener(this);*/
 			buttons[help] = new JButton(UI[nomal][help]);
 			buttons[help].setBorderPainted(false);
 			buttons[help].setContentAreaFilled(false);
@@ -130,11 +114,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			buttons[help].addMouseMotionListener(this);
 			addComponent(buttons[help], 100, 100, 550, 458, 93);
 
-			/*settingBt = new JButton(UI[nomal][setting]);
-			settingBt.setBorderPainted(false);
-			settingBt.setContentAreaFilled(false);
-			settingBt.addMouseListener(this);
-			settingBt.addMouseMotionListener(this);*/
 			buttons[setting] = new JButton(UI[nomal][setting]);
 			buttons[setting].setBorderPainted(false);
 			buttons[setting].setContentAreaFilled(false);
@@ -143,17 +122,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			addComponent(buttons[setting], 100, 100, 650, 458, 93);
 		}
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
-		System.out.println("title");
 
 		title.setVisible(true);
 		cleanButton();
-		repaint();
 	}
 
 	public void setGameScreen() {
 		currentScreen = "game";
-		/*removeScreen(title);
-		removeScreen(gameOver);*/
+
 		title.setVisible(false);
 		if (gameOver != null) {
 			gameOver.setVisible(false);
@@ -162,24 +138,20 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
 		c.add(game);
-		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
-		/*hammer = null;
-		hammer = new Hammer(this);*/
-
 		penguin = new Penguin(this);
 		ices = new Ices(hammer, penguin, this);
 		turnLabel = new JLabel(turnIcon[getMyTurn()]);
 		addComponent(turnLabel, 800, 850, 400, 250, 120);
+		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 
-		System.out.println("game");
 		game.setVisible(true);
-		repaint();
 	}
 
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";
+
 		penguin.getPenguin().setVisible(false);
 
 		if (gameOver == null) {
@@ -187,23 +159,13 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			gameOver.addMouseMotionListener(this);
 			c.add(gameOver);
 
-/*//			againBt = new JButton(UI[nomal][again]);
-//			againBt.setBorderPainted(false);
-//			againBt.setContentAreaFilled(false);
-//			againBt.addMouseListener(this);
-//			againBt.addMouseMotionListener(this);
-*/			buttons[again] = new JButton(UI[nomal][again]);
+			buttons[again] = new JButton(UI[nomal][again]);
 			buttons[again].setBorderPainted(false);
 			buttons[again].setContentAreaFilled(false);
 			buttons[again].addMouseListener(this);
 			buttons[again].addMouseMotionListener(this);
 			addComponent(buttons[again], 1200, 350, 400, 458, 93);
 
-			/*toTitleBt = new JButton(UI[nomal][toTitle]);
-			toTitleBt.setBorderPainted(false);
-			toTitleBt.setContentAreaFilled(false);
-			toTitleBt.addMouseListener(this);
-			toTitleBt.addMouseMotionListener(this);*/
 			buttons[toTitle] = new JButton(UI[nomal][toTitle]);
 			buttons[toTitle].setBorderPainted(false);
 			buttons[toTitle].setContentAreaFilled(false);
@@ -211,7 +173,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			buttons[toTitle].addMouseMotionListener(this);
 			addComponent(buttons[toTitle], 1200, 350, 500, 458, 93);
 		}
-		gameOver.setVisible(true);
 
 		if (isMyTurn()) {
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/lose.png"))), 1000, 0, 0, 1200, 900);
@@ -219,15 +180,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/win.png"))), 1000, 0, 0, 1200, 900);
 		}
 
-		/*hammer = null;
-		hammer = new Hammer(this);*/
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 
-		System.out.println("gameover");
-
+		gameOver.setVisible(true);
 		removeScreen(game);
 		cleanButton();
-		repaint();
 	}
 
 	public void removeScreen(JLayeredPane j) {
