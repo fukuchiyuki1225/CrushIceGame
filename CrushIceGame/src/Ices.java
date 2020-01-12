@@ -54,10 +54,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					} else {
 						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
 					}
-					ices[j][i].addMouseListener(this);
+					/*ices[j][i].addMouseListener(this);
 					ices[j][i].addMouseMotionListener(this);
 					ices[j][i].setBorderPainted(false);
-					ices[j][i].setContentAreaFilled(false);
+					ices[j][i].setContentAreaFilled(false);*/
+					gs.setButton(ices[j][i], this, this);
 					ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
 					mustHitNum[j][i] = random.nextInt(5) + 1;
 					hitCount[j][i] = 0;
@@ -130,10 +131,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		} else {
 			gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
 		}
-		ices[j][i].setBorderPainted(false);
-		ices[j][i].addMouseListener(this);
-		ices[j][i].addMouseMotionListener(this);
-		ices[j][i].setContentAreaFilled(false);
+		gs.setButton(ices[j][i], this, this);
 		ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
 		mustHitNum[j][i] = mustHitCount;
 		hitCount[j][i] = 0;

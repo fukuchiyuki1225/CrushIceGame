@@ -101,24 +101,15 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
 
 			buttons[start] = new JButton(UI[nomal][start]);
-			buttons[start].setBorderPainted(false);
-			buttons[start].setContentAreaFilled(false);
-			buttons[start].addMouseListener(this);
-			buttons[start].addMouseMotionListener(this);
+			setButton(buttons[start], this, this);
 			addComponent(buttons[start], 100, 100, 450, 458, 93);
 
 			buttons[help] = new JButton(UI[nomal][help]);
-			buttons[help].setBorderPainted(false);
-			buttons[help].setContentAreaFilled(false);
-			buttons[help].addMouseListener(this);
-			buttons[help].addMouseMotionListener(this);
+			setButton(buttons[help], this, this);
 			addComponent(buttons[help], 100, 100, 550, 458, 93);
 
 			buttons[setting] = new JButton(UI[nomal][setting]);
-			buttons[setting].setBorderPainted(false);
-			buttons[setting].setContentAreaFilled(false);
-			buttons[setting].addMouseListener(this);
-			buttons[setting].addMouseMotionListener(this);
+			setButton(buttons[setting], this, this);
 			addComponent(buttons[setting], 100, 100, 650, 458, 93);
 		}
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
@@ -160,17 +151,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			c.add(gameOver);
 
 			buttons[again] = new JButton(UI[nomal][again]);
-			buttons[again].setBorderPainted(false);
-			buttons[again].setContentAreaFilled(false);
-			buttons[again].addMouseListener(this);
-			buttons[again].addMouseMotionListener(this);
+			setButton(buttons[again], this, this);
 			addComponent(buttons[again], 1200, 350, 400, 458, 93);
 
 			buttons[toTitle] = new JButton(UI[nomal][toTitle]);
-			buttons[toTitle].setBorderPainted(false);
-			buttons[toTitle].setContentAreaFilled(false);
-			buttons[toTitle].addMouseListener(this);
-			buttons[toTitle].addMouseMotionListener(this);
+			setButton(buttons[toTitle], this, this);
 			addComponent(buttons[toTitle], 1200, 350, 500, 458, 93);
 		}
 
@@ -211,6 +196,13 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		j.setLayer(comp, layer);
 		j.add(comp);
 		comp.setBounds(x, y, width, height);
+	}
+
+	public void setButton(JButton jb, MouseListener m1, MouseMotionListener m2) {
+		jb.addMouseListener(m1);
+		jb.addMouseMotionListener(m2);
+		jb.setBorderPainted(false);
+		jb.setContentAreaFilled(false);
 	}
 
 	public Ices getIces() {
