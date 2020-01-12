@@ -116,6 +116,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 		title.setVisible(true);
 		cleanButton();
+		hammer.cleanHammerIcon();
 	}
 
 	public void setGameScreen() {
@@ -138,6 +139,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 
 		game.setVisible(true);
+		hammer.cleanHammerIcon();
 	}
 
 	public void setGameOverScreen() {
@@ -170,6 +172,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		gameOver.setVisible(true);
 		removeScreen(game);
 		cleanButton();
+		hammer.cleanHammerIcon();
 	}
 
 	public void removeScreen(JLayeredPane j) {
