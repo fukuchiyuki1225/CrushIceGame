@@ -26,7 +26,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private int myTurn;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
 	private JButton[] buttons;
-	private JLabel turnLabel;
+	private JLabel helpLabel, turnLabel;
+	private JButton helpClose;
 	private ImageIcon[][] UI;
 	private ImageIcon[] turnIcon;
 	private String currentScreen;
@@ -111,6 +112,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			buttons[setting] = new JButton(UI[nomal][setting]);
 			setButton(buttons[setting], this, this);
 			addComponent(buttons[setting], 100, 100, 650, 458, 93);
+
+			helpLabel = new JLabel(new ImageIcon(ImageLoader.loadImage("img/help_dialog.png")));
+			addComponent(helpLabel, 200, 145, 125, 900, 654);
+			helpLabel.setVisible(false);
+			helpClose = new JButton(new ImageIcon (ImageLoader.loadImage("img/help_close.png")));
+			setButton(helpClose, this, this);
+			addComponent(helpClose, 210, 900, 120, 117, 100);
+			helpClose.setVisible(false);
 		}
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 
@@ -286,12 +295,16 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		Icon icon = jb.getIcon();
 		if (icon == UI[hover][start] && currentScreen.equals("title")) {
 			send("join");
-		}
-		if (icon == UI[hover][again] && currentScreen.equals("gameOver")) {
+		} else if (icon == UI[hover][again] && currentScreen.equals("gameOver")) {
 			send("join");
-		}
-		if (icon == UI[hover][toTitle] && currentScreen.equals("gameOver")) {
+		} else if (icon == UI[hover][toTitle] && currentScreen.equals("gameOver")) {
 			send("toTitle");
+		} else if (icon == UI[hover][help] && currentScreen.equals("title")) {
+			helpLabel.setVisible(true);
+			helpClose.setVisible(true);
+		} else if (icon == helpClose.getIcon() && currentScreen.equals("title")) {
+			helpLabel.setVisible(false);
+			helpClose.setVisible(false);
 		}
 	}
 
