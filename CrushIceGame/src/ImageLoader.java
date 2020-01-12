@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 public class ImageLoader {
 	static ImageLoader il = new ImageLoader();
 
-	public static BufferedImage readImage(String path) {
+	public static BufferedImage loadImage(String path) {
 		BufferedImage bi = null;
 		try {
 			URL url = il.getClass().getClassLoader().getResource(path);
