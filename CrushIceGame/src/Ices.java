@@ -47,22 +47,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			for (int j = 0; j < icesY; j++) {
 				for (int i = 0; i < icesX; i++) {
 					int rand = random.nextInt(2);
-					ices[j][i] = new JButton(iceIcon[rand][0]);
-					countIce[rand]++;
-					if (i % 2 == 0) {
-						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
-					} else {
-						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
-					}
-					/*ices[j][i].addMouseListener(this);
-					ices[j][i].addMouseMotionListener(this);
-					ices[j][i].setBorderPainted(false);
-					ices[j][i].setContentAreaFilled(false);*/
-					gs.setButton(ices[j][i], this, this);
-					ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
-					mustHitNum[j][i] = random.nextInt(5) + 1;
-					hitCount[j][i] = 0;
-					gs.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum[j][i]);
+					int mustHitNum = random.nextInt(5) + 1;
+					gs.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum);
 				}
 			}
 		}
@@ -123,7 +109,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void initializeIce(int j, int i, int rand, int mustHitCount) {
-		if (gs.isMyTurn()) return;
+		// if (gs.isMyTurn()) return;
 		ices[j][i] = new JButton(iceIcon[rand][0]);
 		countIce[rand]++;
 		if (i % 2 == 0) {
