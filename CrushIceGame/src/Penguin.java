@@ -44,12 +44,8 @@ public class Penguin extends JLabel {
 		}
 	}
 
-	public void setPenguinIcon() {
-		if (penguin.getIcon() == penguinIcon[0]) {
-			penguin.setIcon(penguinIcon[1]);
-		} else {
-			penguin.setIcon(penguinIcon[0]);
-		}
+	public void setPenguinIcon(int state) {
+		penguin.setIcon(penguinIcon[state]);
 	}
 
 	public void penguinMove(int x, int y) {

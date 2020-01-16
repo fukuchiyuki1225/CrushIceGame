@@ -191,10 +191,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
 					if (icon == hoverIcon[j][i]) {
-						if (!moveFlag) {
+						// if (!moveFlag) {
 							timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 							timer.start();
-						}
+						// }
 						gs.send("changeHitCount" + " " + jbNum);
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							breakIce[j]--;
@@ -301,7 +301,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void setMoveFlag(boolean moveFlag) {
-		if (!moveFlag) {
+		if (this.moveFlag || !moveFlag) {
 			timer.stop();
 		}
 		this.moveFlag = moveFlag;
@@ -354,7 +354,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			sendY = 0;
 			speed = 0.2;
 			ices.setMoveFlag(true);
-			penguin.setPenguinIcon();
+			penguin.setPenguinIcon(1);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -382,7 +382,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
-				penguin.setPenguinIcon();
+				penguin.setPenguinIcon(0);
 			}
 		}
 	}
