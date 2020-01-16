@@ -340,7 +340,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	public static class PenguinMove implements ActionListener {
 		private Penguin penguin;
 		private Ices ices;
-		private double x0, x1, y0, y1, x, y, speed;
+		private double x0, x1, y0, y1, x, y, sendX, sendY, speed;
 		public PenguinMove(Penguin penguin, Ices ices, int jbNum) {
 			this.penguin = penguin;
 			this.ices = ices;
@@ -350,6 +350,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			y1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getY();
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
+			sendX = 0;
+			sendY = 0;
 			speed = 0.2;
 			ices.setMoveFlag(true);
 			penguin.setPenguinIcon();
@@ -357,21 +359,23 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			if (speed > 0) {
+				sendX = (int) x;
 				if (Math.abs(x1 - x0) < 25) {
-					penguin.penguinMove(x, y);
+					sendY = y;
 					if (y0 < y1) {
 						y += speed;
 					} else if (y0 >= y1) {
 						y -= speed;
 					}
 				} else if (x0 < x1) {
-					penguin.penguinMove(x, Calculation.lerp(x0, y0, x1, y1, x));
+					sendY = Calculation.lerp(x0, y0, x1, y1, x);
 					x += speed;
-				} else if (x0 >= x1) {
-					penguin.penguinMove(x, Calculation.lerp(x1, y1, x0, y0, x));
+				} else {
+					sendY = Calculation.lerp(x1, y1, x0, y0, x);
 					x -= speed;
 				}
 				speed = speed < 0 ? 0 : speed - 0.002;
+				ices.gs.send("move" + " " + (int)sendX + " " + (int)sendY);
 				penguin.penguinFall(ices, ices.brokenIce);
 			} else if (ices.turnFlag) {
 				ices.gs.send("changeTurn");

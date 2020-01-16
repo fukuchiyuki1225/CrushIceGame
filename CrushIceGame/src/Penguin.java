@@ -52,13 +52,7 @@ public class Penguin extends JLabel {
 		}
 	}
 
-	public void penguinMove(double x, double y) {
-		penguin.setLocation((int)Math.ceil(x), (int)Math.ceil(y));
-		gs.send("move" + " " + (int)Math.ceil(x) + " " + (int)Math.ceil(y));
-	}
-
 	public void penguinMove(int x, int y) {
-		if (gs.isMyTurn()) return;
 		penguin.setLocation(x, y);
 	}
 
