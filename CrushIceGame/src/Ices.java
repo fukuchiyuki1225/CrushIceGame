@@ -352,6 +352,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
 			speed = 0.2;
 			ices.setMoveFlag(true);
+			penguin.setPenguinIcon();
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -377,6 +378,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
+				penguin.setPenguinIcon();
 			}
 		}
 	}
