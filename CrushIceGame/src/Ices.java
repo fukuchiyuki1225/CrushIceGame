@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.Icon;
@@ -28,6 +30,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabel;
 	private Timer timer;
+	private ItemManager im;
+	private Map<String, Item> items;
 
 	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
 		loadIceIcon();
@@ -51,6 +55,12 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					gs.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum);
 				}
 			}
+		}
+
+		items = new HashMap<String, Item>();
+
+		if (gs.isMyTurn()) {
+			im = new ItemManager();
 		}
 
 		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/white.png"))), 850, 900, 515, 100, 100);
@@ -109,7 +119,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void initializeIce(int j, int i, int rand, int mustHitCount) {
-		// if (gs.isMyTurn()) return;
 		ices[j][i] = new JButton(iceIcon[rand][0]);
 		countIce[rand]++;
 		if (i % 2 == 0) {
