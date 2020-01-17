@@ -81,11 +81,13 @@ public class Game {
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
 							break;
+						case "digOutItem":
+							gs.getIces().getItemManager().getItems().get(inputTokens[1]).getItem();
+							break;
 						case "move":
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
 						case "fall":
-							// gs.getPenguin().getPenguin().setVisible(false);
 							gs.setGameOverScreen();
 							break;
 						case "changePenguinIcon":
