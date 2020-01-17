@@ -2,8 +2,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import javax.tools.DocumentationTool.Location;
-
 public class ItemManager {
 	Map<String, Item> items;
 

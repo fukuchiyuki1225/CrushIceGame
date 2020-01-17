@@ -88,6 +88,9 @@ public class Game {
 							// gs.getPenguin().getPenguin().setVisible(false);
 							gs.setGameOverScreen();
 							break;
+						case "changePenguinIcon":
+							gs.getPenguin().setPenguinIcon(Integer.parseInt(inputTokens[1]));
+							break;
 						case "changeTurn":
 							gs.setMyTurn();
 							break;

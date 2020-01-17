@@ -13,7 +13,6 @@ public class Hammer {
 		hammerIcon2 = new ImageIcon(ImageLoader.loadImage("img/pick_hammer_2.png"));
 		hammer = new JLabel(hammerIcon);
 		this.gs = gs;
-		// gs.addComponent(hammer, 1500, 0, 0, 200, 170);
 	}
 
 	public void changeHammerIcon() {

@@ -302,9 +302,15 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		} else if (icon == UI[hover][help] && currentScreen.equals("title")) {
 			helpLabel.setVisible(true);
 			helpClose.setVisible(true);
+			buttons[start].setVisible(false);
+			buttons[help].setVisible(false);
+			buttons[setting].setVisible(false);
 		} else if (icon == helpClose.getIcon() && currentScreen.equals("title")) {
 			helpLabel.setVisible(false);
 			helpClose.setVisible(false);
+			buttons[start].setVisible(true);
+			buttons[help].setVisible(true);
+			buttons[setting].setVisible(true);
 		}
 	}
 

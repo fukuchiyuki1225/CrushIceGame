@@ -4,8 +4,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import javax.swing.Icon;
@@ -363,9 +361,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
 			sendX = 0;
 			sendY = 0;
-			speed = 0.2;
+			speed = 0.3;
 			ices.setMoveFlag(true);
-			penguin.setPenguinIcon(1);
+			// penguin.setPenguinIcon(1);
+			ices.gs.send("changePenguinIcon" + " " + 1);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -393,7 +392,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
-				penguin.setPenguinIcon(0);
+				// penguin.setPenguinIcon(0);
+				ices.gs.send("changePenguinIcon" + " " + 0);
 			}
 		}
 	}
