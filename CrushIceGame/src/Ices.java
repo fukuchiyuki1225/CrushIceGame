@@ -31,7 +31,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private JLabel[] numLabel;
 	private Timer timer;
 	private ItemManager im;
-	private Map<String, Item> items;
 
 	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
 		loadIceIcon();
@@ -57,10 +56,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			}
 		}
 
-		items = new HashMap<String, Item>();
-
+		im = new ItemManager();
 		if (gs.isMyTurn()) {
-			im = new ItemManager();
+			im.initialize(gs);
 		}
 
 		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/white.png"))), 850, 900, 515, 100, 100);
@@ -299,6 +297,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public JButton[][] getIces() {
 		return ices;
+	}
+
+	public ItemManager getItemManager() {
+		return im;
 	}
 
 	public int getIcesX() {

@@ -1,24 +1,26 @@
-import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public abstract class Item {
-	private JLabel itemlabel;
+	private JLabel itemLabel;
 	private String name;
 	private int location;
 
 	public Item(String imgPass, String name, int location) {
-		this.itemlabel = new JLabel(new ImageIcon(ImageLoader.loadImage(imgPass)));
+		this.itemLabel = new JLabel(new ImageIcon(ImageLoader.loadImage(imgPass)));
 		this.name = name;
+		this.location = location;
 	}
 
 	public void initialize(GameScreen gs, Ices ices) {
-		Random random = new Random();
-		location = random.nextInt(63);
-		int icesX = ices.getIcesX();
-		gs.addComponent(itemlabel, 800, ices.getIces()[location / icesX][location % icesX].getX(), ices.getIces()[location / icesX][location % icesX].getY(), 80, 80);
-		itemlabel.setVisible(false);
+		int j = location / ices.getIcesX();
+		int i = location % ices.getIcesX();
+		if (i % 2 == 0) {
+			gs.addComponent(itemLabel, 50, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
+		} else {
+			gs.addComponent(itemLabel, 50, i * 75 + 50, j * 86 + 120, 100, 100);
+		}
 	}
 
 	public abstract void use();

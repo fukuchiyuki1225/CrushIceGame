@@ -65,6 +65,10 @@ public class Game {
 						case "initialize":
 							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
 							break;
+						case "itemInit":
+							gs.getIces().getItemManager().putItems(inputTokens[1], Integer.parseInt(inputTokens[2]));
+							gs.getIces().getItemManager().getItems().get(inputTokens[1]).initialize(gs, gs.getIces());
+							break;
 						case "roulette":
 							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
 							break;
