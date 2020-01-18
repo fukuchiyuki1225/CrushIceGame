@@ -59,15 +59,15 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			im.initialize();
 		}
 
-		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/white.png"))), 850, 900, 515, 100, 100);
-		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/blue.png"))), 850, 900, 601, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/white.png"))), 850, 900, 440, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/blue.png"))), 850, 900, 526, 100, 100);
 
 		numLabel = new JLabel[] {
 				new JLabel(numIcon[white][0]),
 				new JLabel(numIcon[blue][0])
 		};
-		gs.addComponent(numLabel[white], 800, 975, 558, 100, 100);
-		gs.addComponent(numLabel[blue], 800, 975, 644, 100, 100);
+		gs.addComponent(numLabel[white], 800, 975, 483, 100, 100);
+		gs.addComponent(numLabel[blue], 800, 975, 569, 100, 100);
 
 		spinTheRoulette();
 	}

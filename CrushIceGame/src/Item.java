@@ -29,6 +29,10 @@ public abstract class Item {
 
 	public abstract void use();
 
+	public JLabel getItemLabel() {
+		return itemLabel;
+	}
+
 	public String getName() {
 		return name;
 	}

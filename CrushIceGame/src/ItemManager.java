@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -9,6 +10,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 public class ItemManager implements MouseListener, MouseMotionListener {
 	private Map<String, Item> items;
@@ -76,10 +78,20 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 				JButton jb = new JButton(new ImageIcon(ImageLoader.loadImage("img/" + key.split("[0-9]")[0] + ".png")));
 				System.out.println("img/" + key.split("[0-9]")[0] + ".png");
 				gs.setButton(jb, this, this);
-				gs.addComponent(jb, 500, 700 + count * 100, 700, 100, 100);
+				if (count <= 3) {
+					gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
+				} else {
+					gs.addComponent(jb, 500, 775 + (count - 3) * 80, 775, 100, 100);
+				}
 				itemButtons.add(jb);
 				break;
 			}
+		}
+	}
+
+	public void setItemInvisible() {
+		for (Item item : items.values()) {
+			item.getItemLabel().setVisible(false);
 		}
 	}
 
@@ -91,8 +103,10 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		Point p = e.getPoint();
+		SwingUtilities.convertPointToScreen(p, e.getComponent());
+		SwingUtilities.convertPointFromScreen(p, e.getComponent().getParent());
+		gs.getHammer().setHammerLocation(p);
 	}
 
 	@Override

@@ -144,7 +144,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		penguin = new Penguin(this);
 		ices = new Ices(hammer, penguin, this);
 		turnLabel = new JLabel(turnIcon[getMyTurn()]);
-		addComponent(turnLabel, 800, 850, 400, 250, 120);
+		addComponent(turnLabel, 800, 875, 350, 250, 120);
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
 
 		game.setVisible(true);
@@ -223,6 +223,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public Penguin getPenguin() {
 		return penguin;
+	}
+
+	public Hammer getHammer() {
+		return hammer;
 	}
 
 	public String getCurrentScreen() {
