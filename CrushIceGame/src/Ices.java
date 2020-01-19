@@ -30,10 +30,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Timer timer;
 	private ItemManager im;
 
-	public Ices(Hammer hammer, GameScreen gs) {
+	public Ices(GameScreen gs) {
 		loadIceIcon();
-		this.hammer = hammer;
 		this.gs = gs;
+		hammer = Hammer.getInstance();
 		penguin = gs.getPenguin();
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];

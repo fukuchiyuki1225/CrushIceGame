@@ -144,7 +144,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
 		penguin = new Penguin(this);
 		im = new ItemManager(this);
-		ices = new Ices(hammer, this);
+		ices = new Ices(this);
 		turnLabel = new JLabel(turnIcon[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 350, 250, 120);
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);

@@ -7,13 +7,11 @@ public class Hammer {
 	private static Hammer hammer = new Hammer();
 	private ImageIcon hammerIcon, hammerIcon2;
 	private JLabel hammerLabel;
-	// private GameScreen gs;
 
 	private Hammer() {
 		hammerIcon = new ImageIcon(ImageLoader.loadImage("img/pick_hammer.png"));
 		hammerIcon2 = new ImageIcon(ImageLoader.loadImage("img/pick_hammer_2.png"));
 		hammerLabel = new JLabel(hammerIcon);
-		// this.gs = gs;
 	}
 
 	public static Hammer getInstance() {
