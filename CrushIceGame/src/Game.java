@@ -96,6 +96,7 @@ public class Game {
 						case "changeTurn":
 							gs.setMyTurn();
 							gs.getIces().getItemManager().setItemInvisible();
+							gs.getIces().getItemManager().setItemButtons();
 							break;
 						case "toTitle":
 							gs.setTitleScreen();

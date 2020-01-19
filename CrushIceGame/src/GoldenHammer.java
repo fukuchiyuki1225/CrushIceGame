@@ -6,7 +6,7 @@ public class GoldenHammer extends Item {
 	}
 
 	public void use() {
-
+		System.out.println("goldenHammer");
 	}
 
 }

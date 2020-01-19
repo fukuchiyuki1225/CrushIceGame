@@ -76,16 +76,29 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 				gs.send("digOutItem" + " " + key);
 				count++;
 				JButton jb = new JButton(new ImageIcon(ImageLoader.loadImage("img/" + key.split("[0-9]")[0] + ".png")));
-				System.out.println("img/" + key.split("[0-9]")[0] + ".png");
+				jb.setActionCommand(key);
 				gs.setButton(jb, this, this);
 				if (count <= 3) {
 					gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
 				} else {
 					gs.addComponent(jb, 500, 775 + (count - 3) * 80, 775, 100, 100);
 				}
+				jb.setVisible(false);
 				itemButtons.add(jb);
 				break;
 			}
+		}
+	}
+
+	public void realignItemButtons() {
+		int i = 1;
+		for (JButton jb : itemButtons) {
+			if (i <= 3) {
+				jb.setLocation(775 + i * 80, 675);
+			} else {
+				jb.setLocation(775 + (i - 3) * 80, 775);
+			}
+			i++;
 		}
 	}
 
@@ -95,13 +108,16 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		}
 	}
 
-	@Override
+	public void setItemButtons() {
+		for (JButton jb : itemButtons) {
+			jb.setVisible(true);
+		}
+	}
+
 	public void mouseDragged(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
 		SwingUtilities.convertPointToScreen(p, e.getComponent());
@@ -109,33 +125,30 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		gs.getHammer().setHammerLocation(p);
 	}
 
-	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
-
+		if (!gs.isMyTurn()) return;
+		JButton jb = (JButton) e.getComponent();
+		String itemName = jb.getActionCommand();
+		jb.setVisible(false);
+		itemButtons.remove(jb);
+		items.get(itemName).use();
+		realignItemButtons();
+		count--;
 	}
 
-	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
-	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 
-	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO 自動生成されたメソッド・スタブ
 
 	}
 }

@@ -6,7 +6,7 @@ public class Warp extends Item {
 	}
 
 	public void use() {
-
+		System.out.println("warp");
 	}
 
 }
