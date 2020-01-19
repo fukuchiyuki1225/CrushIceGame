@@ -124,7 +124,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setGameScreen(int num) {
 		currentScreen = "game";
 
-
 		title.setVisible(false);
 		if (gameOver != null) {
 			gameOver.setVisible(false);

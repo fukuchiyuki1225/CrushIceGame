@@ -128,7 +128,14 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public void spinTheRoulette() {
 		if (!gs.isMyTurn()) return;
-		int roulette = random.nextInt(6);
+		int roulette = 0;
+		if (countIce[white] > 0 && countIce[blue] > 0) {
+			roulette = random.nextInt(6);
+		} else if (countIce[white] == 0) {
+			roulette = random.nextInt(2);
+		} else if (countIce[blue] == 0) {
+			roulette = random.nextInt(2) + 4;
+		}
 		ms.send("roulette" + " " + roulette);
 	}
 
@@ -139,33 +146,43 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			breakIce[blue] = 2;
 			break;
 		case 1:
-			breakIce[white] = 2;
-			breakIce[blue] = 0;
+			breakIce[white] = 0;
+			breakIce[blue] = 1;
 			break;
 		case 2:
 			breakIce[white] = 1;
 			breakIce[blue] = 1;
+			break;
 		case 3:
-			breakIce[white] = 1;
-			breakIce[blue] = 0;
-			break;
-		case 4:
-			breakIce[white] = 0;
-			breakIce[blue] = 1;
-			break;
-		case 5:
 			breakIce[white] = 3;
 			breakIce[blue] = 3;
+			break;
+		case 4:
+			breakIce[white] = 2;
+			breakIce[blue] = 0;
+			break;
+		case 5:
+			breakIce[white] = 1;
+			breakIce[blue] = 0;
 			break;
 		default:
 			break;
 		}
+		for (int i = white; i <= blue; i++) {
+			if (countIce[i] < breakIce[i]) {
+				breakIce[i] = countIce[i];
+			}
+		}
 		changeNumIcon();
 	}
 
-	public void changeBreakIce(int color, int num) {
-		breakIce[color] = num;
+	public void changeBreakIce(int color) {
+		breakIce[color]--;
+		countIce[color]--;
 		changeNumIcon();
+		if (gs.isMyTurn() && breakIce[white] <= 0 && breakIce[blue] <= 0) {
+			turnFlag = true;
+		}
 	}
 
 	public void changeHitCount(int jbNum) {
@@ -173,7 +190,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void changeNumIcon() {
-		for (int i = 0; i <= blue; i++) {
+		for (int i = white; i <= blue; i++) {
 			numLabel[i].setIcon(numIcon[i][breakIce[i]]);
 		}
 	}
@@ -200,16 +217,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 						// }
 						ms.send("changeHitCount" + " " + jbNum);
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
-							breakIce[j]--;
-							countIce[j]--;
-							if (breakIce[j] < 0) {
-								breakIce[j] = 0;
-							}
-							if (countIce[j] < breakIce[j]) {
-								breakIce[j] = countIce[j];
-							}
+							// breakIce[j]--;
 							jb.setIcon(brokenIce);
-							ms.send("changeNumIcon" + " " + j + " " + breakIce[j]);
+							ms.send("changeNumIcon" + " " + j);
 							color = j;
 							iconName = "broken";
 							im.digOutItem(jbNum);
@@ -235,10 +245,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 		if (!iconName.equals("")) {
 			ms.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName);
-		}
-
-		if (breakIce[white] <= 0 && breakIce[blue] <= 0) {
-			turnFlag = true;
 		}
 	}
 
@@ -386,6 +392,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				}
 				speed = speed < 0 ? 0 : speed - 0.002;
 				ices.ms.send("move" + " " + (int)sendX + " " + (int)sendY);
+				// ↓デバッグ用　のちのち消す
+				// ices.ms.send("move" + " " + (int)x0 + " " + (int)y0);
 				penguin.penguinFall(ices, ices.brokenIce);
 			} else if (ices.turnFlag) {
 				ices.ms.send("changeTurn");

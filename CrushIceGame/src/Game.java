@@ -38,7 +38,6 @@ public class Game {
 		public MesgRecvThread(Socket socket, String myName) {
 			this.socket = socket;
 			this.myName = myName;
-			// existGs = false;
 			ms = MesgSend.getInstance(socket);
 		}
 
@@ -75,7 +74,7 @@ public class Game {
 							gs.getIces().changeHitCount(Integer.parseInt(inputTokens[1]));
 							break;
 						case "changeNumIcon":
-							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]));
 							break;
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
