@@ -39,7 +39,7 @@ public class Game {
 			this.socket = socket;
 			this.myName = myName;
 			// existGs = false;
-			ms = new MesgSend(socket);
+			ms = MesgSend.getInstance(socket);
 		}
 
 		public void run() {
@@ -50,8 +50,7 @@ public class Game {
 				out.println(myName);
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
-				// out.println("join" + " " + myNumber);
-				gs = new GameScreen(myNumber, ms);
+				gs = GameScreen.getInstance();
 				gs.setVisible(true);
 				while (true) {
 					String inputLine = br.readLine();
@@ -60,7 +59,7 @@ public class Game {
 						String cmd = inputTokens[0];
 						switch (cmd) {
 						case "join":
-							gs.setGameScreen();
+							gs.setGameScreen(myNumber);
 							break;
 						case "initialize":
 							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));

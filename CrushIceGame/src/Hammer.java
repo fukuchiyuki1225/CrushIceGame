@@ -35,7 +35,7 @@ public class Hammer {
 		hammerLabel.setIcon(hammerIcon);
 	}
 
-	public JLabel getHammer() {
+	public JLabel getHammerLabel() {
 		return hammerLabel;
 	}
 }

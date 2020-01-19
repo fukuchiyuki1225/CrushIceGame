@@ -7,17 +7,17 @@ public class Penguin extends JLabel {
 	private JLabel penguin;
 	private ImageIcon[] penguinIcon;
 	private boolean fallFlag;
-	private GameScreen gs;
+	private MesgSend ms;
 
-	public Penguin(GameScreen gs) {
+	public Penguin() {
 		penguinIcon = new ImageIcon[] {
 				new ImageIcon(ImageLoader.loadImage("img/penguin.png")),
 				new ImageIcon(ImageLoader.loadImage("img/penguin_2.png"))
 		};
 		penguin = new JLabel(penguinIcon[0]);
 		fallFlag = false;
-		this.gs = gs;
-		gs.addComponent(penguin, 500, 350, 375, 100, 100);
+		ms = MesgSend.getInstance();
+		GameScreen.getInstance().addComponent(penguin, 500, 350, 375, 100, 100);
 	}
 
 	public void penguinFall(Ices ices, Icon brokenIce) {
@@ -35,7 +35,7 @@ public class Penguin extends JLabel {
 					y0 = penguin.getY() < ice.getY() ? ice.getY() : penguin.getY();
 					y1 = penguin.getY() < ice.getY() ? penguin.getY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
-						gs.send("fall");
+						ms.send("fall");
 						fallFlag = true;
 						return;
 					}

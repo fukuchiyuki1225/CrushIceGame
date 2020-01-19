@@ -1,6 +1,5 @@
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
@@ -16,9 +15,9 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 
 public class GameScreen extends JFrame implements MouseListener, MouseMotionListener {
+	private static GameScreen gs = new GameScreen();
 	private Container c;
 	private JLayeredPane title, game, gameOver;
-	private Cursor cursor;
 	private MesgSend ms;
 	private Hammer hammer;
 	private Penguin penguin;
@@ -33,7 +32,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private ImageIcon[] turnIcon;
 	private String currentScreen;
 
-	public GameScreen(int num, MesgSend ms) {
+	private GameScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("クラッシュアイスゲーム");
 		setSize(1200, 935);
@@ -50,18 +49,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		hammer = Hammer.getInstance();
 		buttons = new JButton[toTitle + 1];
 
-		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), "");
-		setCursor(cursor);
-
-		if (num % 2 == 0) {
-			myTurn = 0;
-		} else {
-			myTurn = 1;
-		}
+		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), ""));
 
 		loadImage();
 		setTitleScreen();
-		this.ms = ms;
+		ms = MesgSend.getInstance();
 	}
 
 	public void loadImage() {
@@ -122,19 +114,26 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			addComponent(helpClose, 210, 900, 120, 117, 100);
 			helpClose.setVisible(false);
 		}
-		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
+		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 
 		title.setVisible(true);
 		cleanButton();
 		hammer.cleanHammerIcon();
 	}
 
-	public void setGameScreen() {
+	public void setGameScreen(int num) {
 		currentScreen = "game";
+
 
 		title.setVisible(false);
 		if (gameOver != null) {
 			gameOver.setVisible(false);
+		}
+
+		if (num % 2 == 0) {
+			myTurn = 0;
+		} else {
+			myTurn = 1;
 		}
 
 		game = new JLayeredPane();
@@ -142,12 +141,12 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		c.add(game);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
-		penguin = new Penguin(this);
-		im = new ItemManager(this);
-		ices = new Ices(this);
+		penguin = new Penguin();
+		im = new ItemManager();
+		ices = new Ices();
 		turnLabel = new JLabel(turnIcon[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 350, 250, 120);
-		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
+		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 
 		game.setVisible(true);
 		hammer.cleanHammerIcon();
@@ -178,7 +177,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/win.png"))), 1000, 0, 0, 1200, 900);
 		}
 
-		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
+		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 
 		gameOver.setVisible(true);
 		removeScreen(game);
@@ -235,6 +234,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		return im;
 	}
 
+	public static GameScreen getInstance() {
+		return gs;
+	}
+
 	public String getCurrentScreen() {
 		return currentScreen;
 	}
@@ -255,10 +258,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		turnLabel.setIcon(turnIcon[getMyTurn()]);
 		ices.spinTheRoulette();
 		hammer.cleanHammerIcon();
-	}
-
-	public void send(String mesg) {
-		ms.send(mesg);
 	}
 
 	public void hoverUIIcon(MouseEvent e) {
@@ -303,11 +302,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == UI[hover][start] && currentScreen.equals("title")) {
-			send("join");
+			ms.send("join");
 		} else if (icon == UI[hover][again] && currentScreen.equals("gameOver")) {
-			send("join");
+			ms.send("join");
 		} else if (icon == UI[hover][toTitle] && currentScreen.equals("gameOver")) {
-			send("toTitle");
+			ms.send("toTitle");
 		} else if (icon == UI[hover][help] && currentScreen.equals("title")) {
 			helpLabel.setVisible(true);
 			helpClose.setVisible(true);

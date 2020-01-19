@@ -20,6 +20,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Hammer hammer;
 	private Penguin penguin;
 	private GameScreen gs;
+	private MesgSend ms;
 	private JButton ices[][];
 	private int[][] hitCount, mustHitNum;
 	private int[] countIce, breakIce;
@@ -30,9 +31,9 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Timer timer;
 	private ItemManager im;
 
-	public Ices(GameScreen gs) {
+	public Ices() {
 		loadIceIcon();
-		this.gs = gs;
+		gs = GameScreen.getInstance();
 		hammer = Hammer.getInstance();
 		penguin = gs.getPenguin();
 		ices = new JButton[icesY][icesX];
@@ -44,13 +45,14 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		moveFlag = false;
 		turnFlag = false;
 		im = gs.getItemManager();
+		ms = MesgSend.getInstance();
 
 		if (gs.isMyTurn()) {
 			for (int j = 0; j < icesY; j++) {
 				for (int i = 0; i < icesX; i++) {
 					int rand = random.nextInt(2);
 					int mustHitNum = random.nextInt(5) + 1;
-					gs.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum);
+					ms.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum);
 				}
 			}
 		}
@@ -127,7 +129,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	public void spinTheRoulette() {
 		if (!gs.isMyTurn()) return;
 		int roulette = random.nextInt(6);
-		gs.send("roulette" + " " + roulette);
+		ms.send("roulette" + " " + roulette);
 	}
 
 	public void setBreakIce(int roulette) {
@@ -196,7 +198,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 						timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 						timer.start();
 						// }
-						gs.send("changeHitCount" + " " + jbNum);
+						ms.send("changeHitCount" + " " + jbNum);
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							breakIce[j]--;
 							countIce[j]--;
@@ -207,7 +209,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 								breakIce[j] = countIce[j];
 							}
 							jb.setIcon(brokenIce);
-							gs.send("changeNumIcon" + " " + j + " " + breakIce[j]);
+							ms.send("changeNumIcon" + " " + j + " " + breakIce[j]);
 							color = j;
 							iconName = "broken";
 							im.digOutItem(jbNum);
@@ -232,7 +234,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 
 		if (!iconName.equals("")) {
-			gs.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName);
+			ms.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName);
 		}
 
 		if (breakIce[white] <= 0 && breakIce[blue] <= 0) {
@@ -362,7 +364,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			sendY = 0;
 			speed = 0.3;
 			ices.setMoveFlag(true);
-			ices.gs.send("changePenguinIcon" + " " + 1);
+			ices.ms.send("changePenguinIcon" + " " + 1);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -383,14 +385,14 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					x -= speed;
 				}
 				speed = speed < 0 ? 0 : speed - 0.002;
-				ices.gs.send("move" + " " + (int)sendX + " " + (int)sendY);
+				ices.ms.send("move" + " " + (int)sendX + " " + (int)sendY);
 				penguin.penguinFall(ices, ices.brokenIce);
 			} else if (ices.turnFlag) {
-				ices.gs.send("changeTurn");
+				ices.ms.send("changeTurn");
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
-				ices.gs.send("changePenguinIcon" + " " + 0);
+				ices.ms.send("changePenguinIcon" + " " + 0);
 			}
 		}
 	}
