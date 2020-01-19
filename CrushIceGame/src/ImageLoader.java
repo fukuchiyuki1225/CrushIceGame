@@ -4,7 +4,7 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 public class ImageLoader {
-	static ImageLoader il = new ImageLoader();
+	private static ImageLoader il = new ImageLoader();
 
 	public static BufferedImage loadImage(String path) {
 		BufferedImage bi = null;

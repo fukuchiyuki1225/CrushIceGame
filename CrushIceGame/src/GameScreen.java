@@ -47,7 +47,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game = null;
 		gameOver = null;
 
-		hammer = new Hammer(this);
+		hammer = Hammer.getInstance();
 		buttons = new JButton[toTitle + 1];
 
 		cursor = Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), "");
@@ -324,11 +324,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();
+		hammer.changeHammerIcon(this);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();
+		hammer.changeHammerIcon(this);
 	}
 
 	public void mouseEntered(MouseEvent e) {

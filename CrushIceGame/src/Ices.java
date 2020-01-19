@@ -316,11 +316,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();
+		hammer.changeHammerIcon(gs);
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();
+		hammer.changeHammerIcon(gs);
 	}
 
 	public void mouseExited(MouseEvent e) {
