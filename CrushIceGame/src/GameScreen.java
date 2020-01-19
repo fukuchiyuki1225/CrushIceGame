@@ -254,7 +254,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		myTurn = 1 - myTurn;
 		turnLabel.setIcon(turnIcon[getMyTurn()]);
 		ices.spinTheRoulette();
-		// ices.cleanIceIcon();
 		hammer.cleanHammerIcon();
 	}
 

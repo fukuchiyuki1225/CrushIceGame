@@ -259,7 +259,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		ices[jbNum / icesX][jbNum % icesX].setIcon(chIcon);
 	}
 
-	public void cleanIceIcon() {
+	//  復活させるかもしれない 氷がホバー状態になってしまっているのを戻すメソッド
+	/*public void cleanIceIcon() {
 		if (gs.isMyTurn()) return;
 		for (int j = 0; j < icesY; j++) {
 			for (int i = 0; i < icesX; i++) {
@@ -272,7 +273,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 				}
 			}
 		}
-	}
+	}*/
 
 	public void hoverIceIcon(MouseEvent e) {
 		// if (!gs.isMyTurn()) return;
