@@ -66,8 +66,8 @@ public class Game {
 							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
 							break;
 						case "itemInit":
-							gs.getIces().getItemManager().putItems(inputTokens[1], Integer.parseInt(inputTokens[2]));
-							gs.getIces().getItemManager().getItems().get(inputTokens[1]).initialize(gs, gs.getIces());
+							gs.getItemManager().putItems(inputTokens[1], Integer.parseInt(inputTokens[2]));
+							gs.getItemManager().getItems().get(inputTokens[1]).initialize(gs, gs.getIces());
 							break;
 						case "roulette":
 							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
@@ -82,7 +82,7 @@ public class Game {
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
 							break;
 						case "digOutItem":
-							gs.getIces().getItemManager().getItems().get(inputTokens[1]).getItem();
+							gs.getItemManager().getItems().get(inputTokens[1]).getItem();
 							break;
 						case "move":
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
@@ -95,8 +95,8 @@ public class Game {
 							break;
 						case "changeTurn":
 							gs.setMyTurn();
-							gs.getIces().getItemManager().setItemInvisible();
-							gs.getIces().getItemManager().setItemButtons();
+							gs.getItemManager().setItemInvisible();
+							gs.getItemManager().setItemButtons();
 							break;
 						case "toTitle":
 							gs.setTitleScreen();

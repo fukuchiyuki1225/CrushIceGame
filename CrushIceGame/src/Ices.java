@@ -30,11 +30,11 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	private Timer timer;
 	private ItemManager im;
 
-	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
+	public Ices(Hammer hammer, GameScreen gs) {
 		loadIceIcon();
 		this.hammer = hammer;
-		this.penguin = penguin;
 		this.gs = gs;
+		penguin = gs.getPenguin();
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];
 		mustHitNum = new int[icesY][icesX];
@@ -43,6 +43,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		random = new Random();
 		moveFlag = false;
 		turnFlag = false;
+		im = gs.getItemManager();
 
 		if (gs.isMyTurn()) {
 			for (int j = 0; j < icesY; j++) {
@@ -52,11 +53,6 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 					gs.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum);
 				}
 			}
-		}
-
-		im = new ItemManager(gs);
-		if (gs.isMyTurn()) {
-			im.initialize();
 		}
 
 		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/white.png"))), 850, 900, 440, 100, 100);
@@ -279,7 +275,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void hoverIceIcon(MouseEvent e) {
-		if (!gs.isMyTurn()) return;
+		// if (!gs.isMyTurn()) return;
 		JButton jb = (JButton) e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = white; j <= blue; j++) {

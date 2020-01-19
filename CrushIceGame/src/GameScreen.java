@@ -23,6 +23,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Hammer hammer;
 	private Penguin penguin;
 	private Ices ices;
+	private ItemManager im;
 	private int myTurn;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
 	private JButton[] buttons;
@@ -142,7 +143,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
 		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
 		penguin = new Penguin(this);
-		ices = new Ices(hammer, penguin, this);
+		im = new ItemManager(this);
+		ices = new Ices(hammer, this);
 		turnLabel = new JLabel(turnIcon[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 350, 250, 120);
 		addComponent(hammer.getHammer(), 1500, 0, 0, 200, 170);
@@ -229,6 +231,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		return hammer;
 	}
 
+	public ItemManager getItemManager() {
+		return im;
+	}
+
 	public String getCurrentScreen() {
 		return currentScreen;
 	}
@@ -248,7 +254,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		myTurn = 1 - myTurn;
 		turnLabel.setIcon(turnIcon[getMyTurn()]);
 		ices.spinTheRoulette();
-		ices.cleanIceIcon();
+		// ices.cleanIceIcon();
 		hammer.cleanHammerIcon();
 	}
 

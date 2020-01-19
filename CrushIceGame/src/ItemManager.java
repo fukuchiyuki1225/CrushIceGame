@@ -23,6 +23,9 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		this.gs = gs;
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
+		if (gs.isMyTurn()) {
+			initialize();
+		}
 	}
 
 	public void initialize() {
