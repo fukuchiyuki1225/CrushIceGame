@@ -264,6 +264,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void cleanIceIcon() {
+		if (gs.isMyTurn()) return;
 		for (int j = 0; j < icesY; j++) {
 			for (int i = 0; i < icesX; i++) {
 				for (int l = 0; l < 3; l++) {
