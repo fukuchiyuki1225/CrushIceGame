@@ -211,13 +211,10 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
 					if (icon == hoverIcon[j][i]) {
-						// if (!moveFlag) {
 						timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 						timer.start();
-						// }
 						ms.send("changeHitCount" + " " + jbNum);
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
-							// breakIce[j]--;
 							jb.setIcon(brokenIce);
 							ms.send("changeNumIcon" + " " + j);
 							color = j;
