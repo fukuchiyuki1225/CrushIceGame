@@ -21,6 +21,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private String currentScreen;
 	private Hammer hammer;
 	private MesgSend ms;
+	private ImageLoader il;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
 	private ImageIcon[][] UI;
 	private ImageIcon[] turnIcons, wlIcons;
@@ -46,7 +47,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		hammer = Hammer.getInstance();
 		buttons = new JButton[toTitle + 1];
 		ms = MesgSend.getInstance();
-		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), ""));
+		il = ImageLoader.getInstance();
+		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(il.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
 		setTitleScreen();
 	}
@@ -58,27 +60,27 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void loadImage() {
 		UI = new ImageIcon[][] {
 			{
-				new ImageIcon(ImageLoader.loadImage("img/start.png")),
-				new ImageIcon(ImageLoader.loadImage("img/help.png")),
-				new ImageIcon(ImageLoader.loadImage("img/setting.png")),
-				new ImageIcon(ImageLoader.loadImage("img/again.png")),
-				new ImageIcon(ImageLoader.loadImage("img/to_title.png"))
+				new ImageIcon(il.load("img/start.png")),
+				new ImageIcon(il.load("img/help.png")),
+				new ImageIcon(il.load("img/setting.png")),
+				new ImageIcon(il.load("img/again.png")),
+				new ImageIcon(il.load("img/to_title.png"))
 			},
 			{
-				new ImageIcon(ImageLoader.loadImage("img/start_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/help_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/setting_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/again_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/to_title_2.png"))
+				new ImageIcon(il.load("img/start_2.png")),
+				new ImageIcon(il.load("img/help_2.png")),
+				new ImageIcon(il.load("img/setting_2.png")),
+				new ImageIcon(il.load("img/again_2.png")),
+				new ImageIcon(il.load("img/to_title_2.png"))
 			}
 		};
 		turnIcons = new ImageIcon[] {
-				new ImageIcon(ImageLoader.loadImage("img/your_turn.png")),
-				new ImageIcon(ImageLoader.loadImage("img/my_turn.png"))
+				new ImageIcon(il.load("img/your_turn.png")),
+				new ImageIcon(il.load("img/my_turn.png"))
 		};
 		wlIcons = new ImageIcon[] {
-				new ImageIcon(ImageLoader.loadImage("img/win.png")),
-				new ImageIcon(ImageLoader.loadImage("img/lose.png"))
+				new ImageIcon(il.load("img/win.png")),
+				new ImageIcon(il.load("img/lose.png"))
 		};
 	}
 
@@ -95,15 +97,15 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			title = new JLayeredPane();
 			title.addMouseMotionListener(this);
 			c.add(title);
-			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
+			addComponent(new JLabel(new ImageIcon(il.load("img/title.png"))), 0, 0, 0, 1200, 900);
 			for (int i = start; i <= setting; i++) {
 				buttons[i] = new JButton(UI[nomal][i]);
 				setButton(buttons[i], this, this);
 				addComponent(buttons[i], 100, 100, 450 + i * 100, 458, 93);
 			}
-			helpLabel = new JLabel(new ImageIcon(ImageLoader.loadImage("img/help_dialog.png")));
+			helpLabel = new JLabel(new ImageIcon(il.load("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
-			helpClose = new JButton(new ImageIcon (ImageLoader.loadImage("img/help_close.png")));
+			helpClose = new JButton(new ImageIcon (il.load("img/help_close.png")));
 			setButton(helpClose, this, this);
 			addComponent(helpClose, 210, 900, 120, 117, 100);
 			setHelp(false);
@@ -140,8 +142,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
 		c.add(game);
-		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/sea.png"))), 0, 0, 0, 1200, 900);
-		addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/logo.png"))), 900, 760, 50, 400, 315);
+		addComponent(new JLabel(new ImageIcon(il.load("img/sea.png"))), 0, 0, 0, 1200, 900);
+		addComponent(new JLabel(new ImageIcon(il.load("img/logo.png"))), 900, 760, 50, 400, 315);
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
@@ -321,3 +323,4 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		hoverUIIcon(e);
 	}
 }
+

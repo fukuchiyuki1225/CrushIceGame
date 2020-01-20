@@ -46,7 +46,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		turnFlag = false;
 		im = gs.getItemManager();
 		ms = MesgSend.getInstance();
-		loadIceIcon();
+		loadImage();
 
 		if (gs.isMyTurn()) {
 			for (int j = 0; j < icesY; j++) {
@@ -58,8 +58,8 @@ public class Ices implements MouseListener, MouseMotionListener {
 			}
 		}
 
-		gs.addComponent(new JLabel(new ImageIcon(il.loadImage("img/white.png"))), 850, 900, 440, 100, 100);
-		gs.addComponent(new JLabel(new ImageIcon(il.loadImage("img/blue.png"))), 850, 900, 526, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(il.load("img/white.png"))), 850, 900, 440, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(il.load("img/blue.png"))), 850, 900, 526, 100, 100);
 
 		numLabel = new JLabel[] {
 				new JLabel(numIcon[white][0]),
@@ -71,46 +71,46 @@ public class Ices implements MouseListener, MouseMotionListener {
 		spinTheRoulette();
 	}
 
-	private void loadIceIcon() {
+	private void loadImage() {
 		iceIcon = new ImageIcon[][] {
 			{
-				new ImageIcon(il.loadImage("img/white_ice.png")),
-				new ImageIcon(il.loadImage("img/white_ice_2.png")),
-				new ImageIcon(il.loadImage("img/white_ice_3.png"))
+				new ImageIcon(il.load("img/white_ice.png")),
+				new ImageIcon(il.load("img/white_ice_2.png")),
+				new ImageIcon(il.load("img/white_ice_3.png"))
 			},
 			{
-				new ImageIcon(il.loadImage("img/blue_ice.png")),
-				new ImageIcon(il.loadImage("img/blue_ice_2.png")),
-				new ImageIcon(il.loadImage("img/blue_ice_3.png"))
+				new ImageIcon(il.load("img/blue_ice.png")),
+				new ImageIcon(il.load("img/blue_ice_2.png")),
+				new ImageIcon(il.load("img/blue_ice_3.png"))
 			}
 		};
 		numIcon = new ImageIcon[][] {
 			{
-				new ImageIcon(il.loadImage("img/white_0.png")),
-				new ImageIcon(il.loadImage("img/white_1.png")),
-				new ImageIcon(il.loadImage("img/white_2.png")),
-				new ImageIcon(il.loadImage("img/white_3.png"))
+				new ImageIcon(il.load("img/white_0.png")),
+				new ImageIcon(il.load("img/white_1.png")),
+				new ImageIcon(il.load("img/white_2.png")),
+				new ImageIcon(il.load("img/white_3.png"))
 			},
 			{
-				new ImageIcon(il.loadImage("img/blue_0.png")),
-				new ImageIcon(il.loadImage("img/blue_1.png")),
-				new ImageIcon(il.loadImage("img/blue_2.png")),
-				new ImageIcon(il.loadImage("img/blue_3.png"))
+				new ImageIcon(il.load("img/blue_0.png")),
+				new ImageIcon(il.load("img/blue_1.png")),
+				new ImageIcon(il.load("img/blue_2.png")),
+				new ImageIcon(il.load("img/blue_3.png"))
 			}
 		};
 		hoverIcon = new ImageIcon[][] {
 			{
-				new ImageIcon(il.loadImage("img/white_hover.png")),
-				new ImageIcon(il.loadImage("img/white_hover_2.png")),
-				new ImageIcon(il.loadImage("img/white_hover_3.png"))
+				new ImageIcon(il.load("img/white_hover.png")),
+				new ImageIcon(il.load("img/white_hover_2.png")),
+				new ImageIcon(il.load("img/white_hover_3.png"))
 			},
 			{
-				new ImageIcon(il.loadImage("img/blue_hover.png")),
-				new ImageIcon(il.loadImage("img/blue_hover_2.png")),
-				new ImageIcon(il.loadImage("img/blue_hover_3.png"))
+				new ImageIcon(il.load("img/blue_hover.png")),
+				new ImageIcon(il.load("img/blue_hover_2.png")),
+				new ImageIcon(il.load("img/blue_hover_3.png"))
 			}
 		};
-		brokenIce = new ImageIcon(il.loadImage("img/broken_ice.png"));
+		brokenIce = new ImageIcon(il.load("img/broken_ice.png"));
 	}
 
 	public void initIce(int j, int i, int rand, int mustHitCount) {

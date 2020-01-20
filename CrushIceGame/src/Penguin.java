@@ -10,9 +10,10 @@ public class Penguin {
 	private MesgSend ms;
 
 	public Penguin() {
+		ImageLoader il = ImageLoader.getInstance();
 		penguinIcon = new ImageIcon[] {
-				new ImageIcon(ImageLoader.loadImage("img/penguin.png")),
-				new ImageIcon(ImageLoader.loadImage("img/penguin_2.png"))
+				new ImageIcon(il.load("img/penguin.png")),
+				new ImageIcon(il.load("img/penguin_2.png"))
 		};
 		penguin = new JLabel(penguinIcon[0]);
 		fallFlag = false;

@@ -6,13 +6,16 @@ import javax.swing.JLabel;
 
 public class Hammer {
 	private static Hammer hammer = new Hammer();
-	private ImageIcon hammerIcon, hammerIcon2;
+	private ImageIcon[] hammerIcons;
 	private JLabel hammerLabel;
 
 	private Hammer() {
-		hammerIcon = new ImageIcon(ImageLoader.loadImage("img/pick_hammer.png"));
-		hammerIcon2 = new ImageIcon(ImageLoader.loadImage("img/pick_hammer_2.png"));
-		hammerLabel = new JLabel(hammerIcon);
+		ImageLoader il = ImageLoader.getInstance();
+		hammerIcons = new ImageIcon[] {
+				new ImageIcon(il.load("img/pick_hammer.png")),
+				new ImageIcon(il.load("img/pick_hammer_2.png"))
+		};
+		hammerLabel = new JLabel(hammerIcons[0]);
 	}
 
 	public static Hammer getInstance() {
@@ -22,7 +25,7 @@ public class Hammer {
 	public void changeHammerIcon() {
 		GameScreen gs = GameScreen.getInstance();
 		if (!gs.isMyTurn() && gs.getCurrentScreen().equals("game")) return;
-		Icon icon = (hammerLabel.getIcon() == hammerIcon) ? hammerIcon2 : hammerIcon;
+		Icon icon = (hammerLabel.getIcon() == hammerIcons[0]) ? hammerIcons[1] : hammerIcons[0];
 		hammerLabel.setIcon(icon);
 	}
 
@@ -31,7 +34,7 @@ public class Hammer {
 	}
 
 	public void cleanHammerIcon() {
-		hammerLabel.setIcon(hammerIcon);
+		hammerLabel.setIcon(hammerIcons[0]);
 	}
 
 	public JLabel getHammerLabel() {
