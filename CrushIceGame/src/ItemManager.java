@@ -57,7 +57,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		};
 
 		for (int i = 0; i < itemName.length; i++) {
-			ms.send("itemInit" + " " + itemName[i] + " " + rand[i]);
+			ms.send("initItem" + " " + itemName[i] + " " + rand[i]);
 		}
 	}
 
@@ -69,6 +69,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		} else if (name.matches("warp.*")) {
 			items.put(name, new Warp(location));
 		}
+		items.get(name).initItem();
 	}
 
 	public Map<String, Item> getItems() {

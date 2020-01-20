@@ -12,9 +12,10 @@ public abstract class Item {
 		this.location = location;
 	}
 
-	public void initialize(GameScreen gs, Ices ices) {
-		int j = location / ices.getIcesX();
-		int i = location % ices.getIcesX();
+	public void initItem() {
+		GameScreen gs = GameScreen.getInstance();
+		int j = location / gs.getIces().getIcesX();
+		int i = location % gs.getIces().getIcesX();
 		if (i % 2 == 0) {
 			gs.addComponent(itemLabel, 120, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
 		} else {
