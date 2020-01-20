@@ -4,39 +4,37 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 public class Penguin {
-	private JLabel penguin;
-	private ImageIcon[] penguinIcon;
+	private ImageIcon[] penguinIcons;
+	private JLabel penguinLabel;
 	private boolean fallFlag;
-	private MesgSend ms;
 
 	public Penguin() {
 		ImageLoader il = ImageLoader.getInstance();
-		penguinIcon = new ImageIcon[] {
+		penguinIcons = new ImageIcon[] {
 				new ImageIcon(il.load("img/penguin.png")),
 				new ImageIcon(il.load("img/penguin_2.png"))
 		};
-		penguin = new JLabel(penguinIcon[0]);
+		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;
-		ms = MesgSend.getInstance();
-		GameScreen.getInstance().addComponent(penguin, 500, 350, 375, 100, 100);
+		GameScreen.getInstance().addComponent(penguinLabel, 500, 350, 375, 100, 100);
 	}
 
 	public void penguinFall(Ices ices, Icon brokenIce) {
 		if (fallFlag) return;
-		if (penguin.getX() < 10 || penguin.getX() > 700 || penguin.getY() < 90 || penguin.getY() > 700) {
-			penguin.setVisible(false);
+		if (penguinLabel.getX() < 10 || penguinLabel.getX() > 700 || penguinLabel.getY() < 90 || penguinLabel.getY() > 700) {
+			penguinLabel.setVisible(false);
 			return;
 		}
 		for (JButton[] icesArray : ices.getIces()) {
 			for (JButton ice : icesArray) {
 				if (ice.getIcon() == brokenIce) {
 					int x0, x1, y0, y1;
-					x0 = penguin.getX() < ice.getX() ? ice.getX() : penguin.getX();
-					x1 = penguin.getX() < ice.getX() ? penguin.getX() : ice.getX();
-					y0 = penguin.getY() < ice.getY() ? ice.getY() : penguin.getY();
-					y1 = penguin.getY() < ice.getY() ? penguin.getY() : ice.getY();
+					x0 = getPenguinX()< ice.getX() ? ice.getX() : getPenguinX();
+					x1 = getPenguinX() < ice.getX() ? getPenguinX() : ice.getX();
+					y0 = getPenguinY() < ice.getY() ? ice.getY() : getPenguinY();
+					y1 = getPenguinY() < ice.getY() ? getPenguinY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
-						ms.send("fall");
+						MesgSend.getInstance().send("fall");
 						fallFlag = true;
 						return;
 					}
@@ -46,22 +44,22 @@ public class Penguin {
 	}
 
 	public void setPenguinIcon(int state) {
-		penguin.setIcon(penguinIcon[state]);
+		penguinLabel.setIcon(penguinIcons[state]);
 	}
 
 	public void penguinMove(int x, int y) {
-		penguin.setLocation(x, y);
+		penguinLabel.setLocation(x, y);
 	}
 
 	public int getPenguinX() {
-		return penguin.getX();
+		return penguinLabel.getX();
 	}
 
 	public int getPenguinY() {
-		return penguin.getY();
+		return penguinLabel.getY();
 	}
 
-	public JLabel getPenguin() {
-		return penguin;
+	public JLabel getPenguinLabel() {
+		return penguinLabel;
 	}
 }

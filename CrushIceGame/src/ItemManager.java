@@ -81,7 +81,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			if (items.get(key).getLocation() == JbNum) {
 				ms.send("digOutItem" + " " + key);
 				count++;
-				JButton jb = new JButton(new ImageIcon(ImageLoader.loadImage("img/" + key.split("[0-9]")[0] + ".png")));
+				JButton jb = new JButton(new ImageIcon(ImageLoader.getInstance().load("img/" + key.split("[0-9]")[0] + ".png")));
 				jb.setActionCommand(key);
 				gs.setButton(jb, this, this);
 				if (count <= 3) {
@@ -121,7 +121,6 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
 	}
 
 	public void mouseMoved(MouseEvent e) {

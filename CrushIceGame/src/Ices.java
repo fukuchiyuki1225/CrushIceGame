@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class Ices implements MouseListener, MouseMotionListener {
-	private ImageIcon[][] numIcon, iceIcon, hoverIcon;
+	private ImageIcon[][] numIcons, iceIcons, hoverIcons;
 	private ImageIcon brokenIce;
 	private Hammer hammer;
 	private Penguin penguin;
@@ -27,7 +27,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private Random random;
 	private boolean moveFlag, turnFlag;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
-	private JLabel[] numLabel;
+	private JLabel[] numLabels;
 	private Timer timer;
 	private ItemManager im;
 
@@ -61,18 +61,18 @@ public class Ices implements MouseListener, MouseMotionListener {
 		gs.addComponent(new JLabel(new ImageIcon(il.load("img/white.png"))), 850, 900, 440, 100, 100);
 		gs.addComponent(new JLabel(new ImageIcon(il.load("img/blue.png"))), 850, 900, 526, 100, 100);
 
-		numLabel = new JLabel[] {
-				new JLabel(numIcon[white][0]),
-				new JLabel(numIcon[blue][0])
+		numLabels = new JLabel[] {
+				new JLabel(numIcons[white][0]),
+				new JLabel(numIcons[blue][0])
 		};
-		gs.addComponent(numLabel[white], 800, 975, 483, 100, 100);
-		gs.addComponent(numLabel[blue], 800, 975, 569, 100, 100);
+		gs.addComponent(numLabels[white], 800, 975, 483, 100, 100);
+		gs.addComponent(numLabels[blue], 800, 975, 569, 100, 100);
 
 		spinTheRoulette();
 	}
 
 	private void loadImage() {
-		iceIcon = new ImageIcon[][] {
+		iceIcons = new ImageIcon[][] {
 			{
 				new ImageIcon(il.load("img/white_ice.png")),
 				new ImageIcon(il.load("img/white_ice_2.png")),
@@ -84,7 +84,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				new ImageIcon(il.load("img/blue_ice_3.png"))
 			}
 		};
-		numIcon = new ImageIcon[][] {
+		numIcons = new ImageIcon[][] {
 			{
 				new ImageIcon(il.load("img/white_0.png")),
 				new ImageIcon(il.load("img/white_1.png")),
@@ -98,7 +98,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				new ImageIcon(il.load("img/blue_3.png"))
 			}
 		};
-		hoverIcon = new ImageIcon[][] {
+		hoverIcons = new ImageIcon[][] {
 			{
 				new ImageIcon(il.load("img/white_hover.png")),
 				new ImageIcon(il.load("img/white_hover_2.png")),
@@ -114,7 +114,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void initIce(int j, int i, int rand, int mustHitCount) {
-		ices[j][i] = new JButton(iceIcon[rand][0]);
+		ices[j][i] = new JButton(iceIcons[rand][0]);
 		countIce[rand]++;
 		if (i % 2 == 0) {
 			gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
@@ -192,7 +192,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 
 	public void changeNumIcon() {
 		for (int i = white; i <= blue; i++) {
-			numLabel[i].setIcon(numIcon[i][breakIce[i]]);
+			numLabels[i].setIcon(numIcons[i][breakIce[i]]);
 		}
 	}
 
@@ -211,7 +211,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		loop: for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
-					if (icon == hoverIcon[j][i]) {
+					if (icon == hoverIcons[j][i]) {
 						timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 						timer.start();
 						ms.send("changeHitCount" + " " + jbNum);
@@ -226,11 +226,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 						diff = mustHitNum[jbNum / icesX][jbNum % icesX] - hitCount[jbNum / icesX][jbNum % icesX];
 						if (diff > 0) {
 							if (diff < 3) {
-								jb.setIcon(hoverIcon[j][2]);
+								jb.setIcon(hoverIcons[j][2]);
 								color = j;
 								iconName = "ice2";
 							} else if (diff < 5) {
-								jb.setIcon(hoverIcon[j][1]);
+								jb.setIcon(hoverIcons[j][1]);
 								color = j;
 								iconName = "ice1";
 							}
@@ -254,10 +254,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 			chIcon = brokenIce;
 			break;
 		case "ice1":
-			chIcon = iceIcon[color][1];
+			chIcon = iceIcons[color][1];
 			break;
 		case "ice2":
-			chIcon = iceIcon[color][2];
+			chIcon = iceIcons[color][2];
 			break;
 		default:
 			break;
@@ -270,11 +270,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 		Icon icon = jb.getIcon();
 		for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
-				if (icon == iceIcon[j][i]) {
-					jb.setIcon(hoverIcon[j][i]);
+				if (icon == iceIcons[j][i]) {
+					jb.setIcon(hoverIcons[j][i]);
 					return;
-				} else if (icon == hoverIcon[j][i]) {
-					jb.setIcon(iceIcon[j][i]);
+				} else if (icon == hoverIcons[j][i]) {
+					jb.setIcon(iceIcons[j][i]);
 					return;
 				}
 			}

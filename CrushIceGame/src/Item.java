@@ -7,7 +7,7 @@ public abstract class Item {
 	private int location;
 
 	public Item(String imgPass, String name, int location) {
-		this.itemLabel = new JLabel(new ImageIcon(ImageLoader.loadImage(imgPass)));
+		this.itemLabel = new JLabel(new ImageIcon(ImageLoader.getInstance().load(imgPass)));
 		this.name = name;
 		this.location = location;
 	}
