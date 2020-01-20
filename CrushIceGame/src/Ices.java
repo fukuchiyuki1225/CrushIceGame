@@ -263,22 +263,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 		ices[jbNum / icesX][jbNum % icesX].setIcon(chIcon);
 	}
 
-	//  復活させるかもしれない 氷がホバー状態になってしまっているのを戻すメソッド
-	/*public void cleanIceIcon() {
-		if (gs.isMyTurn()) return;
-		for (int j = 0; j < icesY; j++) {
-			for (int i = 0; i < icesX; i++) {
-				for (int l = 0; l < 3; l++) {
-					for (int k = white; k <= blue; k++) {
-						if (ices[j][i].getIcon() == hoverIcon[k][l]) {
-							ices[j][i].setIcon(iceIcon[k][l]);
-						}
-					}
-				}
-			}
-		}
-	}*/
-
 	public void hoverIceIcon(MouseEvent e) {
 		// if (!gs.isMyTurn()) return;
 		JButton jb = (JButton) e.getComponent();
