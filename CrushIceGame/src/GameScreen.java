@@ -51,6 +51,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		setTitleScreen();
 	}
 
+	public static GameScreen getInstance() {
+		return gs;
+	}
+
 	public void loadImage() {
 		UI = new ImageIcon[][] {
 			{
@@ -253,10 +257,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				buttons[i].setIcon(UI[nomal][i]);
 			}
 		}
-	}
-
-	public static GameScreen getInstance() {
-		return gs;
 	}
 
 	public String getCurrentScreen() {
