@@ -51,7 +51,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				for (int i = 0; i < icesX; i++) {
 					int rand = random.nextInt(2);
 					int mustHitNum = random.nextInt(5) + 1;
-					ms.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum);
+					ms.send("initIce" + " " + j + " " + i + " " + rand + " " + mustHitNum);
 				}
 			}
 		}
@@ -111,7 +111,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		brokenIce = new ImageIcon(ImageLoader.loadImage("img/broken_ice.png"));
 	}
 
-	public void initializeIce(int j, int i, int rand, int mustHitCount) {
+	public void initIce(int j, int i, int rand, int mustHitCount) {
 		ices[j][i] = new JButton(iceIcon[rand][0]);
 		countIce[rand]++;
 		if (i % 2 == 0) {
