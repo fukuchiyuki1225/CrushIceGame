@@ -320,11 +320,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon(gs);
+		hammer.changeHammerIcon();
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon(gs);
+		hammer.changeHammerIcon();
 	}
 
 	public void mouseExited(MouseEvent e) {

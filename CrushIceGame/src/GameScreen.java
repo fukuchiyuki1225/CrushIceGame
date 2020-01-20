@@ -306,11 +306,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon(this);
+		hammer.changeHammerIcon();
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon(this);
+		hammer.changeHammerIcon();
 	}
 
 	public void mouseEntered(MouseEvent e) {

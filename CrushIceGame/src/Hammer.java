@@ -1,5 +1,6 @@
 import java.awt.Point;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -18,13 +19,11 @@ public class Hammer {
 		return hammer;
 	}
 
-	public void changeHammerIcon(GameScreen gs) {
+	public void changeHammerIcon() {
+		GameScreen gs = GameScreen.getInstance();
 		if (!gs.isMyTurn() && gs.getCurrentScreen().equals("game")) return;
-		if (hammerLabel.getIcon() == hammerIcon) {
-			hammerLabel.setIcon(hammerIcon2);
-		} else if (hammerLabel.getIcon() == hammerIcon2){
-			hammerLabel.setIcon(hammerIcon);
-		}
+		Icon icon = (hammerLabel.getIcon() == hammerIcon) ? hammerIcon2 : hammerIcon;
+		hammerLabel.setIcon(icon);
 	}
 
 	public void setHammerLocation(Point p) {
