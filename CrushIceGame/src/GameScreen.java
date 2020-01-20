@@ -99,17 +99,25 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			}
 			helpLabel = new JLabel(new ImageIcon(ImageLoader.loadImage("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
-			helpLabel.setVisible(false);
 			helpClose = new JButton(new ImageIcon (ImageLoader.loadImage("img/help_close.png")));
 			setButton(helpClose, this, this);
 			addComponent(helpClose, 210, 900, 120, 117, 100);
-			helpClose.setVisible(false);
+			setHelp(false);
 		}
 
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		title.setVisible(true);
 		cleanButtons();
 		hammer.cleanHammerIcon();
+	}
+
+	// あそびかたの表示・非表示切り替え
+	public void setHelp(boolean visible) {
+		for (int i = start; i <= setting; i++) {
+			buttons[i].setVisible(!visible);
+		}
+		helpLabel.setVisible(visible);
+		helpClose.setVisible(visible);
 	}
 
 	// ゲーム画面
@@ -174,16 +182,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game = null;
 	}
 
-	/*
-	 * コンポーネントの追加、レイヤー・位置・サイズ指定をまとめて行うメソッド
-	 *
-	 * @param comp
-	 * @param layer
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 */
+	// コンポーネントの追加、レイヤー・位置・サイズ指定をまとめて行うメソッド
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
 		JLayeredPane j = null;
 		switch (currentScreen) {
@@ -203,6 +202,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		comp.setBounds(x, y, width, height);
 	}
 
+	// ボタンのマウスイベントの追加、背景・枠線の非表示をまとめて行うメソッド
 	public void setButton(JButton jb, MouseListener m1, MouseMotionListener m2) {
 		jb.addMouseListener(m1);
 		jb.addMouseMotionListener(m2);
@@ -210,50 +210,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		jb.setContentAreaFilled(false);
 	}
 
-	public Ices getIces() {
-		return ices;
-	}
-
-	public Penguin getPenguin() {
-		return penguin;
-	}
-
-	public Hammer getHammer() {
-		return hammer;
-	}
-
-	public ItemManager getItemManager() {
-		return im;
-	}
-
-	public static GameScreen getInstance() {
-		return gs;
-	}
-
-	public String getCurrentScreen() {
-		return currentScreen;
-	}
-
-	public boolean isMyTurn() {
-		if (myTurn == 1) {
-			return true;
-		}
-		return false;
-	}
-
-	public int getMyTurn() {
-		return myTurn;
-	}
-
-	public void setMyTurn() {
-		myTurn = 1 - myTurn;
-		turnLabel.setIcon(turnIcons[getMyTurn()]);
-		ices.spinTheRoulette();
-		hammer.cleanHammerIcon();
-	}
-
+	// ホバー用の画像への切り替えを行うメソッド
 	public void hoverUIIcon(MouseEvent e) {
-
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = nomal; j <= hover; j++) {
@@ -271,6 +229,23 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
+	public void clickedButton(MouseEvent e) {
+		JButton jb = (JButton)e.getComponent();
+		Icon icon = jb.getIcon();
+			if (icon == UI[hover][start]) {
+				ms.send("join");
+			} else if (icon == UI[hover][help]) {
+				setHelp(true);
+			} else if (icon == helpClose.getIcon()) {
+				setHelp(false);
+			} else if (icon == UI[hover][again]) {
+				ms.send("join");
+			} else if (icon == UI[hover][toTitle]) {
+				ms.send("toTitle");
+			}
+	}
+
+	// 画面遷移後にボタンがホバー状態のままにならないよう、画像を元に戻すメソッド
 	public void cleanButtons() {
 		for (int i = start; i <= toTitle; i++) {
 			if (buttons[i] == null) break;
@@ -280,8 +255,43 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
-	public void mouseDragged(MouseEvent e) {
+	public static GameScreen getInstance() {
+		return gs;
+	}
 
+	public String getCurrentScreen() {
+		return currentScreen;
+	}
+
+	public Penguin getPenguin() {
+		return penguin;
+	}
+
+	public ItemManager getItemManager() {
+		return im;
+	}
+
+	public Ices getIces() {
+		return ices;
+	}
+
+	public int getMyTurn() {
+		return myTurn;
+	}
+
+	public void setMyTurn() {
+		myTurn = 1 - myTurn;
+		turnLabel.setIcon(turnIcons[getMyTurn()]);
+		ices.spinTheRoulette();
+		hammer.cleanHammerIcon();
+	}
+
+	public boolean isMyTurn() {
+		if (myTurn == 1) return true;
+		return false;
+	}
+
+	public void mouseDragged(MouseEvent e) {
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -292,27 +302,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		JButton jb = (JButton)e.getComponent();
-		Icon icon = jb.getIcon();
-		if (icon == UI[hover][start] && currentScreen.equals("title")) {
-			ms.send("join");
-		} else if (icon == UI[hover][again] && currentScreen.equals("gameOver")) {
-			ms.send("join");
-		} else if (icon == UI[hover][toTitle] && currentScreen.equals("gameOver")) {
-			ms.send("toTitle");
-		} else if (icon == UI[hover][help] && currentScreen.equals("title")) {
-			helpLabel.setVisible(true);
-			helpClose.setVisible(true);
-			buttons[start].setVisible(false);
-			buttons[help].setVisible(false);
-			buttons[setting].setVisible(false);
-		} else if (icon == helpClose.getIcon() && currentScreen.equals("title")) {
-			helpLabel.setVisible(false);
-			helpClose.setVisible(false);
-			buttons[start].setVisible(true);
-			buttons[help].setVisible(true);
-			buttons[setting].setVisible(true);
-		}
+		clickedButton(e);
 	}
 
 	public void mousePressed(MouseEvent e) {
@@ -324,10 +314,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		if (currentScreen.equals("title") || currentScreen.equals("gameOver")) hoverUIIcon(e);
+		hoverUIIcon(e);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		if (currentScreen.equals("title") || currentScreen.equals("gameOver")) hoverUIIcon(e);
+		hoverUIIcon(e);
 	}
 }

@@ -128,7 +128,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		Point p = e.getPoint();
 		SwingUtilities.convertPointToScreen(p, e.getComponent());
 		SwingUtilities.convertPointFromScreen(p, e.getComponent().getParent());
-		gs.getHammer().setHammerLocation(p);
+		Hammer.getInstance().setHammerLocation(p);
 	}
 
 	public void mouseClicked(MouseEvent e) {
