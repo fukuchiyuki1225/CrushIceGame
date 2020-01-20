@@ -23,9 +23,6 @@ public class Game {
 
 		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
 		mrt.start();
-
-		/*GameScreen gs = new GameScreen();
-		gs.setVisible(true);*/
 	}
 
 	public class MesgRecvThread extends Thread {

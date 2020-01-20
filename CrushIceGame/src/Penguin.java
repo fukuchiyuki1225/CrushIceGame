@@ -3,7 +3,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-public class Penguin extends JLabel {
+public class Penguin {
 	private JLabel penguin;
 	private ImageIcon[] penguinIcon;
 	private boolean fallFlag;

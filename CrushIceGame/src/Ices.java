@@ -9,12 +9,11 @@ import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-public class Ices extends JFrame implements MouseListener, MouseMotionListener {
+public class Ices implements MouseListener, MouseMotionListener {
 	private ImageIcon[][] numIcon, iceIcon, hoverIcon;
 	private ImageIcon brokenIce;
 	private Hammer hammer;
