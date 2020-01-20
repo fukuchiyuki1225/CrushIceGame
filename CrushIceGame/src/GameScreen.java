@@ -21,16 +21,16 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private String currentScreen;
 	private Hammer hammer;
 	private MesgSend ms;
-	private Penguin penguin;
-	private Ices ices;
-	private ItemManager im;
-	private int myTurn;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
-	private JButton[] buttons;
-	private JLabel helpLabel, turnLabel;
-	private JButton helpClose;
 	private ImageIcon[][] UI;
-	private ImageIcon[] turnIcon;
+	private ImageIcon[] turnIcons, wlIcons;
+	private JButton[] buttons;
+	private JLabel helpLabel, turnLabel, wlLabel;
+	private JButton helpClose;
+	private int myTurn;
+	private Penguin penguin;
+	private ItemManager im;
+	private Ices ices;
 
 	private GameScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,33 +68,35 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				new ImageIcon(ImageLoader.loadImage("img/to_title_2.png"))
 			}
 		};
-		turnIcon = new ImageIcon[] {
+		turnIcons = new ImageIcon[] {
 				new ImageIcon(ImageLoader.loadImage("img/your_turn.png")),
 				new ImageIcon(ImageLoader.loadImage("img/my_turn.png"))
+		};
+		wlIcons = new ImageIcon[] {
+				new ImageIcon(ImageLoader.loadImage("img/win.png")),
+				new ImageIcon(ImageLoader.loadImage("img/lose.png"))
 		};
 	}
 
 	// タイトル画面
 	public void setTitleScreen() {
 		currentScreen = "title";
-		// 前のシーンを取り除く
-		removeScreen(game);
+
+		removeGame();
 		if (gameOver != null) {
 			gameOver.setVisible(false);
 		}
-		// 初回のみコンポーネントの設置などを行う
+
 		if (title == null) {
 			title = new JLayeredPane();
 			title.addMouseMotionListener(this);
 			c.add(title);
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
-
 			for (int i = start; i <= setting; i++) {
 				buttons[i] = new JButton(UI[nomal][i]);
 				setButton(buttons[i], this, this);
 				addComponent(buttons[i], 100, 100, 450 + i * 100, 458, 93);
 			}
-			// あそびかた
 			helpLabel = new JLabel(new ImageIcon(ImageLoader.loadImage("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
 			helpLabel.setVisible(false);
@@ -103,20 +105,19 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			addComponent(helpClose, 210, 900, 120, 117, 100);
 			helpClose.setVisible(false);
 		}
-		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 
+		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		title.setVisible(true);
 		cleanButtons();
 		hammer.cleanHammerIcon();
 	}
 
+	// ゲーム画面
 	public void setGameScreen(int num) {
 		currentScreen = "game";
 
-		title.setVisible(false);
-		if (gameOver != null) {
-			gameOver.setVisible(false);
-		}
+		if (title != null) title.setVisible(false);
+		if (gameOver != null) gameOver.setVisible(false);
 
 		if (num % 2 == 0) {
 			myTurn = 0;
@@ -132,52 +133,57 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
-		turnLabel = new JLabel(turnIcon[getMyTurn()]);
+		turnLabel = new JLabel(turnIcons[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 350, 250, 120);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
-
 		game.setVisible(true);
 		hammer.cleanHammerIcon();
 	}
 
+	// ゲームオーバー画面
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";
-
 		penguin.getPenguin().setVisible(false);
 
 		if (gameOver == null) {
 			gameOver = new JLayeredPane();
 			gameOver.addMouseMotionListener(this);
 			c.add(gameOver);
-
 			for (int i = again; i <= toTitle; i++) {
 				buttons[i] = new JButton(UI[nomal][i]);
 				setButton(buttons[i], this, this);
 				addComponent(buttons[i], 1200, 350, 400 + (i - again) * 100, 458, 93);
+				wlLabel = new JLabel();
+				addComponent(wlLabel, 1000, 0, 0, 1200, 900);
 			}
 		}
 
-		if (isMyTurn()) {
-			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/lose.png"))), 1000, 0, 0, 1200, 900);
-		} else {
-			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/win.png"))), 1000, 0, 0, 1200, 900);
-		}
-
+		wlLabel.setIcon(wlIcons[getMyTurn()]);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
-
 		gameOver.setVisible(true);
-		removeScreen(game);
+		removeGame();
 		cleanButtons();
 		hammer.cleanHammerIcon();
 	}
 
-	public void removeScreen(JLayeredPane j) {
-		if (j == null) return;
-		j.setVisible(false);
-		c.remove(j);
-		j = null;
+	// ゲーム画面を取り除くメソッド
+	public void removeGame() {
+		if (game == null) return;
+		game.setVisible(false);
+		c.remove(game);
+		game = null;
 	}
 
+	/*
+	 * コンポーネントの追加、レイヤー・位置・サイズ指定をまとめて行うメソッド
+	 *
+	 * @param comp
+	 * @param layer
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
 		JLayeredPane j = null;
 		switch (currentScreen) {
@@ -241,7 +247,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public void setMyTurn() {
 		myTurn = 1 - myTurn;
-		turnLabel.setIcon(turnIcon[getMyTurn()]);
+		turnLabel.setIcon(turnIcons[getMyTurn()]);
 		ices.spinTheRoulette();
 		hammer.cleanHammerIcon();
 	}
