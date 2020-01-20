@@ -26,11 +26,11 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
 		if (gs.isMyTurn()) {
-			initialize();
+			initLocation();
 		}
 	}
 
-	public void initialize() {
+	public void initLocation() {
 		Random random = new Random();
 		int[] rand = new int[6];
 		for (int i = 0; i < 6; i++) {
@@ -41,7 +41,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 1; j < 6; j++) {
 				if (i != j && rand[i] == rand[j]) {
-					initialize();
+					initLocation();
 					return;
 				}
 			}

@@ -18,8 +18,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private static GameScreen gs = new GameScreen();
 	private Container c;
 	private JLayeredPane title, game, gameOver;
-	private MesgSend ms;
+	private String currentScreen;
 	private Hammer hammer;
+	private MesgSend ms;
 	private Penguin penguin;
 	private Ices ices;
 	private ItemManager im;
@@ -30,7 +31,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JButton helpClose;
 	private ImageIcon[][] UI;
 	private ImageIcon[] turnIcon;
-	private String currentScreen;
 
 	private GameScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,22 +38,17 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		setSize(1200, 935);
 		setLocationRelativeTo(null);
 		setResizable(false);
-
 		c = getContentPane();
-		currentScreen = "title";
-
 		title = null;
 		game = null;
 		gameOver = null;
-
+		currentScreen = "";
 		hammer = Hammer.getInstance();
 		buttons = new JButton[toTitle + 1];
-
+		ms = MesgSend.getInstance();
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ImageLoader.loadImage("img/cursor.png")).getImage(), new Point(), ""));
-
 		loadImage();
 		setTitleScreen();
-		ms = MesgSend.getInstance();
 	}
 
 	public void loadImage() {
@@ -79,33 +74,27 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		};
 	}
 
+	// タイトル画面
 	public void setTitleScreen() {
 		currentScreen = "title";
-
+		// 前のシーンを取り除く
 		removeScreen(game);
 		if (gameOver != null) {
 			gameOver.setVisible(false);
 		}
-
+		// 初回のみコンポーネントの設置などを行う
 		if (title == null) {
 			title = new JLayeredPane();
 			title.addMouseMotionListener(this);
 			c.add(title);
-
 			addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/title.png"))), 0, 0, 0, 1200, 900);
 
-			buttons[start] = new JButton(UI[nomal][start]);
-			setButton(buttons[start], this, this);
-			addComponent(buttons[start], 100, 100, 450, 458, 93);
-
-			buttons[help] = new JButton(UI[nomal][help]);
-			setButton(buttons[help], this, this);
-			addComponent(buttons[help], 100, 100, 550, 458, 93);
-
-			buttons[setting] = new JButton(UI[nomal][setting]);
-			setButton(buttons[setting], this, this);
-			addComponent(buttons[setting], 100, 100, 650, 458, 93);
-
+			for (int i = start; i <= setting; i++) {
+				buttons[i] = new JButton(UI[nomal][i]);
+				setButton(buttons[i], this, this);
+				addComponent(buttons[i], 100, 100, 450 + i * 100, 458, 93);
+			}
+			// あそびかた
 			helpLabel = new JLabel(new ImageIcon(ImageLoader.loadImage("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
 			helpLabel.setVisible(false);
@@ -117,7 +106,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 
 		title.setVisible(true);
-		cleanButton();
+		cleanButtons();
 		hammer.cleanHammerIcon();
 	}
 
@@ -161,13 +150,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			gameOver.addMouseMotionListener(this);
 			c.add(gameOver);
 
-			buttons[again] = new JButton(UI[nomal][again]);
-			setButton(buttons[again], this, this);
-			addComponent(buttons[again], 1200, 350, 400, 458, 93);
-
-			buttons[toTitle] = new JButton(UI[nomal][toTitle]);
-			setButton(buttons[toTitle], this, this);
-			addComponent(buttons[toTitle], 1200, 350, 500, 458, 93);
+			for (int i = again; i <= toTitle; i++) {
+				buttons[i] = new JButton(UI[nomal][i]);
+				setButton(buttons[i], this, this);
+				addComponent(buttons[i], 1200, 350, 400 + (i - again) * 100, 458, 93);
+			}
 		}
 
 		if (isMyTurn()) {
@@ -180,7 +167,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 		gameOver.setVisible(true);
 		removeScreen(game);
-		cleanButton();
+		cleanButtons();
 		hammer.cleanHammerIcon();
 	}
 
@@ -260,6 +247,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void hoverUIIcon(MouseEvent e) {
+
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = nomal; j <= hover; j++) {
@@ -277,7 +265,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
-	public void cleanButton() {
+	public void cleanButtons() {
 		for (int i = start; i <= toTitle; i++) {
 			if (buttons[i] == null) break;
 			if (buttons[i].getIcon() == UI[hover][i]) {
