@@ -307,6 +307,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 		return icesX;
 	}
 
+	public int getIcesY() {
+		return icesY;
+	}
+
 	public Icon getBrokenIceIcon() {
 		return brokenIce;
 	}
