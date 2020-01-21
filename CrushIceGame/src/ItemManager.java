@@ -25,12 +25,11 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		ms = MesgSend.getInstance();
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
-		if (gs.isMyTurn()) {
-			initLocation();
-		}
+		initLocation();
 	}
 
 	public void initLocation() {
+		if (!gs.isMyTurn()) return;
 		Random random = new Random();
 		int[] rand = new int[6];
 		for (int i = 0; i < 6; i++) {
@@ -57,11 +56,11 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		};
 
 		for (int i = 0; i < itemName.length; i++) {
-			ms.send("initItem" + " " + itemName[i] + " " + rand[i]);
+			ms.send("initItems" + " " + itemName[i] + " " + rand[i]);
 		}
 	}
 
-	public void putItems(String name, int location) {
+	public void initItems(String name, int location) {
 		if (name.matches("goldenHammer.*")) {
 			items.put(name, new GoldenHammer(location));
 		} else if (name.matches("shield.*")) {

@@ -14,53 +14,45 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class Ices implements MouseListener, MouseMotionListener {
-	private ImageIcon[][] numIcons, iceIcons, hoverIcons;
-	private ImageIcon brokenIce;
-	private Hammer hammer;
-	private Penguin penguin;
 	private GameScreen gs;
 	private ImageLoader il;
+	private ItemManager im;
+	private Hammer hammer;
+	private Penguin penguin;
 	private MesgSend ms;
 	private JButton ices[][];
 	private int[][] hitCount, mustHitNum;
 	private int[] countIce, breakIce;
-	private Random random;
-	private boolean moveFlag, turnFlag;
+	private ImageIcon[][] numIcons, iceIcons, hoverIcons;
+	private ImageIcon brokenIce;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabels;
+	private boolean moveFlag, turnFlag;
+	private Random random;
 	private Timer timer;
-	private ItemManager im;
 
 	public Ices() {
 		gs = GameScreen.getInstance();
 		il = ImageLoader.getInstance();
+		im = gs.getItemManager();
 		hammer = Hammer.getInstance();
 		penguin = gs.getPenguin();
+		ms = MesgSend.getInstance();
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];
 		mustHitNum = new int[icesY][icesX];
 		countIce = new int[2];
 		breakIce = new int[2];
-		random = new Random();
 		moveFlag = false;
 		turnFlag = false;
-		im = gs.getItemManager();
-		ms = MesgSend.getInstance();
+		random = new Random();
+
 		loadImage();
 
-		if (gs.isMyTurn()) {
-			for (int j = 0; j < icesY; j++) {
-				for (int i = 0; i < icesX; i++) {
-					int rand = random.nextInt(2);
-					int mustHitNum = random.nextInt(5) + 1;
-					ms.send("initIce" + " " + j + " " + i + " " + rand + " " + mustHitNum);
-				}
-			}
-		}
+		initIceRand();
 
 		gs.addComponent(new JLabel(new ImageIcon(il.load("img/white.png"))), 850, 900, 440, 100, 100);
 		gs.addComponent(new JLabel(new ImageIcon(il.load("img/blue.png"))), 850, 900, 526, 100, 100);
-
 		numLabels = new JLabel[] {
 				new JLabel(numIcons[white][0]),
 				new JLabel(numIcons[blue][0])
@@ -113,7 +105,18 @@ public class Ices implements MouseListener, MouseMotionListener {
 		brokenIce = new ImageIcon(il.load("img/broken_ice.png"));
 	}
 
-	public void initIce(int j, int i, int rand, int mustHitCount) {
+	public void initIceRand() {
+		if (!gs.isMyTurn()) return;
+		for (int j = 0; j < icesY; j++) {
+			for (int i = 0; i < icesX; i++) {
+				int rand = random.nextInt(2);
+				int mustHitNum = random.nextInt(5) + 1;
+				ms.send("initIces" + " " + j + " " + i + " " + rand + " " + mustHitNum);
+			}
+		}
+	}
+
+	public void initIces(int j, int i, int rand, int mustHitCount) {
 		ices[j][i] = new JButton(iceIcons[rand][0]);
 		countIce[rand]++;
 		if (i % 2 == 0) {
@@ -217,7 +220,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 						ms.send("changeHitCount" + " " + jbNum);
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							jb.setIcon(brokenIce);
-							ms.send("changeNumIcon" + " " + j);
+							ms.send("changeBreakIce" + " " + j);
 							color = j;
 							iconName = "broken";
 							im.digOutItem(jbNum);
@@ -281,6 +284,17 @@ public class Ices implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	public void changeHammerIcon(MouseEvent e) {
+		Icon icon = ((JButton)e.getComponent()).getIcon();
+		if (icon == brokenIce) return;
+		for (int j = white; j <= blue; j++) {
+			for (int i = 0; i < 3; i++) {
+				if (icon == hoverIcons[j][i] && breakIce[j] == 0) return;
+			}
+		}
+		hammer.changeHammerIcon();
+	}
+
 	public JButton[][] getIces() {
 		return ices;
 	}
@@ -305,11 +319,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();
+		changeHammerIcon(e);
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();
+		changeHammerIcon(e);
 	}
 
 	public void mouseExited(MouseEvent e) {

@@ -33,6 +33,7 @@ public class Hammer {
 		hammerLabel.setLocation(p.x - 50, p.y - 120);
 	}
 
+	// 画面遷移時やゲーム中に、ハンマー画像が叩いた状態のままになることがあるのを元に戻すメソッド
 	public void cleanHammerIcon() {
 		hammerLabel.setIcon(hammerIcons[0]);
 	}

@@ -56,11 +56,11 @@ public class Game {
 						case "join":
 							gs.setGameScreen(myNumber);
 							break;
-						case "initIce":
-							gs.getIces().initIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
+						case "initIces":
+							gs.getIces().initIces(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
 							break;
-						case "initItem":
-							gs.getItemManager().putItems(inputTokens[1], Integer.parseInt(inputTokens[2]));
+						case "initItems":
+							gs.getItemManager().initItems(inputTokens[1], Integer.parseInt(inputTokens[2]));
 							break;
 						case "roulette":
 							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
@@ -68,7 +68,7 @@ public class Game {
 						case "changeHitCount":
 							gs.getIces().changeHitCount(Integer.parseInt(inputTokens[1]));
 							break;
-						case "changeNumIcon":
+						case "changeBreakIce":
 							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]));
 							break;
 						case "changeIceIcon":
