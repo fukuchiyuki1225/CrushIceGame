@@ -4,7 +4,7 @@ import java.net.Socket;
 
 public class MesgSend {
 	private static MesgSend ms;
-	PrintWriter out;
+	private PrintWriter out;
 
 	private MesgSend(Socket socket) {
 		try {

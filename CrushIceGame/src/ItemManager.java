@@ -13,16 +13,16 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
 public class ItemManager implements MouseListener, MouseMotionListener {
-	private Map<String, Item> items;
-	private MesgSend ms;
 	private GameScreen gs;
+	private MesgSend ms;
+	private Map<String, Item> items;
 	private List<JButton> itemButtons;
 	private int count;
 
 	public ItemManager() {
-		items = new HashMap<String, Item>();
 		gs = GameScreen.getInstance();
 		ms = MesgSend.getInstance();
+		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
 		initLocation();
@@ -71,14 +71,11 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		items.get(name).initItem();
 	}
 
-	public Map<String, Item> getItems() {
-		return items;
-	}
 
 	public void digOutItem(int JbNum) {
 		for (String key : items.keySet()) {
 			if (items.get(key).getLocation() == JbNum) {
-				ms.send("digOutItem" + " " + key);
+				ms.send("getItem" + " " + key);
 				count++;
 				JButton jb = new JButton(new ImageIcon(ImageLoader.getInstance().load("img/" + key.split("[0-9]")[0] + ".png")));
 				jb.setActionCommand(key);
@@ -117,6 +114,10 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		for (JButton jb : itemButtons) {
 			jb.setVisible(true);
 		}
+	}
+
+	public Map<String, Item> getItems() {
+		return items;
 	}
 
 	public void mouseDragged(MouseEvent e) {

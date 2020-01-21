@@ -74,7 +74,7 @@ public class Game {
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
 							break;
-						case "digOutItem":
+						case "getItem":
 							gs.getItemManager().getItems().get(inputTokens[1]).getItem();
 							break;
 						case "move":

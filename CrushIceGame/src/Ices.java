@@ -207,13 +207,14 @@ public class Ices implements MouseListener, MouseMotionListener {
 			return;
 		}
 		int jbNum = Integer.parseInt(jb.getActionCommand());
-		int diff = 0;
 		String iconName = "";
+		int diff = 0;
 		int color = 0;
 		System.out.println("clicked: " + jbNum);
 		loop: for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
+					color = j;
 					if (icon == hoverIcons[j][i]) {
 						timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 						timer.start();
@@ -221,7 +222,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							jb.setIcon(brokenIce);
 							ms.send("changeBreakIce" + " " + j);
-							color = j;
 							iconName = "broken";
 							im.digOutItem(jbNum);
 							break loop;
@@ -230,11 +230,9 @@ public class Ices implements MouseListener, MouseMotionListener {
 						if (diff > 0) {
 							if (diff < 3) {
 								jb.setIcon(hoverIcons[j][2]);
-								color = j;
 								iconName = "ice2";
 							} else if (diff < 5) {
 								jb.setIcon(hoverIcons[j][1]);
-								color = j;
 								iconName = "ice1";
 							}
 							break loop;
@@ -251,21 +249,21 @@ public class Ices implements MouseListener, MouseMotionListener {
 
 	public void changeIceIcon(int color, int jbNum, String iconName) {
 		if (gs.isMyTurn()) return;
-		Icon chIcon = null;
+		Icon icon = null;
 		switch (iconName) {
 		case "broken":
-			chIcon = brokenIce;
+			icon = brokenIce;
 			break;
 		case "ice1":
-			chIcon = iceIcons[color][1];
+			icon = iceIcons[color][1];
 			break;
 		case "ice2":
-			chIcon = iceIcons[color][2];
+			icon = iceIcons[color][2];
 			break;
 		default:
 			break;
 		}
-		ices[jbNum / icesX][jbNum % icesX].setIcon(chIcon);
+		ices[jbNum / icesX][jbNum % icesX].setIcon(icon);
 	}
 
 	public void hoverIceIcon(MouseEvent e) {
