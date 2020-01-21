@@ -27,7 +27,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private ImageIcon brokenIce;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabels;
-	private boolean moveFlag, turnFlag;
+	private boolean moveFlag, turnFlag, ghFlag, shieldFlag;
 	private Random random;
 	private Timer timer;
 
@@ -185,6 +185,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 		countIce[color]--;
 		changeNumIcon();
 		if (gs.isMyTurn() && breakIce[white] <= 0 && breakIce[blue] <= 0) {
+			if (shieldFlag) {
+				ms.send("changeTurn");
+				return;
+			}
 			turnFlag = true;
 		}
 	}
@@ -216,10 +220,12 @@ public class Ices implements MouseListener, MouseMotionListener {
 				if (breakIce[j] > 0) {
 					color = j;
 					if (icon == hoverIcons[j][i]) {
-						timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
-						timer.start();
+						if (!shieldFlag) {
+							timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
+							timer.start();
+						}
 						ms.send("changeHitCount" + " " + jbNum);
-						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
+						if (ghFlag || hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							jb.setIcon(brokenIce);
 							ms.send("changeBreakIce" + " " + j);
 							iconName = "broken";
@@ -297,10 +303,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 		return ices;
 	}
 
-	public ItemManager getItemManager() {
-		return im;
-	}
-
 	public int getIcesX() {
 		return icesX;
 	}
@@ -314,6 +316,17 @@ public class Ices implements MouseListener, MouseMotionListener {
 			timer.stop();
 		}
 		this.moveFlag = moveFlag;
+	}
+
+	public void setGhFlag(boolean ghFlag) {
+		if (!ghFlag) {
+			hammer.changeHammer();
+		}
+		this.ghFlag = ghFlag;
+	}
+
+	public void setShieldFlag(boolean shieldFlag) {
+		this.shieldFlag = shieldFlag;
 	}
 
 	public void mouseReleased(MouseEvent e) {

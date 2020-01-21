@@ -40,7 +40,6 @@ public class Hammer {
 		hammerLabel.setIcon(hammerIcons[0]);
 	}
 
-
 	public void setHammerLocation(Point p) {
 		hammerLabel.setLocation(p.x - 50, p.y - 120);
 	}

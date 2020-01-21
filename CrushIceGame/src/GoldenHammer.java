@@ -15,6 +15,7 @@ public class GoldenHammer extends Item {
 	public void use() {
 		System.out.println("goldenHammer");
 		Hammer.getInstance().changeHammer(ghIcons);
+		GameScreen.getInstance().getIces().setGhFlag(true);
 	}
 
 }
