@@ -3,20 +3,20 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-public class ImageLoader {
-	private static ImageLoader il = new ImageLoader();
+public class ResourceLoader {
+	private static ResourceLoader rl = new ResourceLoader();
 
-	private ImageLoader() {
+	private ResourceLoader() {
 	};
 
-	public static ImageLoader getInstance() {
-		return il;
+	public static ResourceLoader getInstance() {
+		return rl;
 	}
 
 	public BufferedImage load(String path) {
 		BufferedImage bi = null;
 		try {
-			URL url = il.getClass().getClassLoader().getResource(path);
+			URL url = rl.getClass().getClassLoader().getResource(path);
 			bi = ImageIO.read(url);
 		} catch (Exception e) {
 			e.getStackTrace();

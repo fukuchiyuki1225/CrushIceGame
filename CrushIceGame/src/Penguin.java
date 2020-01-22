@@ -9,11 +9,11 @@ public class Penguin {
 	private GameScreen gs;
 
 	public Penguin() {
-		ImageLoader il = ImageLoader.getInstance();
+		ResourceLoader rl = ResourceLoader.getInstance();
 		penguinIcons = new ImageIcon[] {
-				new ImageIcon(il.load("img/penguin.png")),
-				new ImageIcon(il.load("img/penguin_2.png")),
-				new ImageIcon(il.load("img/penguin_3.png"))
+				new ImageIcon(rl.load("img/penguin.png")),
+				new ImageIcon(rl.load("img/penguin_2.png")),
+				new ImageIcon(rl.load("img/penguin_3.png"))
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;

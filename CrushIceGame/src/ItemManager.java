@@ -77,7 +77,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			if (items.get(key).getLocation() == JbNum) {
 				ms.send("getItem" + " " + key);
 				count++;
-				JButton jb = new JButton(new ImageIcon(ImageLoader.getInstance().load("img/" + key.split("[0-9]")[0] + ".png")));
+				JButton jb = new JButton(new ImageIcon(ResourceLoader.getInstance().load("img/" + key.split("[0-9]")[0] + ".png")));
 				jb.setActionCommand(key);
 				gs.setButton(jb, this, this);
 				if (count <= 3) {
