@@ -211,17 +211,19 @@ public class Ices implements MouseListener, MouseMotionListener {
 			return;
 		}
 		int jbNum = Integer.parseInt(jb.getActionCommand());
+		System.out.println("clicked: " + jbNum);
+		int oppositeNum = (icesX * icesY - 1) - jbNum;
+		System.out.println("opposite:" + oppositeNum);
 		String iconName = "";
 		int diff = 0;
 		int color = 0;
-		System.out.println("clicked: " + jbNum);
 		loop: for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
 					color = j;
 					if (icon == hoverIcons[j][i]) {
 						if (!shieldFlag) {
-							timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
+							timer = new Timer(1, new PenguinMove(penguin, this, oppositeNum));
 							timer.start();
 						}
 						ms.send("changeHitCount" + " " + jbNum);
@@ -410,7 +412,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
-				ices.ms.send("changePenguinIcon" + " " + 0);
+				if (!ices.shieldFlag) ices.ms.send("changePenguinIcon" + " " + 0);
 			}
 		}
 	}
