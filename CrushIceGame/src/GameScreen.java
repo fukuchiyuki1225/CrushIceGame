@@ -20,6 +20,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JLayeredPane title, game, gameOver;
 	private String currentScreen;
 	private Hammer hammer;
+	private Sound sound;
 	private MesgSend ms;
 	private ResourceLoader rl;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
@@ -45,6 +46,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		gameOver = null;
 		currentScreen = "";
 		hammer = Hammer.getInstance();
+		sound = Sound.getInstance();
 		buttons = new JButton[toTitle + 1];
 		ms = MesgSend.getInstance();
 		rl = ResourceLoader.getInstance();
@@ -250,6 +252,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			} else if (icon == UI[hover][toTitle]) {
 				ms.send("toTitle");
 			}
+			sound.play("button");
 	}
 
 	// 画面遷移後にボタンがホバー状態のままにならないよう、画像を元に戻すメソッド

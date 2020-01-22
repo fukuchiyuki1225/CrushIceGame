@@ -16,11 +16,14 @@ public class ResourceLoader {
 	public BufferedImage load(String path) {
 		BufferedImage bi = null;
 		try {
-			URL url = rl.getClass().getClassLoader().getResource(path);
-			bi = ImageIO.read(url);
+			bi = ImageIO.read(getURL(path));
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
 		return bi;
+	}
+
+	public URL getURL(String path) {
+		return rl.getClass().getClassLoader().getResource(path);
 	}
 }

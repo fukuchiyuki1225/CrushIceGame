@@ -19,6 +19,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private ItemManager im;
 	private Hammer hammer;
 	private Penguin penguin;
+	private Sound sound;
 	private MesgSend ms;
 	private JButton ices[][];
 	private int[][] hitCount, mustHitNum;
@@ -37,6 +38,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		im = gs.getItemManager();
 		hammer = Hammer.getInstance();
 		penguin = gs.getPenguin();
+		sound = Sound.getInstance();
 		ms = MesgSend.getInstance();
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];
@@ -215,12 +217,14 @@ public class Ices implements MouseListener, MouseMotionListener {
 		int oppositeNum = (icesX * icesY - 1) - jbNum;
 		System.out.println("opposite:" + oppositeNum);
 		String iconName = "";
+		String soundName = "";
 		int diff = 0;
 		int color = 0;
 		loop: for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
 					color = j;
+					sound.play("pick");
 					if (icon == hoverIcons[j][i]) {
 						if (!shieldFlag) {
 							timer = new Timer(1, new PenguinMove(penguin, this, oppositeNum));
@@ -231,6 +235,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 							jb.setIcon(brokenIce);
 							ms.send("changeBreakIce" + " " + j);
 							iconName = "broken";
+							soundName = "broken";
 							im.digOutItem(jbNum);
 							break loop;
 						}
@@ -243,6 +248,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 								jb.setIcon(hoverIcons[j][1]);
 								iconName = "ice1";
 							}
+							soundName = "crack";
 							break loop;
 						}
 					}
@@ -251,7 +257,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		}
 
 		if (!iconName.equals("")) {
-			ms.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName);
+			ms.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName + " " + soundName);
 		}
 	}
 

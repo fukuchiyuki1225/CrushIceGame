@@ -30,6 +30,7 @@ public class Game {
 		String myName;
 		MesgSend ms;
 		GameScreen gs;
+		Sound sound;
 
 		public MesgRecvThread(Socket socket, String myName) {
 			this.socket = socket;
@@ -47,6 +48,8 @@ public class Game {
 				int myNumber = Integer.parseInt(myNumberStr);
 				gs = GameScreen.getInstance();
 				gs.setVisible(true);
+				sound = Sound.getInstance();
+				sound.loop("bgm");
 				while (true) {
 					String inputLine = br.readLine();
 					if (inputLine != null) {
@@ -73,6 +76,7 @@ public class Game {
 							break;
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
+							sound.play(inputTokens[4]);
 							break;
 						case "getItem":
 							gs.getItemManager().getItems().get(inputTokens[1]).getItem();
