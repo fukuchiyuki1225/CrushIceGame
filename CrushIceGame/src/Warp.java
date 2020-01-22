@@ -25,5 +25,4 @@ public class Warp extends Item {
 		int rand = icesNum.get(random.nextInt(icesNum.size()));
 		MesgSend.getInstance().send("move" + " " + ices.getIces()[rand / ices.getIcesX()][rand % ices.getIcesX()].getX() + " " + ices.getIces()[rand / ices.getIcesX()][rand % ices.getIcesX()].getY());
 	}
-
 }

@@ -287,6 +287,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		ices.spinTheRoulette();
 		ices.setGhFlag(false);
 		ices.setShieldFlag(false);
+		penguin.changePenguinIcon(0);
 		hammer.cleanHammerIcon();
 		im.setItemInvisible();
 		im.setItemButtons();

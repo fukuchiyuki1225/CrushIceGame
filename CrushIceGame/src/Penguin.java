@@ -12,7 +12,8 @@ public class Penguin {
 		ImageLoader il = ImageLoader.getInstance();
 		penguinIcons = new ImageIcon[] {
 				new ImageIcon(il.load("img/penguin.png")),
-				new ImageIcon(il.load("img/penguin_2.png"))
+				new ImageIcon(il.load("img/penguin_2.png")),
+				new ImageIcon(il.load("img/penguin_3.png"))
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;
@@ -43,7 +44,7 @@ public class Penguin {
 		}
 	}
 
-	public void setPenguinIcon(int state) {
+	public void changePenguinIcon(int state) {
 		penguinLabel.setIcon(penguinIcons[state]);
 	}
 
