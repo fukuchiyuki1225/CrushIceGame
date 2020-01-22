@@ -1,4 +1,3 @@
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -7,6 +6,7 @@ public class Penguin {
 	private ImageIcon[] penguinIcons;
 	private JLabel penguinLabel;
 	private boolean fallFlag;
+	private GameScreen gs;
 
 	public Penguin() {
 		ImageLoader il = ImageLoader.getInstance();
@@ -17,18 +17,20 @@ public class Penguin {
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;
-		GameScreen.getInstance().addComponent(penguinLabel, 500, 350, 375, 100, 100);
+		gs = GameScreen.getInstance();
+		gs.addComponent(penguinLabel, 500, 350, 375, 100, 100);
 	}
 
-	public void penguinFall(Ices ices, Icon brokenIce) {
+	public void penguinFall() {
 		if (fallFlag) return;
 		if (penguinLabel.getX() < 10 || penguinLabel.getX() > 700 || penguinLabel.getY() < 90 || penguinLabel.getY() > 700) {
 			penguinLabel.setVisible(false);
 			return;
 		}
+		Ices ices = gs.getIces();
 		for (JButton[] icesArray : ices.getIces()) {
 			for (JButton ice : icesArray) {
-				if (ice.getIcon() == brokenIce) {
+				if (ice.getIcon() == ices.getBrokenIceIcon()) {
 					int x0, x1, y0, y1;
 					x0 = getPenguinX()< ice.getX() ? ice.getX() : getPenguinX();
 					x1 = getPenguinX() < ice.getX() ? getPenguinX() : ice.getX();

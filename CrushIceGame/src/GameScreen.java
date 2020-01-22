@@ -158,6 +158,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";
 		penguin.getPenguinLabel().setVisible(false);
+		hammer.changeHammer();
 
 		if (gameOver == null) {
 			gameOver = new JLayeredPane();

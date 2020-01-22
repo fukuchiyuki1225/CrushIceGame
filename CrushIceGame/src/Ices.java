@@ -404,7 +404,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				ices.ms.send("move" + " " + (int)sendX + " " + (int)sendY);
 				// ↓デバッグ用　のちのち消す
 				// ices.ms.send("move" + " " + (int)x0 + " " + (int)y0);
-				penguin.penguinFall(ices, ices.brokenIce);
+				penguin.penguinFall();
 			} else if (ices.turnFlag) {
 				ices.ms.send("changeTurn");
 				ices.turnFlag = false;
