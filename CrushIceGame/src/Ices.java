@@ -9,122 +9,115 @@ import java.util.Random;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-public class Ices extends JFrame implements MouseListener, MouseMotionListener {
-	private ImageIcon[][] numIcon, iceIcon, hoverIcon;
-	private ImageIcon brokenIce;
+public class Ices implements MouseListener, MouseMotionListener {
+	private GameScreen gs;
+	private ImageLoader il;
+	private ItemManager im;
 	private Hammer hammer;
 	private Penguin penguin;
-	private GameScreen gs;
+	private MesgSend ms;
 	private JButton ices[][];
 	private int[][] hitCount, mustHitNum;
 	private int[] countIce, breakIce;
-	private Random random;
-	private boolean moveFlag, turnFlag;
+	private ImageIcon[][] numIcons, iceIcons, hoverIcons;
+	private ImageIcon brokenIce;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
-	private JLabel[] numLabel;
+	private JLabel[] numLabels;
+	private boolean moveFlag, turnFlag, ghFlag, shieldFlag;
+	private Random random;
 	private Timer timer;
 
-	public Ices(Hammer hammer, Penguin penguin, GameScreen gs) {
-		loadIceIcon();
-		this.hammer = hammer;
-		this.penguin = penguin;
-		this.gs = gs;
+	public Ices() {
+		gs = GameScreen.getInstance();
+		il = ImageLoader.getInstance();
+		im = gs.getItemManager();
+		hammer = Hammer.getInstance();
+		penguin = gs.getPenguin();
+		ms = MesgSend.getInstance();
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];
 		mustHitNum = new int[icesY][icesX];
 		countIce = new int[2];
 		breakIce = new int[2];
-		random = new Random();
 		moveFlag = false;
 		turnFlag = false;
+		random = new Random();
 
-		if (gs.isMyTurn()) {
-			for (int j = 0; j < icesY; j++) {
-				for (int i = 0; i < icesX; i++) {
-					int rand = random.nextInt(2);
-					ices[j][i] = new JButton(iceIcon[rand][0]);
-					countIce[rand]++;
-					if (i % 2 == 0) {
-						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
-					} else {
-						gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 120, 100, 100);
-					}
-					/*ices[j][i].addMouseListener(this);
-					ices[j][i].addMouseMotionListener(this);
-					ices[j][i].setBorderPainted(false);
-					ices[j][i].setContentAreaFilled(false);*/
-					gs.setButton(ices[j][i], this, this);
-					ices[j][i].setActionCommand(Integer.toString(i + j * icesX));
-					mustHitNum[j][i] = random.nextInt(5) + 1;
-					hitCount[j][i] = 0;
-					gs.send("initialize" + " " + j + " " + i + " " + rand + " " + mustHitNum[j][i]);
-				}
-			}
-		}
+		loadImage();
 
-		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/white.png"))), 850, 900, 515, 100, 100);
-		gs.addComponent(new JLabel(new ImageIcon(ImageLoader.loadImage("img/blue.png"))), 850, 900, 601, 100, 100);
+		initIceRand();
 
-		numLabel = new JLabel[] {
-				new JLabel(numIcon[white][0]),
-				new JLabel(numIcon[blue][0])
+		gs.addComponent(new JLabel(new ImageIcon(il.load("img/white.png"))), 850, 900, 440, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(il.load("img/blue.png"))), 850, 900, 526, 100, 100);
+		numLabels = new JLabel[] {
+				new JLabel(numIcons[white][0]),
+				new JLabel(numIcons[blue][0])
 		};
-		gs.addComponent(numLabel[white], 800, 975, 558, 100, 100);
-		gs.addComponent(numLabel[blue], 800, 975, 644, 100, 100);
+		gs.addComponent(numLabels[white], 800, 975, 483, 100, 100);
+		gs.addComponent(numLabels[blue], 800, 975, 569, 100, 100);
 
 		spinTheRoulette();
 	}
 
-	private void loadIceIcon() {
-		iceIcon = new ImageIcon[][] {
+	private void loadImage() {
+		iceIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(ImageLoader.loadImage("img/white_ice.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_ice_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_ice_3.png"))
+				new ImageIcon(il.load("img/white_ice.png")),
+				new ImageIcon(il.load("img/white_ice_2.png")),
+				new ImageIcon(il.load("img/white_ice_3.png"))
 			},
 			{
-				new ImageIcon(ImageLoader.loadImage("img/blue_ice.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_ice_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_ice_3.png"))
+				new ImageIcon(il.load("img/blue_ice.png")),
+				new ImageIcon(il.load("img/blue_ice_2.png")),
+				new ImageIcon(il.load("img/blue_ice_3.png"))
 			}
 		};
-		numIcon = new ImageIcon[][] {
+		numIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(ImageLoader.loadImage("img/white_0.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_1.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_3.png"))
+				new ImageIcon(il.load("img/white_0.png")),
+				new ImageIcon(il.load("img/white_1.png")),
+				new ImageIcon(il.load("img/white_2.png")),
+				new ImageIcon(il.load("img/white_3.png"))
 			},
 			{
-				new ImageIcon(ImageLoader.loadImage("img/blue_0.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_1.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_3.png"))
+				new ImageIcon(il.load("img/blue_0.png")),
+				new ImageIcon(il.load("img/blue_1.png")),
+				new ImageIcon(il.load("img/blue_2.png")),
+				new ImageIcon(il.load("img/blue_3.png"))
 			}
 		};
-		hoverIcon = new ImageIcon[][] {
+		hoverIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(ImageLoader.loadImage("img/white_hover.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_hover_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/white_hover_3.png"))
+				new ImageIcon(il.load("img/white_hover.png")),
+				new ImageIcon(il.load("img/white_hover_2.png")),
+				new ImageIcon(il.load("img/white_hover_3.png"))
 			},
 			{
-				new ImageIcon(ImageLoader.loadImage("img/blue_hover.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_hover_2.png")),
-				new ImageIcon(ImageLoader.loadImage("img/blue_hover_3.png"))
+				new ImageIcon(il.load("img/blue_hover.png")),
+				new ImageIcon(il.load("img/blue_hover_2.png")),
+				new ImageIcon(il.load("img/blue_hover_3.png"))
 			}
 		};
-		brokenIce = new ImageIcon(ImageLoader.loadImage("img/broken_ice.png"));
+		brokenIce = new ImageIcon(il.load("img/broken_ice.png"));
 	}
 
-	public void initializeIce(int j, int i, int rand, int mustHitCount) {
-		if (gs.isMyTurn()) return;
-		ices[j][i] = new JButton(iceIcon[rand][0]);
+	public void initIceRand() {
+		if (!gs.isMyTurn()) return;
+		for (int j = 0; j < icesY; j++) {
+			for (int i = 0; i < icesX; i++) {
+				int rand = random.nextInt(2);
+				int mustHitNum = random.nextInt(5) + 1;
+				ms.send("initIces" + " " + j + " " + i + " " + rand + " " + mustHitNum);
+			}
+		}
+	}
+
+	public void initIces(int j, int i, int rand, int mustHitCount) {
+		ices[j][i] = new JButton(iceIcons[rand][0]);
 		countIce[rand]++;
 		if (i % 2 == 0) {
 			gs.addComponent(ices[j][i], 100, i * 75 + 50, j * 86 + 43 + 120, 100, 100);
@@ -139,8 +132,15 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 
 	public void spinTheRoulette() {
 		if (!gs.isMyTurn()) return;
-		int roulette = random.nextInt(6);
-		gs.send("roulette" + " " + roulette);
+		int roulette = 0;
+		if (countIce[white] > 0 && countIce[blue] > 0) {
+			roulette = random.nextInt(6);
+		} else if (countIce[white] == 0) {
+			roulette = random.nextInt(2);
+		} else if (countIce[blue] == 0) {
+			roulette = random.nextInt(2) + 4;
+		}
+		ms.send("roulette" + " " + roulette);
 	}
 
 	public void setBreakIce(int roulette) {
@@ -150,33 +150,47 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			breakIce[blue] = 2;
 			break;
 		case 1:
-			breakIce[white] = 2;
-			breakIce[blue] = 0;
+			breakIce[white] = 0;
+			breakIce[blue] = 1;
 			break;
 		case 2:
 			breakIce[white] = 1;
 			breakIce[blue] = 1;
+			break;
 		case 3:
-			breakIce[white] = 1;
-			breakIce[blue] = 0;
-			break;
-		case 4:
-			breakIce[white] = 0;
-			breakIce[blue] = 1;
-			break;
-		case 5:
 			breakIce[white] = 3;
 			breakIce[blue] = 3;
+			break;
+		case 4:
+			breakIce[white] = 2;
+			breakIce[blue] = 0;
+			break;
+		case 5:
+			breakIce[white] = 1;
+			breakIce[blue] = 0;
 			break;
 		default:
 			break;
 		}
+		for (int i = white; i <= blue; i++) {
+			if (countIce[i] < breakIce[i]) {
+				breakIce[i] = countIce[i];
+			}
+		}
 		changeNumIcon();
 	}
 
-	public void changeBreakIce(int color, int num) {
-		breakIce[color] = num;
+	public void changeBreakIce(int color) {
+		breakIce[color]--;
+		countIce[color]--;
 		changeNumIcon();
+		if (gs.isMyTurn() && breakIce[white] <= 0 && breakIce[blue] <= 0) {
+			if (shieldFlag) {
+				ms.send("changeTurn");
+				return;
+			}
+			turnFlag = true;
+		}
 	}
 
 	public void changeHitCount(int jbNum) {
@@ -184,8 +198,8 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	}
 
 	public void changeNumIcon() {
-		for (int i = 0; i <= blue; i++) {
-			numLabel[i].setIcon(numIcon[i][breakIce[i]]);
+		for (int i = white; i <= blue; i++) {
+			numLabels[i].setIcon(numIcons[i][breakIce[i]]);
 		}
 	}
 
@@ -197,43 +211,34 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			return;
 		}
 		int jbNum = Integer.parseInt(jb.getActionCommand());
-		int diff = 0;
 		String iconName = "";
+		int diff = 0;
 		int color = 0;
 		System.out.println("clicked: " + jbNum);
 		loop: for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
-					if (icon == hoverIcon[j][i]) {
-						if (!moveFlag) {
+					color = j;
+					if (icon == hoverIcons[j][i]) {
+						if (!shieldFlag) {
 							timer = new Timer(1, new PenguinMove(penguin, this, Integer.parseInt(jb.getActionCommand())));
 							timer.start();
 						}
-						gs.send("changeHitCount" + " " + jbNum);
-						if (hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
-							breakIce[j]--;
-							countIce[j]--;
-							if (breakIce[j] < 0) {
-								breakIce[j] = 0;
-							}
-							if (countIce[j] < breakIce[j]) {
-								breakIce[j] = countIce[j];
-							}
+						ms.send("changeHitCount" + " " + jbNum);
+						if (ghFlag || hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							jb.setIcon(brokenIce);
-							gs.send("changeNumIcon" + " " + j + " " + breakIce[j]);
-							color = j;
+							ms.send("changeBreakIce" + " " + j);
 							iconName = "broken";
+							im.digOutItem(jbNum);
 							break loop;
 						}
 						diff = mustHitNum[jbNum / icesX][jbNum % icesX] - hitCount[jbNum / icesX][jbNum % icesX];
 						if (diff > 0) {
 							if (diff < 3) {
-								jb.setIcon(hoverIcon[j][2]);
-								color = j;
+								jb.setIcon(hoverIcons[j][2]);
 								iconName = "ice2";
 							} else if (diff < 5) {
-								jb.setIcon(hoverIcon[j][1]);
-								color = j;
+								jb.setIcon(hoverIcons[j][1]);
 								iconName = "ice1";
 							}
 							break loop;
@@ -244,62 +249,54 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		}
 
 		if (!iconName.equals("")) {
-			gs.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName);
-		}
-
-		if (breakIce[white] <= 0 && breakIce[blue] <= 0) {
-			turnFlag = true;
+			ms.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName);
 		}
 	}
 
 	public void changeIceIcon(int color, int jbNum, String iconName) {
 		if (gs.isMyTurn()) return;
-		Icon chIcon = null;
+		Icon icon = null;
 		switch (iconName) {
 		case "broken":
-			chIcon = brokenIce;
+			icon = brokenIce;
 			break;
 		case "ice1":
-			chIcon = iceIcon[color][1];
+			icon = iceIcons[color][1];
 			break;
 		case "ice2":
-			chIcon = iceIcon[color][2];
+			icon = iceIcons[color][2];
 			break;
 		default:
 			break;
 		}
-		ices[jbNum / icesX][jbNum % icesX].setIcon(chIcon);
-	}
-
-	public void cleanIceIcon() {
-		for (int j = 0; j < icesY; j++) {
-			for (int i = 0; i < icesX; i++) {
-				for (int l = 0; l < 3; l++) {
-					for (int k = white; k <= blue; k++) {
-						if (ices[j][i].getIcon() == hoverIcon[k][l]) {
-							ices[j][i].setIcon(iceIcon[k][l]);
-						}
-					}
-				}
-			}
-		}
+		ices[jbNum / icesX][jbNum % icesX].setIcon(icon);
 	}
 
 	public void hoverIceIcon(MouseEvent e) {
-		if (!gs.isMyTurn()) return;
 		JButton jb = (JButton) e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = white; j <= blue; j++) {
 			for (int i = 0; i < 3; i++) {
-				if (icon == iceIcon[j][i]) {
-					jb.setIcon(hoverIcon[j][i]);
+				if (icon == iceIcons[j][i]) {
+					jb.setIcon(hoverIcons[j][i]);
 					return;
-				} else if (icon == hoverIcon[j][i]) {
-					jb.setIcon(iceIcon[j][i]);
+				} else if (icon == hoverIcons[j][i]) {
+					jb.setIcon(iceIcons[j][i]);
 					return;
 				}
 			}
 		}
+	}
+
+	public void changeHammerIcon(MouseEvent e) {
+		Icon icon = ((JButton)e.getComponent()).getIcon();
+		if (icon == brokenIce) return;
+		for (int j = white; j <= blue; j++) {
+			for (int i = 0; i < 3; i++) {
+				if (icon == hoverIcons[j][i] && breakIce[j] == 0) return;
+			}
+		}
+		hammer.changeHammerIcon();
 	}
 
 	public JButton[][] getIces() {
@@ -310,23 +307,38 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 		return icesX;
 	}
 
+	public int getIcesY() {
+		return icesY;
+	}
+
 	public Icon getBrokenIceIcon() {
 		return brokenIce;
 	}
 
 	public void setMoveFlag(boolean moveFlag) {
-		if (!moveFlag) {
+		if (this.moveFlag || !moveFlag) {
 			timer.stop();
 		}
 		this.moveFlag = moveFlag;
 	}
 
+	public void setGhFlag(boolean ghFlag) {
+		if (!ghFlag) {
+			hammer.changeHammer();
+		}
+		this.ghFlag = ghFlag;
+	}
+
+	public void setShieldFlag(boolean shieldFlag) {
+		this.shieldFlag = shieldFlag;
+	}
+
 	public void mouseReleased(MouseEvent e) {
-		hammer.changeHammerIcon();
+		changeHammerIcon(e);
 	}
 
 	public void mousePressed(MouseEvent e) {
-		hammer.changeHammerIcon();
+		changeHammerIcon(e);
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -354,7 +366,7 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 	public static class PenguinMove implements ActionListener {
 		private Penguin penguin;
 		private Ices ices;
-		private double x0, x1, y0, y1, x, y, speed;
+		private double x0, x1, y0, y1, x, y, sendX, sendY, speed;
 		public PenguinMove(Penguin penguin, Ices ices, int jbNum) {
 			this.penguin = penguin;
 			this.ices = ices;
@@ -364,33 +376,41 @@ public class Ices extends JFrame implements MouseListener, MouseMotionListener {
 			y1 = ices.ices[jbNum / ices.getIcesX()][jbNum % ices.getIcesX()].getY();
 			x = x0 < x1 ? x0 + 1 : x0 - 1;
 			y = y0 < y1 ? y0 + 1 : y0 - 1;
-			speed = 0.2;
+			sendX = 0;
+			sendY = 0;
+			speed = 0.3;
 			ices.setMoveFlag(true);
+			ices.ms.send("changePenguinIcon" + " " + 1);
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			if (speed > 0) {
+				sendX = (int) x;
 				if (Math.abs(x1 - x0) < 25) {
-					penguin.penguinMove(x, y);
+					sendY = y;
 					if (y0 < y1) {
 						y += speed;
 					} else if (y0 >= y1) {
 						y -= speed;
 					}
 				} else if (x0 < x1) {
-					penguin.penguinMove(x, Calculation.lerp(x0, y0, x1, y1, x));
+					sendY = Calculation.lerp(x0, y0, x1, y1, x);
 					x += speed;
-				} else if (x0 >= x1) {
-					penguin.penguinMove(x, Calculation.lerp(x1, y1, x0, y0, x));
+				} else {
+					sendY = Calculation.lerp(x1, y1, x0, y0, x);
 					x -= speed;
 				}
 				speed = speed < 0 ? 0 : speed - 0.002;
-				penguin.penguinFall(ices, ices.brokenIce);
+				ices.ms.send("move" + " " + (int)sendX + " " + (int)sendY);
+				// ↓デバッグ用　のちのち消す
+				// ices.ms.send("move" + " " + (int)x0 + " " + (int)y0);
+				penguin.penguinFall();
 			} else if (ices.turnFlag) {
-				ices.gs.send("changeTurn");
+				ices.ms.send("changeTurn");
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
+				ices.ms.send("changePenguinIcon" + " " + 0);
 			}
 		}
 	}

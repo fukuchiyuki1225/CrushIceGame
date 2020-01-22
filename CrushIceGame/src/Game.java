@@ -23,23 +23,18 @@ public class Game {
 
 		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
 		mrt.start();
-
-		/*GameScreen gs = new GameScreen();
-		gs.setVisible(true);*/
 	}
 
 	public class MesgRecvThread extends Thread {
 		Socket socket;
 		String myName;
-		Boolean existGs;
-		GameScreen gs;
 		MesgSend ms;
+		GameScreen gs;
 
 		public MesgRecvThread(Socket socket, String myName) {
 			this.socket = socket;
 			this.myName = myName;
-			// existGs = false;
-			ms = new MesgSend(socket);
+			ms = MesgSend.getInstance(socket);
 		}
 
 		public void run() {
@@ -50,8 +45,7 @@ public class Game {
 				out.println(myName);
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
-				// out.println("join" + " " + myNumber);
-				gs = new GameScreen(myNumber, ms);
+				gs = GameScreen.getInstance();
 				gs.setVisible(true);
 				while (true) {
 					String inputLine = br.readLine();
@@ -60,10 +54,13 @@ public class Game {
 						String cmd = inputTokens[0];
 						switch (cmd) {
 						case "join":
-							gs.setGameScreen();
+							gs.setGameScreen(myNumber);
 							break;
-						case "initialize":
-							gs.getIces().initializeIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
+						case "initIces":
+							gs.getIces().initIces(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
+							break;
+						case "initItems":
+							gs.getItemManager().initItems(inputTokens[1], Integer.parseInt(inputTokens[2]));
 							break;
 						case "roulette":
 							gs.getIces().setBreakIce(Integer.parseInt(inputTokens[1]));
@@ -71,18 +68,23 @@ public class Game {
 						case "changeHitCount":
 							gs.getIces().changeHitCount(Integer.parseInt(inputTokens[1]));
 							break;
-						case "changeNumIcon":
-							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+						case "changeBreakIce":
+							gs.getIces().changeBreakIce(Integer.parseInt(inputTokens[1]));
 							break;
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
+							break;
+						case "getItem":
+							gs.getItemManager().getItems().get(inputTokens[1]).getItem();
 							break;
 						case "move":
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
 						case "fall":
-							// gs.getPenguin().getPenguin().setVisible(false);
 							gs.setGameOverScreen();
+							break;
+						case "changePenguinIcon":
+							gs.getPenguin().changePenguinIcon(Integer.parseInt(inputTokens[1]));
 							break;
 						case "changeTurn":
 							gs.setMyTurn();

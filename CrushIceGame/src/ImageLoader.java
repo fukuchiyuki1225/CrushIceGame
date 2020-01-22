@@ -4,9 +4,16 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 public class ImageLoader {
-	static ImageLoader il = new ImageLoader();
+	private static ImageLoader il = new ImageLoader();
 
-	public static BufferedImage loadImage(String path) {
+	private ImageLoader() {
+	};
+
+	public static ImageLoader getInstance() {
+		return il;
+	}
+
+	public BufferedImage load(String path) {
 		BufferedImage bi = null;
 		try {
 			URL url = il.getClass().getClassLoader().getResource(path);

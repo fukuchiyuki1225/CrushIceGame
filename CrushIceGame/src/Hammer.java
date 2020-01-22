@@ -1,39 +1,55 @@
 import java.awt.Point;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Hammer {
-	private ImageIcon hammerIcon, hammerIcon2;
-	private JLabel hammer;
-	private GameScreen gs;
+	private static Hammer hammer = new Hammer();
+	private ImageIcon[] hammerIcons, nhIcons;
+	private JLabel hammerLabel;
 
-	public Hammer(GameScreen gs) {
-		hammerIcon = new ImageIcon(ImageLoader.loadImage("img/pick_hammer.png"));
-		hammerIcon2 = new ImageIcon(ImageLoader.loadImage("img/pick_hammer_2.png"));
-		hammer = new JLabel(hammerIcon);
-		this.gs = gs;
-		// gs.addComponent(hammer, 1500, 0, 0, 200, 170);
+	private Hammer() {
+		ImageLoader il = ImageLoader.getInstance();
+		nhIcons = new ImageIcon[] {
+				new ImageIcon(il.load("img/pick_hammer.png")),
+				new ImageIcon(il.load("img/pick_hammer_2.png"))
+		};
+		hammerLabel = new JLabel();
+		changeHammer();
+	}
+
+	public static Hammer getInstance() {
+		return hammer;
 	}
 
 	public void changeHammerIcon() {
+		GameScreen gs = GameScreen.getInstance();
 		if (!gs.isMyTurn() && gs.getCurrentScreen().equals("game")) return;
-		if (hammer.getIcon() == hammerIcon) {
-			hammer.setIcon(hammerIcon2);
-		} else if (hammer.getIcon() == hammerIcon2){
-			hammer.setIcon(hammerIcon);
-		}
+		Icon icon = (hammerLabel.getIcon() == hammerIcons[0]) ? hammerIcons[1] : hammerIcons[0];
+		hammerLabel.setIcon(icon);
+	}
+
+	public void changeHammer() {
+		hammerIcons = nhIcons;
+		hammerLabel.setIcon(hammerIcons[0]);
+	}
+
+	public void changeHammer(ImageIcon[] ghIcons) {
+		hammerIcons = ghIcons;
+		hammerLabel.setIcon(hammerIcons[0]);
 	}
 
 	public void setHammerLocation(Point p) {
-		hammer.setLocation(p.x - 50, p.y - 120);
+		hammerLabel.setLocation(p.x - 50, p.y - 120);
 	}
 
+	// 画面遷移時やゲーム中に、ハンマー画像が叩いた状態のままになることがあるのを元に戻すメソッド
 	public void cleanHammerIcon() {
-		hammer.setIcon(hammerIcon);
+		hammerLabel.setIcon(hammerIcons[0]);
 	}
 
-	public JLabel getHammer() {
-		return hammer;
+	public JLabel getHammerLabel() {
+		return hammerLabel;
 	}
 }
