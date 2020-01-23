@@ -13,7 +13,9 @@ public class Penguin {
 		penguinIcons = new ImageIcon[] {
 				new ImageIcon(rl.load("img/penguin.png")),
 				new ImageIcon(rl.load("img/penguin_2.png")),
-				new ImageIcon(rl.load("img/penguin_3.png"))
+				new ImageIcon(rl.load("img/penguin_3.png")),
+				new ImageIcon(rl.load("img/penguin_4.png")),
+				new ImageIcon(rl.load("img/penguin_5.png"))
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;

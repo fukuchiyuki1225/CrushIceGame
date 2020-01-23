@@ -140,6 +140,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		jb.setVisible(false);
 		itemButtons.remove(jb);
 		items.get(itemName).use();
+		ms.send("useItem");
 		realignItemButtons();
 		count--;
 	}
