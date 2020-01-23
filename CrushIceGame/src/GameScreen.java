@@ -167,7 +167,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO é©ìÆê∂ê¨Ç≥ÇÍÇΩ catch ÉuÉçÉbÉN
 			e.printStackTrace();
 		}
 
@@ -304,15 +303,21 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setMyTurn() {
+		penguin.changePenguinIcon(0);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		myTurn = 1 - myTurn;
 		turnLabel.setIcon(turnIcons[getMyTurn()]);
 		ices.spinTheRoulette();
+		hammer.cleanHammerIcon();
 		ices.setGhFlag(false);
 		ices.setShieldFlag(false);
-		penguin.changePenguinIcon(0);
-		hammer.cleanHammerIcon();
 		im.setItemInvisible();
 		im.setItemButtons();
+		sound.play("turn");
 	}
 
 	public boolean isMyTurn() {

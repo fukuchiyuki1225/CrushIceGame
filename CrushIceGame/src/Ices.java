@@ -108,7 +108,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void initIceRand() {
-		if (!gs.isMyTurn()) return;
+		if (gs.isMyTurn()) return;
 		for (int j = 0; j < icesY; j++) {
 			for (int i = 0; i < icesX; i++) {
 				int rand = random.nextInt(2);
@@ -133,7 +133,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void spinTheRoulette() {
-		if (!gs.isMyTurn()) return;
+		if (gs.isMyTurn()) return;
 		int roulette = 0;
 		if (countIce[white] > 0 && countIce[blue] > 0) {
 			roulette = random.nextInt(6);

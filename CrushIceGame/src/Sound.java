@@ -19,9 +19,11 @@ public class Sound {
 		String[] names = new String[] {
 				"bgm",
 				"button",
+				"turn",
 				"pick",
 				"crack",
 				"broken",
+				"item",
 				"fall",
 				"win",
 				"lose"
@@ -55,10 +57,14 @@ public class Sound {
 	}
 
 	public void loop(String name) {
-		sounds.get(name).loop(1);
+		Clip clip = sounds.get(name);
+		clip.setFramePosition(0);
+		clip.loop(1);
 	}
 
 	public void stop(String name) {
-		sounds.get(name).stop();
+		Clip clip = sounds.get(name);
+		clip.stop();
+		clip.setFramePosition(0);
 	}
 }

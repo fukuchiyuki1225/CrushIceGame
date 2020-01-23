@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 public class ItemManager implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
 	private MesgSend ms;
+	private Sound sound;
 	private Map<String, Item> items;
 	private List<JButton> itemButtons;
 	private int count;
@@ -22,6 +23,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	public ItemManager() {
 		gs = GameScreen.getInstance();
 		ms = MesgSend.getInstance();
+		sound = Sound.getInstance();
 		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
@@ -87,6 +89,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 				}
 				jb.setVisible(false);
 				itemButtons.add(jb);
+				sound.play("item");
 				break;
 			}
 		}

@@ -9,6 +9,7 @@ public class Shield extends Item {
 		System.out.println("shield");
 		GameScreen.getInstance().getIces().setShieldFlag(true);
 		MesgSend.getInstance().send("changePenguinIcon" + " " + 2);
+		Sound.getInstance().play("item");
 	}
 
 }
