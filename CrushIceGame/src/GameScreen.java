@@ -89,6 +89,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	// タイトル画面
 	public void setTitleScreen() {
 		currentScreen = "title";
+		sound.loop("bgm");
 
 		removeGame();
 		if (gameOver != null) {
@@ -131,6 +132,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	// ゲーム画面
 	public void setGameScreen(int num) {
 		currentScreen = "game";
+		sound.loop("bgm");
 
 		if (title != null) title.setVisible(false);
 		if (gameOver != null) gameOver.setVisible(false);
@@ -160,6 +162,15 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";
 		penguin.getPenguinLabel().setVisible(false);
+		sound.stop("bgm");
+		sound.play("fall");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+
 		hammer.changeHammer();
 
 		if (gameOver == null) {
@@ -178,6 +189,13 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		wlLabel.setIcon(wlIcons[getMyTurn()]);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		gameOver.setVisible(true);
+
+		if (!isMyTurn()) {
+			sound.play("win");
+		} else {
+			sound.play("lose");
+		}
+
 		removeGame();
 		cleanButtons();
 		hammer.cleanHammerIcon();

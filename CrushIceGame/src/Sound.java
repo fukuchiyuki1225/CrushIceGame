@@ -21,7 +21,10 @@ public class Sound {
 				"button",
 				"pick",
 				"crack",
-				"broken"
+				"broken",
+				"fall",
+				"win",
+				"lose"
 		};
 		for (String name : names) {
 			try {

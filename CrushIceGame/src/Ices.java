@@ -224,8 +224,8 @@ public class Ices implements MouseListener, MouseMotionListener {
 			for (int i = 0; i < 3; i++) {
 				if (breakIce[j] > 0) {
 					color = j;
-					sound.play("pick");
 					if (icon == hoverIcons[j][i]) {
+						sound.play("pick");
 						if (!shieldFlag) {
 							timer = new Timer(1, new PenguinMove(penguin, this, oppositeNum));
 							timer.start();
