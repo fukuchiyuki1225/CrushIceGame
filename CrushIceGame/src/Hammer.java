@@ -10,10 +10,10 @@ public class Hammer {
 	private JLabel hammerLabel;
 
 	private Hammer() {
-		ImageLoader il = ImageLoader.getInstance();
+		ResourceLoader rl = ResourceLoader.getInstance();
 		nhIcons = new ImageIcon[] {
-				new ImageIcon(il.load("img/pick_hammer.png")),
-				new ImageIcon(il.load("img/pick_hammer_2.png"))
+				new ImageIcon(rl.load("img/pick_hammer.png")),
+				new ImageIcon(rl.load("img/pick_hammer_2.png"))
 		};
 		hammerLabel = new JLabel();
 		changeHammer();

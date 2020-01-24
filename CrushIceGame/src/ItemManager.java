@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 public class ItemManager implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
 	private MesgSend ms;
+	private Sound sound;
 	private Map<String, Item> items;
 	private List<JButton> itemButtons;
 	private int count;
@@ -22,6 +23,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	public ItemManager() {
 		gs = GameScreen.getInstance();
 		ms = MesgSend.getInstance();
+		sound = Sound.getInstance();
 		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
@@ -77,7 +79,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			if (items.get(key).getLocation() == JbNum) {
 				ms.send("getItem" + " " + key);
 				count++;
-				JButton jb = new JButton(new ImageIcon(ImageLoader.getInstance().load("img/" + key.split("[0-9]")[0] + ".png")));
+				JButton jb = new JButton(new ImageIcon(ResourceLoader.getInstance().load("img/" + key.split("[0-9]")[0] + ".png")));
 				jb.setActionCommand(key);
 				gs.setButton(jb, this, this);
 				if (count <= 3) {
@@ -87,6 +89,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 				}
 				jb.setVisible(false);
 				itemButtons.add(jb);
+				sound.play("item");
 				break;
 			}
 		}
@@ -136,6 +139,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		String itemName = jb.getActionCommand();
 		jb.setVisible(false);
 		itemButtons.remove(jb);
+		ms.send("useItem");
 		items.get(itemName).use();
 		realignItemButtons();
 		count--;

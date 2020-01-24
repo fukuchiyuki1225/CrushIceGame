@@ -5,10 +5,10 @@ public class GoldenHammer extends Item {
 
 	public GoldenHammer(int location) {
 		super("img/goldenHammer.png", "goldenHammer", location);
-		ImageLoader il = ImageLoader.getInstance();
+		ResourceLoader rl = ResourceLoader.getInstance();
 		ghIcons = new ImageIcon[] {
-				new ImageIcon(il.load("img/golden_hammer.png")),
-				new ImageIcon(il.load("img/golden_hammer_2.png"))
+				new ImageIcon(rl.load("img/golden_hammer.png")),
+				new ImageIcon(rl.load("img/golden_hammer_2.png"))
 		};
 	}
 
@@ -16,6 +16,7 @@ public class GoldenHammer extends Item {
 		System.out.println("goldenHammer");
 		Hammer.getInstance().changeHammer(ghIcons);
 		GameScreen.getInstance().getIces().setGhFlag(true);
+		MesgSend.getInstance().send("changePenguinIcon" + " " + 2);
 	}
 
 }
