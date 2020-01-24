@@ -164,6 +164,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		penguin.getPenguinLabel().setVisible(false);
 		sound.stop("bgm");
 		sound.play("fall");
+
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -303,6 +304,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setMyTurn() {
+		ices.setGhFlag(false);
+		ices.setShieldFlag(false);
 		penguin.changePenguinIcon(0);
 		try {
 			Thread.sleep(1000);
@@ -313,8 +316,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		turnLabel.setIcon(turnIcons[getMyTurn()]);
 		ices.spinTheRoulette();
 		hammer.cleanHammerIcon();
-		ices.setGhFlag(false);
-		ices.setShieldFlag(false);
 		im.setItemInvisible();
 		im.setItemButtons();
 		sound.play("turn");

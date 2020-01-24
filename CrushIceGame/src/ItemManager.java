@@ -139,8 +139,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		String itemName = jb.getActionCommand();
 		jb.setVisible(false);
 		itemButtons.remove(jb);
-		items.get(itemName).use();
 		ms.send("useItem");
+		items.get(itemName).use();
 		realignItemButtons();
 		count--;
 	}

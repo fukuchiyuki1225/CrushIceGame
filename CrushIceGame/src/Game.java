@@ -84,6 +84,7 @@ public class Game {
 							break;
 						case "useItem":
 							sound.play("item");
+							break;
 						case "move":
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;

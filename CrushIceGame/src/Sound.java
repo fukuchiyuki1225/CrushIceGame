@@ -59,7 +59,7 @@ public class Sound {
 	public void loop(String name) {
 		Clip clip = sounds.get(name);
 		clip.setFramePosition(0);
-		clip.loop(1);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
 	public void stop(String name) {

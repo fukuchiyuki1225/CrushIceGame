@@ -388,7 +388,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 			sendY = 0;
 			speed = 0.3;
 			ices.setMoveFlag(true);
-			ices.ms.send("changePenguinIcon" + " " + 1);
+			if (ices.ghFlag) {
+				ices.ms.send("changePenguinIcon" + " " + 3);
+			} else {
+				ices.ms.send("changePenguinIcon" + " " + 1);
+			}
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -418,7 +422,11 @@ public class Ices implements MouseListener, MouseMotionListener {
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
-				if (!ices.shieldFlag) ices.ms.send("changePenguinIcon" + " " + 0);
+				if (ices.ghFlag) {
+					ices.ms.send("changePenguinIcon" + " " + 2);
+				} else if (!ices.shieldFlag) {
+					ices.ms.send("changePenguinIcon" + " " + 0);
+				}
 			}
 		}
 	}

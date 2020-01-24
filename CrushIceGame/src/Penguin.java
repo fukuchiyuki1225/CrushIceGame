@@ -15,7 +15,8 @@ public class Penguin {
 				new ImageIcon(rl.load("img/penguin_2.png")),
 				new ImageIcon(rl.load("img/penguin_3.png")),
 				new ImageIcon(rl.load("img/penguin_4.png")),
-				new ImageIcon(rl.load("img/penguin_5.png"))
+				new ImageIcon(rl.load("img/penguin_5.png")),
+				new ImageIcon(rl.load("img/penguin_6.png"))
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;
@@ -50,6 +51,7 @@ public class Penguin {
 
 	public void changePenguinIcon(int state) {
 		penguinLabel.setIcon(penguinIcons[state]);
+		penguinLabel.repaint();
 	}
 
 	public void penguinMove(int x, int y) {
