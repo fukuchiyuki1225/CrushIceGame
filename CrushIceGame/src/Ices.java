@@ -196,6 +196,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void changeHitCount(int jbNum) {
+		sound.play("pick");
 		hitCount[jbNum / icesX][jbNum % icesX]++;
 	}
 
@@ -213,9 +214,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 			return;
 		}
 		int jbNum = Integer.parseInt(jb.getActionCommand());
-		System.out.println("clicked: " + jbNum);
 		int oppositeNum = (icesX * icesY - 1) - jbNum;
-		System.out.println("opposite:" + oppositeNum);
 		String iconName = "";
 		String soundName = "";
 		int diff = 0;
@@ -225,7 +224,6 @@ public class Ices implements MouseListener, MouseMotionListener {
 				if (breakIce[j] > 0) {
 					color = j;
 					if (icon == hoverIcons[j][i]) {
-						sound.play("pick");
 						if (!shieldFlag) {
 							timer = new Timer(1, new PenguinMove(penguin, this, oppositeNum));
 							timer.start();
@@ -321,6 +319,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 
 	public Icon getBrokenIceIcon() {
 		return brokenIce;
+	}
+
+	public boolean getMoveFlag() {
+		return moveFlag;
 	}
 
 	public void setMoveFlag(boolean moveFlag) {

@@ -25,12 +25,13 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private MesgSend ms;
 	private ResourceLoader rl;
 	private GhostHammer ghost;
-	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
+	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, nomal = 0, hover = 1;
 	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons;
 	private JButton[] buttons;
 	private JLabel helpLabel, turnLabel, wlLabel, msgLabel;
-	private JButton helpClose;
+	private JButton helpClose, bgm, se;
+	private boolean bgmFlag, seFlag;
 	private int myTurn, myNum;
 	private Penguin penguin;
 	private ItemManager im;
@@ -53,6 +54,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		ms = MesgSend.getInstance();
 		rl = ResourceLoader.getInstance();
 		ghost = GhostHammer.getInstance();
+		bgmFlag = true;
+		seFlag = true;
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
 		setTitleScreen();
@@ -67,25 +70,23 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			{
 				new ImageIcon(rl.load("img/start.png")),
 				new ImageIcon(rl.load("img/help.png")),
-				new ImageIcon(rl.load("img/setting.png")),
 				new ImageIcon(rl.load("img/again.png")),
-				new ImageIcon(rl.load("img/to_title.png"))
+				new ImageIcon(rl.load("img/to_title.png")),
+				new ImageIcon(rl.load("img/bgm_off.png")),
+				new ImageIcon(rl.load("img/bgm_on.png")),
+				new ImageIcon(rl.load("img/se_off.png")),
+				new ImageIcon(rl.load("img/se_on.png")),
 			},
 			{
 				new ImageIcon(rl.load("img/start_2.png")),
 				new ImageIcon(rl.load("img/help_2.png")),
-				new ImageIcon(rl.load("img/setting_2.png")),
 				new ImageIcon(rl.load("img/again_2.png")),
-				new ImageIcon(rl.load("img/to_title_2.png"))
+				new ImageIcon(rl.load("img/to_title_2.png")),
+				new ImageIcon(rl.load("img/bgm_off_2.png")),
+				new ImageIcon(rl.load("img/bgm_on_2.png")),
+				new ImageIcon(rl.load("img/se_off_2.png")),
+				new ImageIcon(rl.load("img/se_on_2.png"))
 			}
-		};
-		turnIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/your_turn.png")),
-				new ImageIcon(rl.load("img/my_turn.png"))
-		};
-		wlIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/win.png")),
-				new ImageIcon(rl.load("img/lose.png"))
 		};
 		msgIcons = new ImageIcon[][] {
 			{
@@ -96,6 +97,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				new ImageIcon(rl.load("img/lose_msg.png")),
 				new ImageIcon(rl.load("img/lose_msg_2.png"))
 			}
+		};
+		turnIcons = new ImageIcon[] {
+				new ImageIcon(rl.load("img/your_turn.png")),
+				new ImageIcon(rl.load("img/my_turn.png"))
+		};
+		wlIcons = new ImageIcon[] {
+				new ImageIcon(rl.load("img/win.png")),
+				new ImageIcon(rl.load("img/lose.png"))
 		};
 	}
 
@@ -114,11 +123,19 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			title.addMouseMotionListener(this);
 			c.add(title);
 			addComponent(new JLabel(new ImageIcon(rl.load("img/title.png"))), 0, 0, 0, 1200, 900);
-			for (int i = start; i <= setting; i++) {
+			for (int i = start; i <= help; i++) {
 				buttons[i] = new JButton(UI[nomal][i]);
 				setButton(buttons[i], this, this);
 				addComponent(buttons[i], 100, 100, 450 + i * 100, 458, 93);
 			}
+			bgm = new JButton(UI[nomal][bgmOn]);
+			setButton(bgm, this, this);
+			addComponent(bgm, 100, 100, 650, 213, 93);
+			bgm.setVisible(true);
+			se = new JButton(UI[nomal][seOn]);
+			setButton(se, this, this);
+			addComponent(se, 100, 345, 650, 213, 93);
+			se.setVisible(true);
 			helpLabel = new JLabel(new ImageIcon(rl.load("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
 			helpClose = new JButton(new ImageIcon (rl.load("img/help_close.png")));
@@ -135,9 +152,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// ‚ ‚»‚Ñ‚©‚½‚Ì•\Ž¦E”ñ•\Ž¦Ø‚è‘Ö‚¦
 	public void setHelp(boolean visible) {
-		for (int i = start; i <= setting; i++) {
+		for (int i = start; i <= help; i++) {
 			buttons[i].setVisible(!visible);
 		}
+		bgm.setVisible(!visible);
+		se.setVisible(!visible);
 		helpLabel.setVisible(visible);
 		helpClose.setVisible(visible);
 	}
@@ -260,7 +279,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = nomal; j <= hover; j++) {
-			for (int i = start; i <= toTitle; i++) {
+			for (int i = start; i <= seOn; i++) {
 				if (icon == UI[j][i]) {
 					if (j == nomal) {
 						jb.setIcon(UI[hover][i]);
@@ -283,6 +302,18 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			setHelp(true);
 		} else if (icon == helpClose.getIcon()) {
 			setHelp(false);
+		} else if (icon == UI[hover][bgmOn]) {
+			setBgmFlag(false);
+			jb.setIcon(UI[hover][bgmOff]);
+		} else if (icon == UI[hover][bgmOff]) {
+			setBgmFlag(true);
+			jb.setIcon(UI[hover][bgmOn]);
+		} else if (icon == UI[hover][seOn]) {
+			seFlag = false;
+			jb.setIcon(UI[hover][seOff]);
+		} else if (icon == UI[hover][seOff]) {
+			seFlag = true;
+			jb.setIcon(UI[hover][seOn]);
 		} else if (icon == UI[hover][again]) {
 			ms.send("join");
 		} else if (icon == UI[hover][toTitle]) {
@@ -317,12 +348,29 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		return ices;
 	}
 
+	public boolean getBgmFlag() {
+		return bgmFlag;
+	}
+
+	public boolean getSeFlag() {
+		return seFlag;
+	}
+
 	public int getMyTurn() {
 		return myTurn;
 	}
 
 	public int getMyNum() {
 		return myNum;
+	}
+
+	public void setBgmFlag(boolean bgmFlag) {
+		this.bgmFlag = bgmFlag;
+		if (!this.bgmFlag) {
+			sound.stop("bgm");
+		} else {
+			sound.loop("bgm");
+		}
 	}
 
 	public void setMyTurn() {

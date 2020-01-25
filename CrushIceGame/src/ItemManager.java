@@ -134,7 +134,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (!gs.isMyTurn()) return;
+		if (!gs.isMyTurn() || gs.getIces().getMoveFlag()) return;
 		JButton jb = (JButton) e.getComponent();
 		String itemName = jb.getActionCommand();
 		jb.setVisible(false);

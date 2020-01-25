@@ -51,12 +51,16 @@ public class Sound {
 	}
 
 	public void play(String name) {
+		if (!GameScreen.getInstance().getSeFlag()) return;
 		Clip clip = sounds.get(name);
 		clip.setFramePosition(0);
 		clip.start();
 	}
 
 	public void loop(String name) {
+		if (GameScreen.getInstance() != null) {
+			if (!GameScreen.getInstance().getBgmFlag()) return;
+		}
 		Clip clip = sounds.get(name);
 		clip.setFramePosition(0);
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
