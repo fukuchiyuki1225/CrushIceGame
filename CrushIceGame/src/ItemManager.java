@@ -36,7 +36,6 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		int[] rand = new int[6];
 		for (int i = 0; i < 6; i++) {
 			rand[i] = random.nextInt(63);
-			System.out.println("itemlocationF " + rand[i]);
 		}
 
 		for (int i = 0; i < 5; i++) {

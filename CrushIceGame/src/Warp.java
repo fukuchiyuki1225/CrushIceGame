@@ -15,7 +15,6 @@ public class Warp extends Item {
 	}
 
 	public void use() {
-		System.out.println("warp");
 		GameScreen.getInstance().getPenguin().changePenguinIcon(5);
 		MesgSend ms = MesgSend.getInstance();
 		ms.send("changePenguinIcon" + " " + 5);
