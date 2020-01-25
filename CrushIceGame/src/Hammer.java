@@ -6,10 +6,11 @@ import javax.swing.JLabel;
 
 public class Hammer {
 	private static Hammer hammer = new Hammer();
-	private ImageIcon[] hammerIcons, nhIcons;
-	private JLabel hammerLabel;
+	protected ImageIcon[] hammerIcons;
+	protected ImageIcon[] nhIcons;
+	protected JLabel hammerLabel;
 
-	private Hammer() {
+	protected Hammer() {
 		ResourceLoader rl = ResourceLoader.getInstance();
 		nhIcons = new ImageIcon[] {
 				new ImageIcon(rl.load("img/pick_hammer.png")),
@@ -28,6 +29,9 @@ public class Hammer {
 		if (!gs.isMyTurn() && gs.getCurrentScreen().equals("game")) return;
 		Icon icon = (hammerLabel.getIcon() == hammerIcons[0]) ? hammerIcons[1] : hammerIcons[0];
 		hammerLabel.setIcon(icon);
+		if (!gs.getCurrentScreen().equals("game")) return;
+		int iconNum = (hammerLabel.getIcon() == hammerIcons[0]) ? 0 : 1;
+		MesgSend.getInstance().send("ghostClick" + " " + gs.getMyNum() + " " + iconNum);
 	}
 
 	public void changeHammer() {
@@ -42,6 +46,9 @@ public class Hammer {
 
 	public void setHammerLocation(Point p) {
 		hammerLabel.setLocation(p.x - 50, p.y - 120);
+		GameScreen gs = GameScreen.getInstance();
+		if (!gs.getCurrentScreen().equals("game")) return;
+		MesgSend.getInstance().send("ghostMove" + " " + gs.getMyNum() + " " + (p.x - 50) + " " + (p.y - 120));
 	}
 
 	// 画面遷移時やゲーム中に、ハンマー画像が叩いた状態のままになることがあるのを元に戻すメソッド

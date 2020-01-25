@@ -59,6 +59,12 @@ public class Game {
 						case "join":
 							gs.setGameScreen(myNumber);
 							break;
+						case "ghostMove":
+							GhostHammer.getInstance().setHammerLocation(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]));
+							break;
+						case "ghostClick":
+							GhostHammer.getInstance().changeHammerIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							break;
 						case "initIces":
 							gs.getIces().initIces(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
 							break;

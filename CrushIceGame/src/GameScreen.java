@@ -23,13 +23,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private Sound sound;
 	private MesgSend ms;
 	private ResourceLoader rl;
+	private GhostHammer ghost;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
 	private ImageIcon[][] UI;
 	private ImageIcon[] turnIcons, wlIcons;
 	private JButton[] buttons;
 	private JLabel helpLabel, turnLabel, wlLabel;
 	private JButton helpClose;
-	private int myTurn;
+	private int myTurn, myNum;
 	private Penguin penguin;
 	private ItemManager im;
 	private Ices ices;
@@ -50,6 +51,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		buttons = new JButton[toTitle + 1];
 		ms = MesgSend.getInstance();
 		rl = ResourceLoader.getInstance();
+		ghost = GhostHammer.getInstance();
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
 		setTitleScreen();
@@ -142,6 +144,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		} else {
 			myTurn = 1;
 		}
+		myNum = myTurn;
 
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
@@ -151,6 +154,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
+		addComponent(ghost.getHammerLabel(), 800, 0, 0, 200, 170);
 		turnLabel = new JLabel(turnIcons[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 350, 250, 120);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
@@ -301,6 +305,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public int getMyTurn() {
 		return myTurn;
+	}
+
+	public int getMyNum() {
+		return myNum;
 	}
 
 	public void setMyTurn() {
