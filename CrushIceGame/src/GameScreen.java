@@ -180,13 +180,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game.addMouseMotionListener(this);
 		c.add(game);
 		addComponent(new JLabel(new ImageIcon(rl.load("img/sea.png"))), 0, 0, 0, 1200, 900);
-		addComponent(new JLabel(new ImageIcon(rl.load("img/logo.png"))), 900, 760, 50, 400, 315);
+		addComponent(new JLabel(new ImageIcon(rl.load("img/logo.png"))), 900, 760, 25, 400, 315);
+		addComponent(new JLabel(new ImageIcon(rl.load("img/item_ice.png"))), 450, 805, 640, 359, 212);
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
 		addComponent(ghost.getHammerLabel(), 800, 0, 0, 200, 170);
 		turnLabel = new JLabel(turnIcons[getMyTurn()]);
-		addComponent(turnLabel, 800, 875, 350, 250, 120);
+		addComponent(turnLabel, 800, 875, 325, 250, 120);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		game.setVisible(true);
 		hammer.cleanHammerIcon();

@@ -53,14 +53,14 @@ public class Ices implements MouseListener, MouseMotionListener {
 
 		initIceRand();
 
-		gs.addComponent(new JLabel(new ImageIcon(rl.load("img/white.png"))), 850, 900, 440, 100, 100);
-		gs.addComponent(new JLabel(new ImageIcon(rl.load("img/blue.png"))), 850, 900, 526, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(rl.load("img/white.png"))), 850, 900, 415, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(rl.load("img/blue.png"))), 850, 900, 501, 100, 100);
 		numLabels = new JLabel[] {
 				new JLabel(numIcons[white][0]),
 				new JLabel(numIcons[blue][0])
 		};
-		gs.addComponent(numLabels[white], 800, 975, 483, 100, 100);
-		gs.addComponent(numLabels[blue], 800, 975, 569, 100, 100);
+		gs.addComponent(numLabels[white], 800, 975, 458, 100, 100);
+		gs.addComponent(numLabels[blue], 800, 975, 544, 100, 100);
 
 		spinTheRoulette();
 	}

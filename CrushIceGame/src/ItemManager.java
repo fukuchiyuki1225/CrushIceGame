@@ -85,7 +85,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 				if (count <= 3) {
 					gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
 				} else {
-					gs.addComponent(jb, 500, 775 + (count - 3) * 80, 775, 100, 100);
+					gs.addComponent(jb, 500, 775 + (count - 3) * 80, 750, 100, 100);
 				}
 				jb.setVisible(false);
 				itemButtons.add(jb);
