@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Random;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -25,10 +26,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private ResourceLoader rl;
 	private GhostHammer ghost;
 	private final int start = 0, help = 1, setting = 2, again = 3, toTitle = 4, nomal = 0, hover = 1;
-	private ImageIcon[][] UI;
+	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons;
 	private JButton[] buttons;
-	private JLabel helpLabel, turnLabel, wlLabel;
+	private JLabel helpLabel, turnLabel, wlLabel, msgLabel;
 	private JButton helpClose;
 	private int myTurn, myNum;
 	private Penguin penguin;
@@ -85,6 +86,16 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		wlIcons = new ImageIcon[] {
 				new ImageIcon(rl.load("img/win.png")),
 				new ImageIcon(rl.load("img/lose.png"))
+		};
+		msgIcons = new ImageIcon[][] {
+			{
+				new ImageIcon(rl.load("img/win_msg.png")),
+				new ImageIcon(rl.load("img/win_msg_2.png"))
+			},
+			{
+				new ImageIcon(rl.load("img/lose_msg.png")),
+				new ImageIcon(rl.load("img/lose_msg_2.png"))
+			}
 		};
 	}
 
@@ -187,10 +198,13 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				addComponent(buttons[i], 1200, 350, 400 + (i - again) * 100, 458, 93);
 				wlLabel = new JLabel();
 				addComponent(wlLabel, 1000, 0, 0, 1200, 900);
+				msgLabel = new JLabel();
+				addComponent(msgLabel, 1100, 350, 625, 500, 200);
 			}
 		}
 
 		wlLabel.setIcon(wlIcons[getMyTurn()]);
+		msgLabel.setIcon(msgIcons[getMyTurn()][new Random().nextInt(2)]);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		gameOver.setVisible(true);
 
@@ -263,18 +277,18 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void clickedButton(MouseEvent e) {
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
-			if (icon == UI[hover][start]) {
-				ms.send("join");
-			} else if (icon == UI[hover][help]) {
-				setHelp(true);
-			} else if (icon == helpClose.getIcon()) {
-				setHelp(false);
-			} else if (icon == UI[hover][again]) {
-				ms.send("join");
-			} else if (icon == UI[hover][toTitle]) {
-				ms.send("toTitle");
-			}
-			sound.play("button");
+		if (icon == UI[hover][start]) {
+			ms.send("join");
+		} else if (icon == UI[hover][help]) {
+			setHelp(true);
+		} else if (icon == helpClose.getIcon()) {
+			setHelp(false);
+		} else if (icon == UI[hover][again]) {
+			ms.send("join");
+		} else if (icon == UI[hover][toTitle]) {
+			ms.send("toTitle");
+		}
+		sound.play("button");
 	}
 
 	// 画面遷移後にボタンがホバー状態のままにならないよう、画像を元に戻すメソッド
