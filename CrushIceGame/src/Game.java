@@ -59,6 +59,9 @@ public class Game {
 						case "join":
 							gs.setGameScreen(myNumber);
 							break;
+						case "start":
+							gs.setGameScreen(myNumber);
+							break;
 						case "ghostMove":
 							GhostHammer.getInstance().setHammerLocation(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]));
 							break;
@@ -105,6 +108,9 @@ public class Game {
 							break;
 						case "toTitle":
 							gs.setTitleScreen();
+							break;
+						case "disconnect":
+							gs.setConnectLabel(1);
 							break;
 						default:
 							break;
