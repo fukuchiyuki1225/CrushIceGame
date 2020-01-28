@@ -2,6 +2,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class GameScreen extends JFrame implements MouseListener, MouseMotionListener {
 	private static GameScreen gs = new GameScreen();
@@ -25,11 +28,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private MesgSend ms;
 	private ResourceLoader rl;
 	private GhostHammer ghost;
-	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, nomal = 0, hover = 1;
+	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, wait = 0, disconnect = 1, nomal = 0, hover = 1;
 	private ImageIcon[][] UI, msgIcons;
-	private ImageIcon[] turnIcons, wlIcons;
+	private ImageIcon[] turnIcons, wlIcons, connectIcons;
 	private JButton[] buttons;
-	private JLabel helpLabel, turnLabel, wlLabel, msgLabel;
+	private JLabel helpLabel, turnLabel, wlLabel, msgLabel, connectLabel;
 	private JButton helpClose, bgm, se;
 	private boolean bgmFlag, seFlag;
 	private int myTurn, myNum;
@@ -54,6 +57,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		ms = MesgSend.getInstance();
 		rl = ResourceLoader.getInstance();
 		ghost = GhostHammer.getInstance();
+		connectLabel = new JLabel();
 		bgmFlag = true;
 		seFlag = true;
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
@@ -106,6 +110,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				new ImageIcon(rl.load("img/win.png")),
 				new ImageIcon(rl.load("img/lose.png"))
 		};
+		connectIcons = new ImageIcon[] {
+				new ImageIcon(rl.load("img/wait.png")),
+				new ImageIcon(rl.load("img/disconnect.png"))
+		};
 	}
 
 	// ƒ^ƒCƒgƒ‹‰æ–Ê
@@ -131,18 +139,19 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			bgm = new JButton(UI[nomal][bgmOn]);
 			setButton(bgm, this, this);
 			addComponent(bgm, 100, 100, 650, 213, 93);
-			bgm.setVisible(true);
 			se = new JButton(UI[nomal][seOn]);
 			setButton(se, this, this);
 			addComponent(se, 100, 345, 650, 213, 93);
-			se.setVisible(true);
 			helpLabel = new JLabel(new ImageIcon(rl.load("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
-			helpClose = new JButton(new ImageIcon (rl.load("img/help_close.png")));
+			helpClose = new JButton(new ImageIcon(rl.load("img/help_close.png")));
 			setButton(helpClose, this, this);
 			addComponent(helpClose, 210, 900, 120, 117, 100);
-			setHelp(false);
 		}
+		setHelp(false);
+		addComponent(connectLabel, 1000, 350, 378, 500, 145);
+		connectLabel.setIcon(new ImageIcon(rl.load("img/wait.png")));
+		connectLabel.setVisible(false);
 
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		title.setVisible(true);
@@ -294,11 +303,39 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
+	public void setConnectLabel(int state) {
+		connectLabel.setIcon(connectIcons[state]);
+		addComponent(connectLabel, 1000, 350, 378, 500, 145);
+		connectLabel.setVisible(true);
+
+		if (state == wait) {
+			if (currentScreen.equals("title")) {
+				buttons[start].setVisible(false);
+				buttons[help].setVisible(false);
+				bgm.setVisible(false);
+				se.setVisible(false);
+			} else if (currentScreen.equals("gameOver")) {
+				setTitleScreen();
+				setConnectLabel(wait);
+			}
+			return;
+		} else {
+			Timer timer = new Timer(5000, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setTitleScreen();;
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
+		}
+	}
+
 	public void clickedButton(MouseEvent e) {
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == UI[hover][start]) {
 			ms.send("join");
+			setConnectLabel(wait);
 		} else if (icon == UI[hover][help]) {
 			setHelp(true);
 		} else if (icon == helpClose.getIcon()) {
@@ -317,6 +354,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			jb.setIcon(UI[hover][seOn]);
 		} else if (icon == UI[hover][again]) {
 			ms.send("join");
+			setConnectLabel(wait);
 		} else if (icon == UI[hover][toTitle]) {
 			ms.send("toTitle");
 		}
@@ -387,9 +425,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		turnLabel.setIcon(turnIcons[getMyTurn()]);
 		ices.spinTheRoulette();
 		hammer.cleanHammerIcon();
+		ghost.cleanHammerIcon();
 		im.setItemInvisible();
 		im.setItemButtons();
-		sound.play("turn");
 	}
 
 	public boolean isMyTurn() {
