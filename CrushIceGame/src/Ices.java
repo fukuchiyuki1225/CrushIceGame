@@ -179,6 +179,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				breakIce[i] = countIce[i];
 			}
 		}
+		sound.play("turn");
 		changeNumIcon();
 	}
 
