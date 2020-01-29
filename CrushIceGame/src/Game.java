@@ -57,10 +57,10 @@ public class Game {
 						String cmd = inputTokens[0];
 						switch (cmd) {
 						case "join":
-							gs.setGameScreen(myNumber);
+							gs.setMyNum(myNumber);
 							break;
 						case "start":
-							gs.setGameScreen(myNumber);
+							gs.setGameScreen(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
 						case "ghostMove":
 							GhostHammer.getInstance().setHammerLocation(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]));
@@ -105,9 +105,6 @@ public class Game {
 							break;
 						case "changeTurn":
 							gs.setMyTurn();
-							break;
-						case "toTitle":
-							gs.setTitleScreen();
 							break;
 						case "disconnect":
 							gs.setConnectLabel(1);

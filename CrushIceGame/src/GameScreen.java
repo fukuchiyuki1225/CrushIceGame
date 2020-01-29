@@ -171,19 +171,22 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	// ÉQÅ[ÉÄâÊñ 
-	public void setGameScreen(int num) {
+	public void setGameScreen(int myNum, int myTurn) {
+		if (this.myNum != myNum) return;
+		this.myTurn = myTurn;
+
 		currentScreen = "game";
 		sound.loop("bgm");
 
 		if (title != null) title.setVisible(false);
 		if (gameOver != null) gameOver.setVisible(false);
 
-		if (num % 2 == 0) {
+		/*if (num % 2 == 0) {
 			myTurn = 0;
 		} else {
 			myTurn = 1;
-		}
-		myNum = myTurn;
+		}*/
+		// myNum = myTurn;
 
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
@@ -356,7 +359,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			ms.send("join");
 			setConnectLabel(wait);
 		} else if (icon == UI[hover][toTitle]) {
-			ms.send("toTitle");
+			setTitleScreen();
 		}
 		sound.play("button");
 	}
@@ -369,6 +372,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				buttons[i].setIcon(UI[nomal][i]);
 			}
 		}
+	}
+
+	public void initMyTurn(int myNum, int myTurn) {
+		if (this.myNum == myNum) return;
+		this.myTurn = myTurn;
 	}
 
 	public String getCurrentScreen() {
@@ -410,6 +418,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		} else {
 			sound.loop("bgm");
 		}
+	}
+
+	public void setMyNum(int myNum) {
+		this.myNum = myNum;
 	}
 
 	public void setMyTurn() {

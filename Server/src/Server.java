@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 class ClientProcThread extends Thread {
 	// private Socket incoming;
@@ -27,21 +28,30 @@ class ClientProcThread extends Thread {
 
 			while (true) {
 				String str = myIn.readLine();
-				System.out.println("Received from client No." + number + "(" + name + "), Messages: " + str);
+				String inputTokens[] = str.split(" ");
 				if (str != null) {
-					if (str.toUpperCase().equals("BYE")) {
-						myOut.println("Good bye!");
+					String cmd = inputTokens[0];
+					// System.out.println("Received from client No." + number + "(" + name + "), Messages: " + str);
+					switch (cmd) {
+					case "join":
+						Server.setMemNum();
+						break;
+					case "fall":
+						Server.resetMemNum();
+						break;
+					default:
 						break;
 					}
-					Server.SendAll(str, name);
+					Server.SendAll(str);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Disconeect from client No." + number + "(" + name + ")");
+			// System.out.println("Disconeect from client No." + number + "(" + name + ")");
+			if (Server.getIsGame()) Server.SendAll("disconnect");
+			Server.resetMemNum();
 			Server.SetFlag(number, false);
 		}
 	}
-
 }
 
 class Server {
@@ -52,20 +62,55 @@ class Server {
 	private static BufferedReader[] in;
 	private static PrintWriter[] out;
 	private static ClientProcThread[] myClientProcThread;
-	private static int member;
+	private static int member, memNum = 0;
+	private static boolean isGame = false;
 
-	public static void SendAll(String str, String name) {
+	public static void SendAll(String str) {
+		int turn = new Random().nextInt(2);
+		boolean sendFlag = false;
+		String cmd = str.split(" ")[0];
 		for (int i = 1; i <= member; i++) {
 			if (flag[i]) {
+				if (cmd.equals("start")) {
+					if (!sendFlag) {
+						str = cmd + " " + i + " " + turn;
+						sendFlag = true;
+					} else {
+						turn = 1 - turn;
+						str = cmd + " " + i + " " + turn;
+					}
+				}
 				out[i].println(str);
 				out[i].flush();
-				System.out.println("Send Messages to Client No." + i);
+				// System.out.println("Send Messages to Client No." + i);
 			}
 		}
 	}
 
 	public static void SetFlag(int n, boolean value) {
 		flag[n] = value;
+	}
+
+	public static void setMemNum() {
+		if (memNum >= 2) return;
+		memNum++;
+		if (memNum == 2) {
+			isGame = true;
+			Server.SendAll("start");
+		}
+	}
+
+	public static void resetMemNum() {
+		if (isGame) {
+			memNum = 0;
+			isGame = false;
+		} else {
+			memNum--;
+		}
+	}
+
+	public static boolean getIsGame() {
+		return isGame;
 	}
 
 	public static void main(String[] args) {
