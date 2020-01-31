@@ -22,8 +22,8 @@ class ClientProcThread extends Thread {
 
 			while (true) {
 				String str = myIn.readLine();
-				String inputTokens[] = str.split(" ");
 				if (str != null) {
+					String inputTokens[] = str.split(" ");
 					String cmd = inputTokens[0];
 					switch (cmd) {
 					case "join":
@@ -34,8 +34,12 @@ class ClientProcThread extends Thread {
 						break;
 					case "cancel":
 						Server.resetMemNum();
-						Server.SetFlag(Integer.parseInt(inputTokens[0]), false);
-						System.out.println("Disconeect from client No." + inputTokens[0]);
+						Server.SetFlag(Integer.parseInt(inputTokens[1]), false);
+						// System.out.println("Disconeect from client No." + inputTokens[1]);
+						break;
+					case "close":
+						Server.SetFlag(Integer.parseInt(inputTokens[1]), false);
+						// System.out.println("Disconeect from client No." + inputTokens[1]);
 						break;
 					case "gameOver":
 						Server.setAllFlag();
@@ -47,7 +51,9 @@ class ClientProcThread extends Thread {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Disconeect from client No." + number);
+			// System.out.println(e);
+			if (!Server.getFlag(number)) return;
+			// System.out.println("Disconeect from client No." + number);
 			if (Server.getIsGame()) Server.SendAll("disconnect");
 			Server.resetMemNum();
 			Server.SetFlag(number, false);
@@ -89,6 +95,10 @@ class Server {
 
 	public static void SetFlag(int n, boolean value) {
 		flag[n] = value;
+	}
+
+	public static boolean getFlag(int n) {
+		return flag[n];
 	}
 
 	public static void setAllFlag() {
@@ -141,7 +151,7 @@ class Server {
 			while (true) {
 				incoming[n] = serverSocket.accept();
 				flag[n] = true;
-				System.out.println("Accept client No." + n);
+				// System.out.println("Accept client No." + n);
 				isr[n] = new InputStreamReader(incoming[n].getInputStream());
 				in[n] = new BufferedReader(isr[n]);
 				out[n] = new PrintWriter(incoming[n].getOutputStream(), true);

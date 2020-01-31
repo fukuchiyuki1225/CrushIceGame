@@ -339,7 +339,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setConnectLabel(int state, boolean visible) {
 		if (state == 3) {
 			if (currentScreen.equals("game")) return;
-			MesgSend.getInstance().send("cancel" + " " + myNum);
+			MesgSend.getInstance().send("close" + " " + myNum);
 		}
 
 		connectLabel.setIcon(connectIcons[state]);
