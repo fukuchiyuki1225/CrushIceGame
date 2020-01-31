@@ -145,11 +145,11 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	}
 
 	public void mousePressed(MouseEvent e) {
-
+		Hammer.getInstance().changeHammerIcon();
 	}
 
 	public void mouseReleased(MouseEvent e) {
-
+		Hammer.getInstance().changeHammerIcon();
 	}
 
 	public void mouseEntered(MouseEvent e) {
