@@ -98,7 +98,10 @@ class Server {
 	}
 
 	public static void setMemNum() {
-		if (memNum >= 2) return;
+		if (memNum >= 2) {
+			Server.SendAll("noVacancy");
+			return;
+		}
 		memNum++;
 		System.out.println("now mem : " + memNum);
 		if (memNum == 2) {

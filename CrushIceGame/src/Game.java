@@ -51,6 +51,9 @@ public class Game {
 						String[] inputTokens = inputLine.split(" ");
 						String cmd = inputTokens[0];
 						switch (cmd) {
+						case "noVacancy":
+							gs.setConnectLabel(3, true);
+							break;
 						case "start":
 							gs.setGameScreen(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;

@@ -121,7 +121,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		connectIcons = new ImageIcon[] {
 				new ImageIcon(rl.load("img/wait.png")),
 				new ImageIcon(rl.load("img/disconnect.png")),
-				new ImageIcon(rl.load("img/server_error.png"))
+				new ImageIcon(rl.load("img/server_error.png")),
+				new ImageIcon(rl.load("img/no_vacancy.png"))
 		};
 	}
 
@@ -336,6 +337,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setConnectLabel(int state, boolean visible) {
+		if (state == 3) {
+			if (currentScreen.equals("game")) return;
+			MesgSend.getInstance().send("cancel" + " " + myNum);
+		}
+
 		connectLabel.setIcon(connectIcons[state]);
 		addComponent(connectLabel, 1000, 350, 378, 500, 145);
 		connectLabel.setVisible(visible);
@@ -347,20 +353,20 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				bgm.setVisible(!visible);
 				se.setVisible(!visible);
 				cancelButton.setVisible(visible);
-			} else if (currentScreen.equals("gameOver")) {
+			} /*else if (currentScreen.equals("gameOver")) {
 				setTitleScreen();
 				setConnectLabel(wait, visible);
-			}
+			}*/
 			return;
 		} else {
-			if (state == 2) cancelButton.setVisible(false);
+			cancelButton.setVisible(false);
 			Timer timer = new Timer(5000, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setTitleScreen();;
-			}
-		});
-		timer.setRepeats(false);
-		timer.start();
+				public void actionPerformed(ActionEvent e) {
+					setTitleScreen();;
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
 		}
 	}
 
