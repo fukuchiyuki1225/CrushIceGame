@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -9,8 +8,9 @@ public class MesgSend {
 	private MesgSend(Socket socket) {
 		try {
 			out = new PrintWriter(socket.getOutputStream(), true);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			GameScreen.getInstance().setConnectLabel(2, true);
+			// e.printStackTrace();
 		}
 	}
 

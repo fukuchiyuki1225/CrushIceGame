@@ -1,24 +1,26 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class Game {
 	PrintWriter out;
+	static GameScreen gs;
+	static Sound sound;
+	static MesgSend ms;
 
-	public Game() {
+	public Game(String ip) {
 		String myName = "No name";
-		String addr = "localhost";
+		String addr = ip;
+		if (addr.equals("")) addr = "localhost";
 		Socket socket = null;
+		System.out.println("ip : " + addr);
 
 		try {
 			socket = new Socket(addr, 10000);
-		} catch (UnknownHostException e) {
-			System.err.println("ホストのIPアドレスが判定できません.：" + e);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("エラーが発生しました.：" + e);
+			// gs.setConnectLabel(2, true);
 		}
 
 		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
@@ -28,37 +30,29 @@ public class Game {
 	public class MesgRecvThread extends Thread {
 		Socket socket;
 		String myName;
-		MesgSend ms;
-		GameScreen gs;
-		Sound sound;
 
 		public MesgRecvThread(Socket socket, String myName) {
 			this.socket = socket;
 			this.myName = myName;
-			ms = MesgSend.getInstance(socket);
 		}
 
 		public void run() {
 			try {
+				ms = MesgSend.getInstance(socket);
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
 				out.println(myName);
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
-				gs = GameScreen.getInstance();
-				gs.setVisible(true);
-				sound = Sound.getInstance();
-				sound.loop("bgm");
+				gs.setMyNum(myNumber);
+				ms.send("join");
 				while (true) {
 					String inputLine = br.readLine();
 					if (inputLine != null) {
 						String[] inputTokens = inputLine.split(" ");
 						String cmd = inputTokens[0];
 						switch (cmd) {
-						case "join":
-							gs.setMyNum(myNumber);
-							break;
 						case "start":
 							gs.setGameScreen(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
@@ -107,7 +101,7 @@ public class Game {
 							gs.setMyTurn();
 							break;
 						case "disconnect":
-							gs.setConnectLabel(1);
+							gs.setConnectLabel(1, true);
 							break;
 						default:
 							break;
@@ -116,13 +110,18 @@ public class Game {
 						break;
 					}
 				}
-			} catch (IOException e) {
-				System.err.println("エラーが発生しました：" + e);
+			} catch (Exception e) {
+				// System.err.println("エラーが発生しました：" + e);
+				gs.setConnectLabel(2, true);
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		new Game();
+		gs = GameScreen.getInstance();
+		gs.setVisible(true);
+		sound = Sound.getInstance();
+		sound.loop("bgm");
+		// new Game();
 	}
 }

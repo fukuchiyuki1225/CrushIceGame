@@ -39,6 +39,15 @@ class ClientProcThread extends Thread {
 					case "fall":
 						Server.resetMemNum();
 						break;
+					case "cancel":
+						Server.resetMemNum();
+						Server.SetFlag(Integer.parseInt(inputTokens[0]), false);
+						System.out.println("Disconeect from client No." + inputTokens[0]);
+						break;
+					case "gameOver":
+						// Server.SetFlag(Integer.parseInt(inputTokens[0]), false);
+						Server.setAllFlag();
+						break;
 					default:
 						break;
 					}
@@ -46,7 +55,7 @@ class ClientProcThread extends Thread {
 				}
 			}
 		} catch (Exception e) {
-			// System.out.println("Disconeect from client No." + number + "(" + name + ")");
+			System.out.println("Disconeect from client No." + number);
 			if (Server.getIsGame()) Server.SendAll("disconnect");
 			Server.resetMemNum();
 			Server.SetFlag(number, false);
@@ -91,9 +100,16 @@ class Server {
 		flag[n] = value;
 	}
 
+	public static void setAllFlag() {
+		for (int i = 1; i <= member; i++) {
+			flag[i] = false;
+		}
+	}
+
 	public static void setMemNum() {
 		if (memNum >= 2) return;
 		memNum++;
+		System.out.println("now mem : " + memNum);
 		if (memNum == 2) {
 			isGame = true;
 			Server.SendAll("start");
@@ -106,7 +122,9 @@ class Server {
 			isGame = false;
 		} else {
 			memNum--;
+			if (memNum < 0) memNum = 0;
 		}
+		System.out.println("now mem : " + memNum);
 	}
 
 	public static boolean getIsGame() {

@@ -1,5 +1,6 @@
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -22,23 +24,24 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private static GameScreen gs = new GameScreen();
 	private Container c;
 	private JLayeredPane title, game, gameOver;
-	private String currentScreen;
+	private String currentScreen, myIp;
 	private Hammer hammer;
 	private Sound sound;
 	private MesgSend ms;
 	private ResourceLoader rl;
 	private GhostHammer ghost;
-	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, wait = 0, disconnect = 1, nomal = 0, hover = 1;
+	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, cancel = 8, decide = 9 , wait = 0, disconnect = 1, nomal = 0, hover = 1;
 	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons, connectIcons;
 	private JButton[] buttons;
-	private JLabel helpLabel, turnLabel, wlLabel, msgLabel, connectLabel;
-	private JButton helpClose, bgm, se;
-	private boolean bgmFlag, seFlag;
+	private JLabel helpLabel, turnLabel, wlLabel, msgLabel, connectLabel, inputLabel;
+	private JButton helpClose, bgm, se, cancelButton, decideButton;
+	private boolean bgmFlag, seFlag, gameFlag;
 	private int myTurn, myNum;
 	private Penguin penguin;
 	private ItemManager im;
 	private Ices ices;
+	private JTextField ip;
 
 	private GameScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,14 +57,16 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		hammer = Hammer.getInstance();
 		sound = Sound.getInstance();
 		buttons = new JButton[toTitle + 1];
-		ms = MesgSend.getInstance();
+		// ms = MesgSend.getInstance();
 		rl = ResourceLoader.getInstance();
 		ghost = GhostHammer.getInstance();
 		connectLabel = new JLabel();
 		bgmFlag = true;
 		seFlag = true;
+		gameFlag = false;
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
+		cancelButton = new JButton(UI[nomal][cancel]);
 		setTitleScreen();
 	}
 
@@ -80,6 +85,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				new ImageIcon(rl.load("img/bgm_on.png")),
 				new ImageIcon(rl.load("img/se_off.png")),
 				new ImageIcon(rl.load("img/se_on.png")),
+				new ImageIcon(rl.load("img/cancel.png")),
+				new ImageIcon(rl.load("img/decide.png"))
 			},
 			{
 				new ImageIcon(rl.load("img/start_2.png")),
@@ -89,7 +96,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 				new ImageIcon(rl.load("img/bgm_off_2.png")),
 				new ImageIcon(rl.load("img/bgm_on_2.png")),
 				new ImageIcon(rl.load("img/se_off_2.png")),
-				new ImageIcon(rl.load("img/se_on_2.png"))
+				new ImageIcon(rl.load("img/se_on_2.png")),
+				new ImageIcon(rl.load("img/cancel_2.png")),
+				new ImageIcon(rl.load("img/decide_2.png"))
 			}
 		};
 		msgIcons = new ImageIcon[][] {
@@ -112,12 +121,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		};
 		connectIcons = new ImageIcon[] {
 				new ImageIcon(rl.load("img/wait.png")),
-				new ImageIcon(rl.load("img/disconnect.png"))
+				new ImageIcon(rl.load("img/disconnect.png")),
+				new ImageIcon(rl.load("img/server_error.png"))
 		};
 	}
 
 	// タイトル画面
 	public void setTitleScreen() {
+		gameFlag = false;
 		currentScreen = "title";
 		sound.loop("bgm");
 
@@ -147,11 +158,25 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			helpClose = new JButton(new ImageIcon(rl.load("img/help_close.png")));
 			setButton(helpClose, this, this);
 			addComponent(helpClose, 210, 900, 120, 117, 100);
+			inputLabel = new JLabel(new ImageIcon(rl.load("img/input_ip.png")));
+			addComponent(inputLabel, 120, 100, 490, 458, 213);
+			decideButton = new JButton(UI[nomal][decide]);
+			setButton(decideButton, this, this);
+			addComponent(decideButton, 140, 250, 625, 150, 56);
+			ip = new JTextField("localhost", 20);
+			ip.setHorizontalAlignment(JTextField.CENTER);
+			ip.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 20));
+			addComponent(ip, 130, 180, 570, 300, 30);
+			connectLabel.setIcon(new ImageIcon(rl.load("img/wait.png")));
+			addComponent(connectLabel, 1000, 350, 378, 500, 145);
+			setButton(cancelButton, this, this);
+			addComponent(cancelButton, 1050, 800, 400, 30, 30);
 		}
 		setHelp(false);
-		addComponent(connectLabel, 1000, 350, 378, 500, 145);
-		connectLabel.setIcon(new ImageIcon(rl.load("img/wait.png")));
-		connectLabel.setVisible(false);
+		setInputIP(false);
+		/*connectLabel.setVisible(false);
+		cancelButton.setVisible(false);*/
+		setConnectLabel(wait, false);
 
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		title.setVisible(true);
@@ -170,23 +195,30 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		helpClose.setVisible(visible);
 	}
 
+	public void setInputIP(boolean visible) {
+		for (int i = start; i <= help; i++) {
+			buttons[i].setVisible(!visible);
+		}
+		bgm.setVisible(!visible);
+		se.setVisible(!visible);
+		inputLabel.setVisible(visible);
+		ip.setVisible(visible);
+		decideButton.setVisible(visible);
+	}
+
 	// ゲーム画面
 	public void setGameScreen(int myNum, int myTurn) {
+		System.out.println("myNun : " + this.myNum);
+		System.out.println("okurareMyNUm : " + myNum);
 		if (this.myNum != myNum) return;
 		this.myTurn = myTurn;
+
 
 		currentScreen = "game";
 		sound.loop("bgm");
 
 		if (title != null) title.setVisible(false);
 		if (gameOver != null) gameOver.setVisible(false);
-
-		/*if (num % 2 == 0) {
-			myTurn = 0;
-		} else {
-			myTurn = 1;
-		}*/
-		// myNum = myTurn;
 
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
@@ -207,6 +239,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// ゲームオーバー画面
 	public void setGameOverScreen() {
+		gameFlag = false;
 		currentScreen = "gameOver";
 		penguin.getPenguinLabel().setVisible(false);
 		sound.stop("bgm");
@@ -249,6 +282,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		removeGame();
 		cleanButtons();
 		hammer.cleanHammerIcon();
+
+		MesgSend.getInstance().send("gameOver");
 	}
 
 	// ゲーム画面を取り除くメソッド
@@ -292,7 +327,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		for (int j = nomal; j <= hover; j++) {
-			for (int i = start; i <= seOn; i++) {
+			for (int i = start; i <= decide; i++) {
 				if (icon == UI[j][i]) {
 					if (j == nomal) {
 						jb.setIcon(UI[hover][i]);
@@ -306,23 +341,27 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		}
 	}
 
-	public void setConnectLabel(int state) {
+	public void setConnectLabel(int state, boolean visible) {
+		// if (!gameFlag) return;
 		connectLabel.setIcon(connectIcons[state]);
+		System.out.println(state);
 		addComponent(connectLabel, 1000, 350, 378, 500, 145);
-		connectLabel.setVisible(true);
+		connectLabel.setVisible(visible);
 
 		if (state == wait) {
 			if (currentScreen.equals("title")) {
-				buttons[start].setVisible(false);
-				buttons[help].setVisible(false);
-				bgm.setVisible(false);
-				se.setVisible(false);
+				buttons[start].setVisible(!visible);
+				buttons[help].setVisible(!visible);
+				bgm.setVisible(!visible);
+				se.setVisible(!visible);
+				cancelButton.setVisible(visible);
 			} else if (currentScreen.equals("gameOver")) {
 				setTitleScreen();
-				setConnectLabel(wait);
+				setConnectLabel(wait, visible);
 			}
 			return;
 		} else {
+			if (state == 2) cancelButton.setVisible(false);
 			Timer timer = new Timer(5000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setTitleScreen();;
@@ -337,8 +376,19 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == UI[hover][start]) {
-			ms.send("join");
-			setConnectLabel(wait);
+			setInputIP(true);
+		} else if (icon == UI[hover][decide]) {
+			gameFlag = true;
+			setInputIP(false);
+			setConnectLabel(wait, true);
+			myIp = ip.getText();
+			new Game(myIp);
+			ms = MesgSend.getInstance();
+		} else if (icon == cancelButton.getIcon()) {
+			ms = MesgSend.getInstance();
+			ms.send("cancel" + " " + getMyNum());
+			gameFlag = false;
+			setConnectLabel(wait, false);
 		} else if (icon == UI[hover][help]) {
 			setHelp(true);
 		} else if (icon == helpClose.getIcon()) {
@@ -356,8 +406,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			seFlag = true;
 			jb.setIcon(UI[hover][seOn]);
 		} else if (icon == UI[hover][again]) {
-			ms.send("join");
-			setConnectLabel(wait);
+			setTitleScreen();
+			setConnectLabel(wait, true);
+			new Game(myIp);
 		} else if (icon == UI[hover][toTitle]) {
 			setTitleScreen();
 		}
