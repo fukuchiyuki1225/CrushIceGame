@@ -6,16 +6,11 @@ import java.net.Socket;
 import java.util.Random;
 
 class ClientProcThread extends Thread {
-	// private Socket incoming;
-	// private InputStreamReader myIsr;
 	private BufferedReader myIn;
 	private PrintWriter myOut;
 	private int number;
-	private String name;
 
 	public ClientProcThread(BufferedReader in, PrintWriter out, int n) {
-		// incoming = i;
-		// myIsr = ist;
 		myIn = in;
 		myOut = out;
 		number = n;
@@ -24,14 +19,12 @@ class ClientProcThread extends Thread {
 	public void run() {
 		try {
 			myOut.println(number);
-			name = myIn.readLine();
 
 			while (true) {
 				String str = myIn.readLine();
 				String inputTokens[] = str.split(" ");
 				if (str != null) {
 					String cmd = inputTokens[0];
-					// System.out.println("Received from client No." + number + "(" + name + "), Messages: " + str);
 					switch (cmd) {
 					case "join":
 						Server.setMemNum();
@@ -45,7 +38,6 @@ class ClientProcThread extends Thread {
 						System.out.println("Disconeect from client No." + inputTokens[0]);
 						break;
 					case "gameOver":
-						// Server.SetFlag(Integer.parseInt(inputTokens[0]), false);
 						Server.setAllFlag();
 						break;
 					default:
@@ -91,7 +83,6 @@ class Server {
 				}
 				out[i].println(str);
 				out[i].flush();
-				// System.out.println("Send Messages to Client No." + i);
 			}
 		}
 	}

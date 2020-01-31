@@ -10,7 +10,6 @@ public class MesgSend {
 			out = new PrintWriter(socket.getOutputStream(), true);
 		} catch (Exception e) {
 			GameScreen.getInstance().setConnectLabel(2, true);
-			// e.printStackTrace();
 		}
 	}
 

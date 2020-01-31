@@ -36,7 +36,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JButton[] buttons;
 	private JLabel helpLabel, turnLabel, wlLabel, msgLabel, connectLabel, inputLabel;
 	private JButton helpClose, bgm, se, cancelButton, decideButton;
-	private boolean bgmFlag, seFlag, gameFlag;
+	private boolean bgmFlag, seFlag;
 	private int myTurn, myNum;
 	private Penguin penguin;
 	private ItemManager im;
@@ -63,7 +63,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		connectLabel = new JLabel();
 		bgmFlag = true;
 		seFlag = true;
-		gameFlag = false;
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
 		cancelButton = new JButton(UI[nomal][cancel]);
@@ -128,7 +127,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// タイトル画面
 	public void setTitleScreen() {
-		gameFlag = false;
 		currentScreen = "title";
 		sound.loop("bgm");
 
@@ -208,11 +206,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// ゲーム画面
 	public void setGameScreen(int myNum, int myTurn) {
-		System.out.println("myNun : " + this.myNum);
-		System.out.println("okurareMyNUm : " + myNum);
 		if (this.myNum != myNum) return;
 		this.myTurn = myTurn;
-
 
 		currentScreen = "game";
 		sound.loop("bgm");
@@ -239,7 +234,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// ゲームオーバー画面
 	public void setGameOverScreen() {
-		gameFlag = false;
 		currentScreen = "gameOver";
 		penguin.getPenguinLabel().setVisible(false);
 		sound.stop("bgm");
@@ -342,9 +336,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setConnectLabel(int state, boolean visible) {
-		// if (!gameFlag) return;
 		connectLabel.setIcon(connectIcons[state]);
-		System.out.println(state);
 		addComponent(connectLabel, 1000, 350, 378, 500, 145);
 		connectLabel.setVisible(visible);
 
@@ -378,7 +370,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		if (icon == UI[hover][start]) {
 			setInputIP(true);
 		} else if (icon == UI[hover][decide]) {
-			gameFlag = true;
 			setInputIP(false);
 			setConnectLabel(wait, true);
 			myIp = ip.getText();
@@ -387,7 +378,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		} else if (icon == cancelButton.getIcon()) {
 			ms = MesgSend.getInstance();
 			ms.send("cancel" + " " + getMyNum());
-			gameFlag = false;
 			setConnectLabel(wait, false);
 		} else if (icon == UI[hover][help]) {
 			setHelp(true);

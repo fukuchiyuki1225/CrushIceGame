@@ -14,13 +14,11 @@ public class Game {
 		String addr = ip;
 		if (addr.equals("")) addr = "localhost";
 		Socket socket = null;
-		System.out.println("ip : " + addr);
 
 		try {
 			socket = new Socket(addr, 10000);
 		} catch (Exception e) {
-			System.err.println("エラーが発生しました.：" + e);
-			// gs.setConnectLabel(2, true);
+			gs.setConnectLabel(2, true);
 		}
 
 		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
@@ -111,7 +109,6 @@ public class Game {
 					}
 				}
 			} catch (Exception e) {
-				// System.err.println("エラーが発生しました：" + e);
 				gs.setConnectLabel(2, true);
 			}
 		}
