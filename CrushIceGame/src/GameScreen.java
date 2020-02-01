@@ -30,7 +30,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private MesgSend ms;
 	private ResourceLoader rl;
 	private GhostHammer ghost;
-	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, cancel = 8, decide = 9 , wait = 0, disconnect = 1, nomal = 0, hover = 1;
+	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, cancel = 8, decide = 9 , wait = 0, nomal = 0, hover = 1;
 	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons, connectIcons;
 	private JButton[] buttons;
@@ -169,12 +169,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			connectLabel.setIcon(new ImageIcon(rl.load("img/wait.png")));
 			addComponent(connectLabel, 1000, 350, 378, 500, 145);
 			setButton(cancelButton, this, this);
-			addComponent(cancelButton, 1050, 800, 400, 30, 30);
+			addComponent(cancelButton, 1050, 715, 390, 121, 40);
 		}
 		setHelp(false);
 		setInputIP(false);
-		/*connectLabel.setVisible(false);
-		cancelButton.setVisible(false);*/
 		setConnectLabel(wait, false);
 
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
@@ -245,6 +243,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
 
 		hammer.changeHammer();
 

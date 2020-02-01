@@ -35,11 +35,9 @@ class ClientProcThread extends Thread {
 					case "cancel":
 						Server.resetMemNum();
 						Server.SetFlag(Integer.parseInt(inputTokens[1]), false);
-						// System.out.println("Disconeect from client No." + inputTokens[1]);
 						break;
 					case "close":
 						Server.SetFlag(Integer.parseInt(inputTokens[1]), false);
-						// System.out.println("Disconeect from client No." + inputTokens[1]);
 						break;
 					case "gameOver":
 						Server.setAllFlag();
@@ -51,10 +49,11 @@ class ClientProcThread extends Thread {
 				}
 			}
 		} catch (Exception e) {
-			// System.out.println(e);
 			if (!Server.getFlag(number)) return;
-			// System.out.println("Disconeect from client No." + number);
-			if (Server.getIsGame()) Server.SendAll("disconnect");
+			if (Server.getIsGame()) {
+				Server.SendAll("disconnect");
+				Server.setAllFlag();
+			}
 			Server.resetMemNum();
 			Server.SetFlag(number, false);
 		}
@@ -113,7 +112,6 @@ class Server {
 			return;
 		}
 		memNum++;
-		System.out.println("now mem : " + memNum);
 		if (memNum == 2) {
 			isGame = true;
 			Server.SendAll("start");
@@ -128,7 +126,6 @@ class Server {
 			memNum--;
 			if (memNum < 0) memNum = 0;
 		}
-		System.out.println("now mem : " + memNum);
 	}
 
 	public static boolean getIsGame() {
@@ -146,12 +143,10 @@ class Server {
 		member = 0;
 
 		try {
-			System.out.println("The server has launched!");
 			ServerSocket serverSocket = new ServerSocket(10000);
 			while (true) {
 				incoming[n] = serverSocket.accept();
 				flag[n] = true;
-				// System.out.println("Accept client No." + n);
 				isr[n] = new InputStreamReader(incoming[n].getInputStream());
 				in[n] = new BufferedReader(isr[n]);
 				out[n] = new PrintWriter(incoming[n].getOutputStream(), true);
