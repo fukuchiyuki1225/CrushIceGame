@@ -112,7 +112,7 @@ public class Game {
 					}
 				}
 			} catch (Exception e) {
-				gs.setConnectLabel(2, true);
+				if (gs.getWaitFlag() || gs.getCurrentScreen().equals("game")) gs.setConnectLabel(2, true);
 			}
 		}
 	}

@@ -36,7 +36,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JButton[] buttons;
 	private JLabel helpLabel, turnLabel, wlLabel, msgLabel, connectLabel, inputLabel;
 	private JButton helpClose, bgm, se, cancelButton, decideButton;
-	private boolean bgmFlag, seFlag;
+	private boolean bgmFlag, seFlag, waitFlag;
 	private int myTurn, myNum;
 	private Penguin penguin;
 	private ItemManager im;
@@ -63,6 +63,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		connectLabel = new JLabel();
 		bgmFlag = true;
 		seFlag = true;
+		waitFlag = false;
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
 		cancelButton = new JButton(UI[nomal][cancel]);
@@ -162,7 +163,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			decideButton = new JButton(UI[nomal][decide]);
 			setButton(decideButton, this, this);
 			addComponent(decideButton, 140, 250, 625, 150, 56);
-			ip = new JTextField("localhost", 20);
+			ip = new JTextField("", 20);
 			ip.setHorizontalAlignment(JTextField.CENTER);
 			ip.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 20));
 			addComponent(ip, 130, 180, 570, 300, 30);
@@ -346,16 +347,12 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		connectLabel.setVisible(visible);
 
 		if (state == wait) {
-			if (currentScreen.equals("title")) {
-				buttons[start].setVisible(!visible);
-				buttons[help].setVisible(!visible);
-				bgm.setVisible(!visible);
-				se.setVisible(!visible);
-				cancelButton.setVisible(visible);
-			} /*else if (currentScreen.equals("gameOver")) {
-				setTitleScreen();
-				setConnectLabel(wait, visible);
-			}*/
+			waitFlag = visible;
+			buttons[start].setVisible(!visible);
+			buttons[help].setVisible(!visible);
+			bgm.setVisible(!visible);
+			se.setVisible(!visible);
+			cancelButton.setVisible(visible);
 			return;
 		} else {
 			cancelButton.setVisible(false);
@@ -447,6 +444,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	public boolean getSeFlag() {
 		return seFlag;
+	}
+
+	public boolean getWaitFlag() {
+		return waitFlag;
 	}
 
 	public int getMyTurn() {
