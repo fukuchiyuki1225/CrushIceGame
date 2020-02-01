@@ -100,7 +100,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			if (i <= 3) {
 				jb.setLocation(775 + i * 80, 675);
 			} else {
-				jb.setLocation(775 + (i - 3) * 80, 775);
+				jb.setLocation(775 + (i - 3) * 80, 750);
 			}
 			i++;
 		}
