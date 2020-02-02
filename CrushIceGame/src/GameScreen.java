@@ -232,6 +232,20 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		hammer.cleanHammerIcon();
 	}
 
+	public void setGameStart() {
+		JLabel gameStart = new JLabel(new ImageIcon(rl.load("img/game_start.png")));
+		addComponent(gameStart, 2000, 70, 400, 650, 121);
+		sound.play("start");
+		Timer timer = new Timer(2000, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				gameStart.setVisible(false);
+				ices.setStartFlag(true);
+			}
+		});
+		timer.setRepeats(false);
+		timer.start();
+	}
+
 	// ゲームオーバー画面
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";

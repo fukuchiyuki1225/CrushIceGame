@@ -19,6 +19,7 @@ public class Sound {
 		String[] names = new String[] {
 				"bgm",
 				"button",
+				"start",
 				"turn",
 				"pick",
 				"crack",

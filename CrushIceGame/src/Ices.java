@@ -28,7 +28,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private ImageIcon brokenIce;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabels;
-	private boolean moveFlag, turnFlag, ghFlag, shieldFlag;
+	private boolean moveFlag, turnFlag, ghFlag, shieldFlag, startFlag;
 	private Random random;
 	private Timer timer;
 
@@ -47,6 +47,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		breakIce = new int[2];
 		moveFlag = false;
 		turnFlag = false;
+		startFlag = false;
 		random = new Random();
 
 		loadImage();
@@ -205,10 +206,19 @@ public class Ices implements MouseListener, MouseMotionListener {
 		for (int i = white; i <= blue; i++) {
 			numLabels[i].setIcon(numIcons[i][breakIce[i]]);
 		}
+		if (!startFlag) {
+			Timer timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gs.setGameStart();
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
+		}
 	}
 
 	public void breakIce(MouseEvent e) {
-		if (!gs.isMyTurn()) return;
+		if (!startFlag || !gs.isMyTurn()) return;
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == brokenIce) {
@@ -342,6 +352,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 
 	public void setShieldFlag(boolean shieldFlag) {
 		this.shieldFlag = shieldFlag;
+	}
+
+	public void setStartFlag(boolean startFlag) {
+		this.startFlag = startFlag;
 	}
 
 	public void mouseReleased(MouseEvent e) {
