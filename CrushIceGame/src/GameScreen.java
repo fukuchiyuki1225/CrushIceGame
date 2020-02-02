@@ -236,7 +236,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";
 		penguin.getPenguinLabel().setVisible(false);
-		sound.stop("bgm");
+		sound.stop();
 		sound.play("fall");
 
 		try {
@@ -244,7 +244,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 
 		hammer.changeHammer();
 

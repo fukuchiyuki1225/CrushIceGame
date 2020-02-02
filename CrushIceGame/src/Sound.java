@@ -71,4 +71,10 @@ public class Sound {
 		clip.stop();
 		clip.setFramePosition(0);
 	}
+
+	public void stop() {
+		for (Clip sound : sounds.values()) {
+			sound.stop();
+		}
+	}
 }
