@@ -115,7 +115,9 @@ class Server {
 		if (memNum == 2) {
 			isGame = true;
 			Server.SendAll("start");
+			System.out.println("start");
 		}
+		System.out.println("now mem  " + memNum);
 	}
 
 	public static void resetMemNum() {
@@ -126,6 +128,7 @@ class Server {
 			memNum--;
 			if (memNum < 0) memNum = 0;
 		}
+		System.out.println("now mem  " + memNum);
 	}
 
 	public static boolean getIsGame() {

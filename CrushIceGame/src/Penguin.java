@@ -9,14 +9,13 @@ public class Penguin {
 	private GameScreen gs;
 
 	public Penguin() {
-		ResourceLoader rl = ResourceLoader.getInstance();
 		penguinIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/penguin.png")),
-				new ImageIcon(rl.load("img/penguin_2.png")),
-				new ImageIcon(rl.load("img/penguin_3.png")),
-				new ImageIcon(rl.load("img/penguin_4.png")),
-				new ImageIcon(rl.load("img/penguin_5.png")),
-				new ImageIcon(rl.load("img/penguin_6.png"))
+				new ImageIcon(ResourceLoader.load("img/penguin.png")),
+				new ImageIcon(ResourceLoader.load("img/penguin_2.png")),
+				new ImageIcon(ResourceLoader.load("img/penguin_3.png")),
+				new ImageIcon(ResourceLoader.load("img/penguin_4.png")),
+				new ImageIcon(ResourceLoader.load("img/penguin_5.png")),
+				new ImageIcon(ResourceLoader.load("img/penguin_6.png"))
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;
@@ -40,7 +39,7 @@ public class Penguin {
 					y0 = getPenguinY() < ice.getY() ? ice.getY() : getPenguinY();
 					y1 = getPenguinY() < ice.getY() ? getPenguinY() : ice.getY();
 					if (Calculation.calcDistance(x0, y0, x1, y1) < 40) {
-						MesgSend.getInstance().send("fall");
+						MesgSend.send("fall");
 						fallFlag = true;
 						return;
 					}

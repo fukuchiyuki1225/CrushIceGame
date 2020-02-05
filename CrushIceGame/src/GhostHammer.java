@@ -5,10 +5,9 @@ public class GhostHammer extends Hammer {
 	private static GhostHammer hammer = new GhostHammer();
 
 	private GhostHammer() {
-		ResourceLoader rl = ResourceLoader.getInstance();
 		nhIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/ghost_hammer.png")),
-				new ImageIcon(rl.load("img/ghost_hammer_2.png"))
+				new ImageIcon(ResourceLoader.load("img/ghost_hammer.png")),
+				new ImageIcon(ResourceLoader.load("img/ghost_hammer_2.png"))
 		};
 		hammerLabel = new JLabel();
 		changeHammer();

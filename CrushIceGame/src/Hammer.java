@@ -11,10 +11,9 @@ public class Hammer {
 	protected JLabel hammerLabel;
 
 	protected Hammer() {
-		ResourceLoader rl = ResourceLoader.getInstance();
 		nhIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/pick_hammer.png")),
-				new ImageIcon(rl.load("img/pick_hammer_2.png"))
+				new ImageIcon(ResourceLoader.load("img/pick_hammer.png")),
+				new ImageIcon(ResourceLoader.load("img/pick_hammer_2.png"))
 		};
 		hammerLabel = new JLabel();
 		changeHammer();
@@ -31,7 +30,7 @@ public class Hammer {
 		hammerLabel.setIcon(icon);
 		if (!gs.getCurrentScreen().equals("game")) return;
 		int iconNum = (hammerLabel.getIcon() == hammerIcons[0]) ? 0 : 1;
-		MesgSend.getInstance().send("ghostClick" + " " + gs.getMyNum() + " " + iconNum);
+		MesgSend.send("ghostClick" + " " + gs.getMyNum() + " " + iconNum);
 	}
 
 	public void changeHammer() {
@@ -48,7 +47,7 @@ public class Hammer {
 		hammerLabel.setLocation(p.x - 50, p.y - 120);
 		GameScreen gs = GameScreen.getInstance();
 		if (!gs.getCurrentScreen().equals("game")) return;
-		MesgSend.getInstance().send("ghostMove" + " " + gs.getMyNum() + " " + (p.x - 50) + " " + (p.y - 120));
+		MesgSend.send("ghostMove" + " " + gs.getMyNum() + " " + (p.x - 50) + " " + (p.y - 120));
 	}
 
 	// 画面遷移時やゲーム中に、ハンマー画像が叩いた状態のままになることがあるのを元に戻すメソッド

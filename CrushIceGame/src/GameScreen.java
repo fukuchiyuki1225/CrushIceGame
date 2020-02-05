@@ -26,10 +26,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JLayeredPane title, game, gameOver;
 	private String currentScreen, myIp;
 	private Hammer hammer;
-	private Sound sound;
-	private ResourceLoader rl;
 	private GhostHammer ghost;
-	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, cancel = 8, decide = 9 , wait = 0, nomal = 0, hover = 1;
+	public final int START = 0, HELP = 1, AGAIN = 2, TOTITLE = 3, BGMOFF= 4, BGMON = 5, SEOFF= 6, SEON = 7, CANCEL = 8, DECIDE = 9 , WAIT = 0, DISCONNECT = 1, SERVERERROR = 2, NOVACANCY = 3, NOMAL = 0, HOVER = 1;
 	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons, connectIcons;
 	private JButton[] buttons;
@@ -54,18 +52,15 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		gameOver = null;
 		currentScreen = "";
 		hammer = Hammer.getInstance();
-		sound = Sound.getInstance();
-		buttons = new JButton[toTitle + 1];
-		// ms = MesgSend.getInstance();
-		rl = ResourceLoader.getInstance();
+		buttons = new JButton[TOTITLE + 1];
 		ghost = GhostHammer.getInstance();
 		connectLabel = new JLabel();
 		bgmFlag = true;
 		seFlag = true;
 		waitFlag = false;
-		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(rl.load("img/cursor.png")).getImage(), new Point(), ""));
+		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ResourceLoader.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
-		cancelButton = new JButton(UI[nomal][cancel]);
+		cancelButton = new JButton(UI[NOMAL][CANCEL]);
 		setTitleScreen();
 	}
 
@@ -76,60 +71,60 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void loadImage() {
 		UI = new ImageIcon[][] {
 			{
-				new ImageIcon(rl.load("img/start.png")),
-				new ImageIcon(rl.load("img/help.png")),
-				new ImageIcon(rl.load("img/again.png")),
-				new ImageIcon(rl.load("img/to_title.png")),
-				new ImageIcon(rl.load("img/bgm_off.png")),
-				new ImageIcon(rl.load("img/bgm_on.png")),
-				new ImageIcon(rl.load("img/se_off.png")),
-				new ImageIcon(rl.load("img/se_on.png")),
-				new ImageIcon(rl.load("img/cancel.png")),
-				new ImageIcon(rl.load("img/decide.png"))
+				new ImageIcon(ResourceLoader.load("img/start.png")),
+				new ImageIcon(ResourceLoader.load("img/help.png")),
+				new ImageIcon(ResourceLoader.load("img/again.png")),
+				new ImageIcon(ResourceLoader.load("img/to_title.png")),
+				new ImageIcon(ResourceLoader.load("img/bgm_off.png")),
+				new ImageIcon(ResourceLoader.load("img/bgm_on.png")),
+				new ImageIcon(ResourceLoader.load("img/se_off.png")),
+				new ImageIcon(ResourceLoader.load("img/se_on.png")),
+				new ImageIcon(ResourceLoader.load("img/cancel.png")),
+				new ImageIcon(ResourceLoader.load("img/decide.png"))
 			},
 			{
-				new ImageIcon(rl.load("img/start_2.png")),
-				new ImageIcon(rl.load("img/help_2.png")),
-				new ImageIcon(rl.load("img/again_2.png")),
-				new ImageIcon(rl.load("img/to_title_2.png")),
-				new ImageIcon(rl.load("img/bgm_off_2.png")),
-				new ImageIcon(rl.load("img/bgm_on_2.png")),
-				new ImageIcon(rl.load("img/se_off_2.png")),
-				new ImageIcon(rl.load("img/se_on_2.png")),
-				new ImageIcon(rl.load("img/cancel_2.png")),
-				new ImageIcon(rl.load("img/decide_2.png"))
+				new ImageIcon(ResourceLoader.load("img/start_2.png")),
+				new ImageIcon(ResourceLoader.load("img/help_2.png")),
+				new ImageIcon(ResourceLoader.load("img/again_2.png")),
+				new ImageIcon(ResourceLoader.load("img/to_title_2.png")),
+				new ImageIcon(ResourceLoader.load("img/bgm_off_2.png")),
+				new ImageIcon(ResourceLoader.load("img/bgm_on_2.png")),
+				new ImageIcon(ResourceLoader.load("img/se_off_2.png")),
+				new ImageIcon(ResourceLoader.load("img/se_on_2.png")),
+				new ImageIcon(ResourceLoader.load("img/cancel_2.png")),
+				new ImageIcon(ResourceLoader.load("img/decide_2.png"))
 			}
 		};
 		msgIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(rl.load("img/win_msg.png")),
-				new ImageIcon(rl.load("img/win_msg_2.png"))
+				new ImageIcon(ResourceLoader.load("img/win_msg.png")),
+				new ImageIcon(ResourceLoader.load("img/win_msg_2.png"))
 			},
 			{
-				new ImageIcon(rl.load("img/lose_msg.png")),
-				new ImageIcon(rl.load("img/lose_msg_2.png"))
+				new ImageIcon(ResourceLoader.load("img/lose_msg.png")),
+				new ImageIcon(ResourceLoader.load("img/lose_msg_2.png"))
 			}
 		};
 		turnIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/your_turn.png")),
-				new ImageIcon(rl.load("img/my_turn.png"))
+				new ImageIcon(ResourceLoader.load("img/your_turn.png")),
+				new ImageIcon(ResourceLoader.load("img/my_turn.png"))
 		};
 		wlIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/win.png")),
-				new ImageIcon(rl.load("img/lose.png"))
+				new ImageIcon(ResourceLoader.load("img/win.png")),
+				new ImageIcon(ResourceLoader.load("img/lose.png"))
 		};
 		connectIcons = new ImageIcon[] {
-				new ImageIcon(rl.load("img/wait.png")),
-				new ImageIcon(rl.load("img/disconnect.png")),
-				new ImageIcon(rl.load("img/server_error.png")),
-				new ImageIcon(rl.load("img/no_vacancy.png"))
+				new ImageIcon(ResourceLoader.load("img/wait.png")),
+				new ImageIcon(ResourceLoader.load("img/disconnect.png")),
+				new ImageIcon(ResourceLoader.load("img/server_error.png")),
+				new ImageIcon(ResourceLoader.load("img/no_vacancy.png"))
 		};
 	}
 
 	// タイトル画面
 	public void setTitleScreen() {
 		currentScreen = "title";
-		sound.loop("bgm");
+		Sound.loop("bgm");
 
 		removeGame();
 		if (gameOver != null) {
@@ -140,40 +135,40 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			title = new JLayeredPane();
 			title.addMouseMotionListener(this);
 			c.add(title);
-			addComponent(new JLabel(new ImageIcon(rl.load("img/title.png"))), 0, 0, 0, 1200, 900);
-			for (int i = start; i <= help; i++) {
-				buttons[i] = new JButton(UI[nomal][i]);
+			addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/title.png"))), 0, 0, 0, 1200, 900);
+			for (int i = START; i <= HELP; i++) {
+				buttons[i] = new JButton(UI[NOMAL][i]);
 				setButton(buttons[i], this, this);
 				addComponent(buttons[i], 100, 100, 450 + i * 100, 458, 93);
 			}
-			bgm = new JButton(UI[nomal][bgmOn]);
+			bgm = new JButton(UI[NOMAL][BGMON]);
 			setButton(bgm, this, this);
 			addComponent(bgm, 100, 100, 650, 213, 93);
-			se = new JButton(UI[nomal][seOn]);
+			se = new JButton(UI[NOMAL][SEON]);
 			setButton(se, this, this);
 			addComponent(se, 100, 345, 650, 213, 93);
-			helpLabel = new JLabel(new ImageIcon(rl.load("img/help_dialog.png")));
+			helpLabel = new JLabel(new ImageIcon(ResourceLoader.load("img/help_dialog.png")));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
-			helpClose = new JButton(new ImageIcon(rl.load("img/help_close.png")));
+			helpClose = new JButton(new ImageIcon(ResourceLoader.load("img/help_close.png")));
 			setButton(helpClose, this, this);
 			addComponent(helpClose, 210, 900, 120, 117, 100);
-			inputLabel = new JLabel(new ImageIcon(rl.load("img/input_ip.png")));
+			inputLabel = new JLabel(new ImageIcon(ResourceLoader.load("img/input_ip.png")));
 			addComponent(inputLabel, 120, 100, 490, 458, 213);
-			decideButton = new JButton(UI[nomal][decide]);
+			decideButton = new JButton(UI[NOMAL][DECIDE]);
 			setButton(decideButton, this, this);
 			addComponent(decideButton, 140, 250, 625, 150, 56);
 			ip = new JTextField("", 20);
 			ip.setHorizontalAlignment(JTextField.CENTER);
 			ip.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 20));
 			addComponent(ip, 130, 180, 570, 300, 30);
-			connectLabel.setIcon(new ImageIcon(rl.load("img/wait.png")));
+			connectLabel.setIcon(new ImageIcon(ResourceLoader.load("img/wait.png")));
 			addComponent(connectLabel, 1000, 350, 378, 500, 145);
 			setButton(cancelButton, this, this);
 			addComponent(cancelButton, 1050, 715, 390, 121, 40);
 		}
 		setHelp(false);
 		setInputIP(false);
-		setConnectLabel(wait, false);
+		setConnectLabel(WAIT, false);
 
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
 		title.setVisible(true);
@@ -183,7 +178,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// あそびかたの表示・非表示切り替え
 	public void setHelp(boolean visible) {
-		for (int i = start; i <= help; i++) {
+		for (int i = START; i <= HELP; i++) {
 			buttons[i].setVisible(!visible);
 		}
 		bgm.setVisible(!visible);
@@ -193,7 +188,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setInputIP(boolean visible) {
-		for (int i = start; i <= help; i++) {
+		for (int i = START; i <= HELP; i++) {
 			buttons[i].setVisible(!visible);
 		}
 		bgm.setVisible(!visible);
@@ -209,7 +204,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		this.myTurn = myTurn;
 
 		currentScreen = "game";
-		sound.loop("bgm");
+		Sound.loop("bgm");
 
 		if (title != null) title.setVisible(false);
 		if (gameOver != null) gameOver.setVisible(false);
@@ -217,9 +212,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
 		c.add(game);
-		addComponent(new JLabel(new ImageIcon(rl.load("img/sea.png"))), 0, 0, 0, 1200, 900);
-		addComponent(new JLabel(new ImageIcon(rl.load("img/logo.png"))), 900, 760, 25, 400, 315);
-		addComponent(new JLabel(new ImageIcon(rl.load("img/item_ice.png"))), 450, 805, 640, 359, 212);
+		addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/sea.png"))), 0, 0, 0, 1200, 900);
+		addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/logo.png"))), 900, 760, 25, 400, 315);
+		addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/item_ice.png"))), 450, 805, 640, 359, 212);
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
@@ -232,9 +227,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setGameStart() {
-		JLabel gameStart = new JLabel(new ImageIcon(rl.load("img/game_start.png")));
+		JLabel gameStart = new JLabel(new ImageIcon(ResourceLoader.load("img/game_start.png")));
 		addComponent(gameStart, 2000, 70, 400, 650, 121);
-		sound.play("start");
+		Sound.play("start");
 		Timer timer = new Timer(2000, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				gameStart.setVisible(false);
@@ -249,8 +244,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setGameOverScreen() {
 		currentScreen = "gameOver";
 		penguin.getPenguinLabel().setVisible(false);
-		sound.stop();
-		sound.play("fall");
+		Sound.stop();
+		Sound.play("fall");
 
 		try {
 			Thread.sleep(2000);
@@ -264,10 +259,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			gameOver = new JLayeredPane();
 			gameOver.addMouseMotionListener(this);
 			c.add(gameOver);
-			for (int i = again; i <= toTitle; i++) {
-				buttons[i] = new JButton(UI[nomal][i]);
+			for (int i = AGAIN; i <= TOTITLE; i++) {
+				buttons[i] = new JButton(UI[NOMAL][i]);
 				setButton(buttons[i], this, this);
-				addComponent(buttons[i], 1200, 350, 400 + (i - again) * 100, 458, 93);
+				addComponent(buttons[i], 1200, 350, 400 + (i - AGAIN) * 100, 458, 93);
 				wlLabel = new JLabel();
 				addComponent(wlLabel, 1000, 0, 0, 1200, 900);
 				msgLabel = new JLabel();
@@ -281,9 +276,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		gameOver.setVisible(true);
 
 		if (!isMyTurn()) {
-			sound.play("win");
+			Sound.play("win");
 		} else {
-			sound.play("lose");
+			Sound.play("lose");
 		}
 
 		removeGame();
@@ -333,14 +328,14 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void hoverUIIcon(MouseEvent e) {
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
-		for (int j = nomal; j <= hover; j++) {
-			for (int i = start; i <= decide; i++) {
+		for (int j = NOMAL; j <= HOVER; j++) {
+			for (int i = START; i <= DECIDE; i++) {
 				if (icon == UI[j][i]) {
-					if (j == nomal) {
-						jb.setIcon(UI[hover][i]);
+					if (j == NOMAL) {
+						jb.setIcon(UI[HOVER][i]);
 						return;
-					} else if (j == hover) {
-						jb.setIcon(UI[nomal][i]);
+					} else if (j == HOVER) {
+						jb.setIcon(UI[NOMAL][i]);
 						return;
 					}
 				}
@@ -358,10 +353,10 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		addComponent(connectLabel, 1000, 350, 378, 500, 145);
 		connectLabel.setVisible(visible);
 
-		if (state == wait) {
+		if (state == WAIT) {
 			waitFlag = visible;
-			buttons[start].setVisible(!visible);
-			buttons[help].setVisible(!visible);
+			buttons[START].setVisible(!visible);
+			buttons[HELP].setVisible(!visible);
 			bgm.setVisible(!visible);
 			se.setVisible(!visible);
 			cancelButton.setVisible(visible);
@@ -381,48 +376,48 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void clickedButton(MouseEvent e) {
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
-		if (icon == UI[hover][start]) {
+		if (icon == UI[HOVER][START]) {
 			setInputIP(true);
-		} else if (icon == UI[hover][decide]) {
+		} else if (icon == UI[HOVER][DECIDE]) {
 			setInputIP(false);
-			setConnectLabel(wait, true);
+			setConnectLabel(WAIT, true);
 			myIp = ip.getText();
 			new Game(myIp);
 		} else if (icon == cancelButton.getIcon()) {
 			MesgSend.send("cancel" + " " + getMyNum());
-			setConnectLabel(wait, false);
-		} else if (icon == UI[hover][help]) {
+			setConnectLabel(WAIT, false);
+		} else if (icon == UI[HOVER][HELP]) {
 			setHelp(true);
 		} else if (icon == helpClose.getIcon()) {
 			setHelp(false);
-		} else if (icon == UI[hover][bgmOn]) {
+		} else if (icon == UI[HOVER][BGMON]) {
 			setBgmFlag(false);
-			jb.setIcon(UI[hover][bgmOff]);
-		} else if (icon == UI[hover][bgmOff]) {
+			jb.setIcon(UI[HOVER][BGMOFF]);
+		} else if (icon == UI[HOVER][BGMOFF]) {
 			setBgmFlag(true);
-			jb.setIcon(UI[hover][bgmOn]);
-		} else if (icon == UI[hover][seOn]) {
+			jb.setIcon(UI[HOVER][BGMON]);
+		} else if (icon == UI[HOVER][SEON]) {
 			seFlag = false;
-			jb.setIcon(UI[hover][seOff]);
-		} else if (icon == UI[hover][seOff]) {
+			jb.setIcon(UI[HOVER][SEOFF]);
+		} else if (icon == UI[HOVER][SEOFF]) {
 			seFlag = true;
-			jb.setIcon(UI[hover][seOn]);
-		} else if (icon == UI[hover][again]) {
+			jb.setIcon(UI[HOVER][SEON]);
+		} else if (icon == UI[HOVER][AGAIN]) {
 			setTitleScreen();
-			setConnectLabel(wait, true);
+			setConnectLabel(WAIT, true);
 			new Game(myIp);
-		} else if (icon == UI[hover][toTitle]) {
+		} else if (icon == UI[HOVER][TOTITLE]) {
 			setTitleScreen();
 		}
-		sound.play("button");
+		Sound.play("button");
 	}
 
 	// 画面遷移後にボタンがホバー状態のままにならないよう、画像を元に戻すメソッド
 	public void cleanButtons() {
-		for (int i = start; i <= toTitle; i++) {
+		for (int i = START; i <= TOTITLE; i++) {
 			if (buttons[i] == null) break;
-			if (buttons[i].getIcon() == UI[hover][i]) {
-				buttons[i].setIcon(UI[nomal][i]);
+			if (buttons[i].getIcon() == UI[HOVER][i]) {
+				buttons[i].setIcon(UI[NOMAL][i]);
 			}
 		}
 	}
@@ -471,9 +466,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setBgmFlag(boolean bgmFlag) {
 		this.bgmFlag = bgmFlag;
 		if (!this.bgmFlag) {
-			sound.stop("bgm");
+			Sound.stop("bgm");
 		} else {
-			sound.loop("bgm");
+			Sound.loop("bgm");
 		}
 	}
 

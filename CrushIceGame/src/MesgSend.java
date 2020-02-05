@@ -9,7 +9,7 @@ public class MesgSend {
 		try {
 			out = new PrintWriter(socket.getOutputStream(), true);
 		} catch (Exception e) {
-			GameScreen.getInstance().setConnectLabel(2, true);
+			GameScreen.getInstance().setConnectLabel(GameScreen.getInstance().SERVERERROR, true);
 		}
 	}
 

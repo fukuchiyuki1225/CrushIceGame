@@ -6,10 +6,8 @@ import java.net.Socket;
 public class Game {
 	PrintWriter out;
 	static GameScreen gs;
-	static Sound sound;
 
 	public Game(String ip) {
-		String myName = "No name";
 		String addr = ip;
 		if (addr.equals("")) addr = "localhost";
 		Socket socket = null;
@@ -17,20 +15,18 @@ public class Game {
 		try {
 			socket = new Socket(addr, 10000);
 		} catch (Exception e) {
-			gs.setConnectLabel(2, true);
+			gs.setConnectLabel(gs.SERVERERROR, true);
 		}
 
-		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
+		MesgRecvThread mrt = new MesgRecvThread(socket);
 		mrt.start();
 	}
 
 	public class MesgRecvThread extends Thread {
 		Socket socket;
-		String myName;
 
-		public MesgRecvThread(Socket socket, String myName) {
+		public MesgRecvThread(Socket socket) {
 			this.socket = socket;
-			this.myName = myName;
 		}
 
 		public void run() {
@@ -39,7 +35,6 @@ public class Game {
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
-				out.println(myName);
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
 				gs.setMyNum(myNumber);
@@ -51,7 +46,7 @@ public class Game {
 						String cmd = inputTokens[0];
 						switch (cmd) {
 						case "noVacancy":
-							gs.setConnectLabel(3, true);
+							gs.setConnectLabel(gs.NOVACANCY, true);
 							break;
 						case "start":
 							gs.setGameScreen(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
@@ -79,14 +74,14 @@ public class Game {
 							break;
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
-							sound.play(inputTokens[4]);
+							Sound.play(inputTokens[4]);
 							break;
 						case "getItem":
 							gs.getItemManager().getItems().get(inputTokens[1]).getItem();
-							sound.play("item");
+							Sound.play("item");
 							break;
 						case "useItem":
-							sound.play("item");
+							Sound.play("item");
 							break;
 						case "move":
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
@@ -101,7 +96,7 @@ public class Game {
 							gs.setMyTurn();
 							break;
 						case "disconnect":
-							gs.setConnectLabel(1, true);
+							gs.setConnectLabel(gs.DISCONNECT, true);
 							break;
 						default:
 							break;
@@ -111,7 +106,7 @@ public class Game {
 					}
 				}
 			} catch (Exception e) {
-				if (gs.getWaitFlag() || gs.getCurrentScreen().equals("game")) gs.setConnectLabel(2, true);
+				if (gs.getWaitFlag() || gs.getCurrentScreen().equals("game")) gs.setConnectLabel(gs.SERVERERROR, true);
 			}
 		}
 	}
@@ -119,7 +114,6 @@ public class Game {
 	public static void main(String[] args) {
 		gs = GameScreen.getInstance();
 		gs.setVisible(true);
-		sound = Sound.getInstance();
-		sound.loop("bgm");
+		Sound.loop("bgm");
 	}
 }
