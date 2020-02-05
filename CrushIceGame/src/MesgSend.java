@@ -3,7 +3,7 @@ import java.net.Socket;
 
 public class MesgSend {
 	private static MesgSend ms;
-	private PrintWriter out;
+	private static PrintWriter out;
 
 	private MesgSend(Socket socket) {
 		try {
@@ -14,15 +14,11 @@ public class MesgSend {
 	}
 
 	public static MesgSend getInstance(Socket socket) {
-		ms = new MesgSend(socket);
+		if (ms == null) ms = new MesgSend(socket);
 		return ms;
 	}
 
-	public static MesgSend getInstance() {
-		return ms;
-	}
-
-	public void send(String mesg) {
+	public static void send(String mesg) {
 		out.println(mesg);
 	}
 }

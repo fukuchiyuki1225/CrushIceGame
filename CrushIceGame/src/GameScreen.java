@@ -27,7 +27,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private String currentScreen, myIp;
 	private Hammer hammer;
 	private Sound sound;
-	private MesgSend ms;
 	private ResourceLoader rl;
 	private GhostHammer ghost;
 	private final int start = 0, help = 1, again = 2, toTitle = 3, bgmOff = 4, bgmOn = 5, seOff = 6, seOn = 7, cancel = 8, decide = 9 , wait = 0, nomal = 0, hover = 1;
@@ -291,7 +290,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		cleanButtons();
 		hammer.cleanHammerIcon();
 
-		MesgSend.getInstance().send("gameOver");
+		MesgSend.send("gameOver");
 	}
 
 	// ゲーム画面を取り除くメソッド
@@ -352,7 +351,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void setConnectLabel(int state, boolean visible) {
 		if (state == 3) {
 			if (currentScreen.equals("game")) return;
-			MesgSend.getInstance().send("close" + " " + myNum);
+			MesgSend.send("close" + " " + myNum);
 		}
 
 		connectLabel.setIcon(connectIcons[state]);
@@ -389,10 +388,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			setConnectLabel(wait, true);
 			myIp = ip.getText();
 			new Game(myIp);
-			ms = MesgSend.getInstance();
 		} else if (icon == cancelButton.getIcon()) {
-			ms = MesgSend.getInstance();
-			ms.send("cancel" + " " + getMyNum());
+			MesgSend.send("cancel" + " " + getMyNum());
 			setConnectLabel(wait, false);
 		} else if (icon == UI[hover][help]) {
 			setHelp(true);

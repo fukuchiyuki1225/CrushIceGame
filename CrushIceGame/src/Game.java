@@ -7,7 +7,6 @@ public class Game {
 	PrintWriter out;
 	static GameScreen gs;
 	static Sound sound;
-	static MesgSend ms;
 
 	public Game(String ip) {
 		String myName = "No name";
@@ -36,7 +35,7 @@ public class Game {
 
 		public void run() {
 			try {
-				ms = MesgSend.getInstance(socket);
+				MesgSend.getInstance(socket);
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
 				out = new PrintWriter(socket.getOutputStream(), true);
@@ -44,7 +43,7 @@ public class Game {
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
 				gs.setMyNum(myNumber);
-				ms.send("join");
+				MesgSend.send("join");
 				while (true) {
 					String inputLine = br.readLine();
 					if (inputLine != null) {
@@ -122,6 +121,5 @@ public class Game {
 		gs.setVisible(true);
 		sound = Sound.getInstance();
 		sound.loop("bgm");
-		// new Game();
 	}
 }
