@@ -297,7 +297,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 
 	// コンポーネントの追加、レイヤー・位置・サイズ指定をまとめて行うメソッド
 	public void addComponent(Component comp, int layer, int x, int y, int width, int height) {
-		JLayeredPane j = null;
+		JLayeredPane j = title;
 		switch (currentScreen) {
 		case "title":
 			j = title;
