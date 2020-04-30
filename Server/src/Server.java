@@ -19,7 +19,6 @@ class ClientProcThread extends Thread {
 	public void run() {
 		try {
 			myOut.println(number);
-
 			while (true) {
 				String str = myIn.readLine();
 				if (str != null) {
@@ -145,7 +144,7 @@ class Server {
 		int n = 1;
 		member = 0;
 		ServerSocket serverSocket;
-		
+
 		try {
 			serverSocket = new ServerSocket(10000);
 			while (true) {
