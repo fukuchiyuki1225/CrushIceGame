@@ -27,7 +27,6 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private String currentScreen, myIp;
 	private Hammer hammer;
 	private GhostHammer ghost;
-	public final int START = 0, HELP = 1, AGAIN = 2, TOTITLE = 3, BGMOFF= 4, BGMON = 5, SEOFF= 6, SEON = 7, CANCEL = 8, DECIDE = 9 , WAIT = 0, DISCONNECT = 1, SERVERERROR = 2, NOVACANCY = 3, NOMAL = 0, HOVER = 1;
 	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons, connectIcons;
 	private JButton[] buttons;
@@ -35,6 +34,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JButton helpClose, bgm, se, cancelButton, decideButton;
 	private boolean bgmFlag, seFlag, waitFlag;
 	private int myTurn, myNum;
+	public final int START = 0, HELP = 1, AGAIN = 2, TOTITLE = 3, BGMOFF= 4, BGMON = 5, SEOFF= 6, SEON = 7, CANCEL = 8, DECIDE = 9 , WAIT = 0, DISCONNECT = 1, SERVERERROR = 2, NOVACANCY = 3, NOMAL = 0, HOVER = 1;
 	private Penguin penguin;
 	private ItemManager im;
 	private Ices ices;
@@ -52,15 +52,11 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		gameOver = null;
 		currentScreen = "";
 		hammer = Hammer.getInstance();
-		buttons = new JButton[TOTITLE + 1];
-		ghost = GhostHammer.getInstance();
-		connectLabel = new JLabel();
 		bgmFlag = true;
 		seFlag = true;
 		waitFlag = false;
 		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ResourceLoader.load("img/cursor.png")).getImage(), new Point(), ""));
 		loadImage();
-		cancelButton = new JButton(UI[NOMAL][CANCEL]);
 		setTitleScreen();
 	}
 
@@ -136,6 +132,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			title.addMouseMotionListener(this);
 			c.add(title);
 			addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/title.png"))), 0, 0, 0, 1200, 900);
+			buttons = new JButton[TOTITLE + 1];
 			for (int i = START; i <= HELP; i++) {
 				buttons[i] = new JButton(UI[NOMAL][i]);
 				setButton(buttons[i], this, this);
@@ -161,8 +158,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			ip.setHorizontalAlignment(JTextField.CENTER);
 			ip.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 20));
 			addComponent(ip, 130, 180, 570, 300, 30);
-			connectLabel.setIcon(new ImageIcon(ResourceLoader.load("img/wait.png")));
+			connectLabel = new JLabel();
 			addComponent(connectLabel, 1000, 350, 378, 500, 145);
+			cancelButton = new JButton(UI[NOMAL][CANCEL]);
 			setButton(cancelButton, this, this);
 			addComponent(cancelButton, 1050, 715, 390, 121, 40);
 		}
@@ -218,6 +216,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
+		ghost = GhostHammer.getInstance();
 		addComponent(ghost.getHammerLabel(), 800, 0, 0, 200, 170);
 		turnLabel = new JLabel(turnIcons[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 325, 250, 120);

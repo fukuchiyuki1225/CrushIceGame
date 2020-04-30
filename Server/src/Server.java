@@ -144,9 +144,10 @@ class Server {
 		myClientProcThread = new ClientProcThread[maxConnection];
 		int n = 1;
 		member = 0;
-
+		ServerSocket serverSocket;
+		
 		try {
-			ServerSocket serverSocket = new ServerSocket(10000);
+			serverSocket = new ServerSocket(10000);
 			while (true) {
 				incoming[n] = serverSocket.accept();
 				flag[n] = true;

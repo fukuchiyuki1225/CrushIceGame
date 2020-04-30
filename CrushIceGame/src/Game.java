@@ -1,11 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Game {
-	PrintWriter out;
-	static GameScreen gs;
+	private static GameScreen gs;
 
 	public Game(String ip) {
 		String addr = ip;
@@ -34,7 +32,6 @@ public class Game {
 				MesgSend.getInstance(socket);
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
-				out = new PrintWriter(socket.getOutputStream(), true);
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
 				gs.setMyNum(myNumber);
