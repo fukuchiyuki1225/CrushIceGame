@@ -15,12 +15,9 @@ import javax.swing.Timer;
 
 public class Ices implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
-	private ResourceLoader rl;
 	private ItemManager im;
 	private Hammer hammer;
 	private Penguin penguin;
-	private Sound sound;
-	private MesgSend ms;
 	private JButton ices[][];
 	private int[][] hitCount, mustHitNum;
 	private int[] countIce, breakIce;
@@ -28,18 +25,15 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private ImageIcon brokenIce;
 	private final int icesX = 9, icesY = 7, white = 0, blue = 1;
 	private JLabel[] numLabels;
-	private boolean moveFlag, turnFlag, ghFlag, shieldFlag;
+	private boolean moveFlag, turnFlag, ghFlag, shieldFlag, startFlag;
 	private Random random;
 	private Timer timer;
 
 	public Ices() {
 		gs = GameScreen.getInstance();
-		rl = ResourceLoader.getInstance();
 		im = gs.getItemManager();
 		hammer = Hammer.getInstance();
 		penguin = gs.getPenguin();
-		sound = Sound.getInstance();
-		ms = MesgSend.getInstance();
 		ices = new JButton[icesY][icesX];
 		hitCount = new int[icesY][icesX];
 		mustHitNum = new int[icesY][icesX];
@@ -47,20 +41,21 @@ public class Ices implements MouseListener, MouseMotionListener {
 		breakIce = new int[2];
 		moveFlag = false;
 		turnFlag = false;
+		startFlag = false;
 		random = new Random();
 
 		loadImage();
 
 		initIceRand();
 
-		gs.addComponent(new JLabel(new ImageIcon(rl.load("img/white.png"))), 850, 900, 440, 100, 100);
-		gs.addComponent(new JLabel(new ImageIcon(rl.load("img/blue.png"))), 850, 900, 526, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/white.png"))), 850, 900, 415, 100, 100);
+		gs.addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/blue.png"))), 850, 900, 501, 100, 100);
 		numLabels = new JLabel[] {
 				new JLabel(numIcons[white][0]),
 				new JLabel(numIcons[blue][0])
 		};
-		gs.addComponent(numLabels[white], 800, 975, 483, 100, 100);
-		gs.addComponent(numLabels[blue], 800, 975, 569, 100, 100);
+		gs.addComponent(numLabels[white], 800, 975, 458, 100, 100);
+		gs.addComponent(numLabels[blue], 800, 975, 544, 100, 100);
 
 		spinTheRoulette();
 	}
@@ -68,43 +63,43 @@ public class Ices implements MouseListener, MouseMotionListener {
 	private void loadImage() {
 		iceIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(rl.load("img/white_ice.png")),
-				new ImageIcon(rl.load("img/white_ice_2.png")),
-				new ImageIcon(rl.load("img/white_ice_3.png"))
+				new ImageIcon(ResourceLoader.load("img/white_ice.png")),
+				new ImageIcon(ResourceLoader.load("img/white_ice_2.png")),
+				new ImageIcon(ResourceLoader.load("img/white_ice_3.png"))
 			},
 			{
-				new ImageIcon(rl.load("img/blue_ice.png")),
-				new ImageIcon(rl.load("img/blue_ice_2.png")),
-				new ImageIcon(rl.load("img/blue_ice_3.png"))
+				new ImageIcon(ResourceLoader.load("img/blue_ice.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_ice_2.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_ice_3.png"))
 			}
 		};
 		numIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(rl.load("img/white_0.png")),
-				new ImageIcon(rl.load("img/white_1.png")),
-				new ImageIcon(rl.load("img/white_2.png")),
-				new ImageIcon(rl.load("img/white_3.png"))
+				new ImageIcon(ResourceLoader.load("img/white_0.png")),
+				new ImageIcon(ResourceLoader.load("img/white_1.png")),
+				new ImageIcon(ResourceLoader.load("img/white_2.png")),
+				new ImageIcon(ResourceLoader.load("img/white_3.png"))
 			},
 			{
-				new ImageIcon(rl.load("img/blue_0.png")),
-				new ImageIcon(rl.load("img/blue_1.png")),
-				new ImageIcon(rl.load("img/blue_2.png")),
-				new ImageIcon(rl.load("img/blue_3.png"))
+				new ImageIcon(ResourceLoader.load("img/blue_0.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_1.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_2.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_3.png"))
 			}
 		};
 		hoverIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(rl.load("img/white_hover.png")),
-				new ImageIcon(rl.load("img/white_hover_2.png")),
-				new ImageIcon(rl.load("img/white_hover_3.png"))
+				new ImageIcon(ResourceLoader.load("img/white_hover.png")),
+				new ImageIcon(ResourceLoader.load("img/white_hover_2.png")),
+				new ImageIcon(ResourceLoader.load("img/white_hover_3.png"))
 			},
 			{
-				new ImageIcon(rl.load("img/blue_hover.png")),
-				new ImageIcon(rl.load("img/blue_hover_2.png")),
-				new ImageIcon(rl.load("img/blue_hover_3.png"))
+				new ImageIcon(ResourceLoader.load("img/blue_hover.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_hover_2.png")),
+				new ImageIcon(ResourceLoader.load("img/blue_hover_3.png"))
 			}
 		};
-		brokenIce = new ImageIcon(rl.load("img/broken_ice.png"));
+		brokenIce = new ImageIcon(ResourceLoader.load("img/broken_ice.png"));
 	}
 
 	public void initIceRand() {
@@ -113,7 +108,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 			for (int i = 0; i < icesX; i++) {
 				int rand = random.nextInt(2);
 				int mustHitNum = random.nextInt(5) + 1;
-				ms.send("initIces" + " " + j + " " + i + " " + rand + " " + mustHitNum);
+				MesgSend.send("initIces" + " " + j + " " + i + " " + rand + " " + mustHitNum);
 			}
 		}
 	}
@@ -142,7 +137,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		} else if (countIce[blue] == 0) {
 			roulette = random.nextInt(2) + 4;
 		}
-		ms.send("roulette" + " " + roulette);
+		MesgSend.send("roulette" + " " + roulette);
 	}
 
 	public void setBreakIce(int roulette) {
@@ -179,6 +174,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 				breakIce[i] = countIce[i];
 			}
 		}
+		Sound.play("turn");
 		changeNumIcon();
 	}
 
@@ -188,7 +184,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		changeNumIcon();
 		if (gs.isMyTurn() && breakIce[white] <= 0 && breakIce[blue] <= 0) {
 			if (shieldFlag) {
-				ms.send("changeTurn");
+				MesgSend.send("changeTurn");
 				return;
 			}
 			turnFlag = true;
@@ -196,6 +192,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 	}
 
 	public void changeHitCount(int jbNum) {
+		Sound.play("pick");
 		hitCount[jbNum / icesX][jbNum % icesX]++;
 	}
 
@@ -203,19 +200,26 @@ public class Ices implements MouseListener, MouseMotionListener {
 		for (int i = white; i <= blue; i++) {
 			numLabels[i].setIcon(numIcons[i][breakIce[i]]);
 		}
+		if (!startFlag) {
+			Timer timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gs.setGameStart();
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
+		}
 	}
 
 	public void breakIce(MouseEvent e) {
-		if (!gs.isMyTurn()) return;
+		if (!startFlag || !gs.isMyTurn()) return;
 		JButton jb = (JButton)e.getComponent();
 		Icon icon = jb.getIcon();
 		if (icon == brokenIce) {
 			return;
 		}
 		int jbNum = Integer.parseInt(jb.getActionCommand());
-		System.out.println("clicked: " + jbNum);
 		int oppositeNum = (icesX * icesY - 1) - jbNum;
-		System.out.println("opposite:" + oppositeNum);
 		String iconName = "";
 		String soundName = "";
 		int diff = 0;
@@ -225,15 +229,14 @@ public class Ices implements MouseListener, MouseMotionListener {
 				if (breakIce[j] > 0) {
 					color = j;
 					if (icon == hoverIcons[j][i]) {
-						sound.play("pick");
 						if (!shieldFlag) {
 							timer = new Timer(1, new PenguinMove(penguin, this, oppositeNum));
 							timer.start();
 						}
-						ms.send("changeHitCount" + " " + jbNum);
+						MesgSend.send("changeHitCount" + " " + jbNum);
 						if (ghFlag || hitCount[jbNum / icesX][jbNum % icesX] >= mustHitNum[jbNum / icesX][jbNum % icesX]) {
 							jb.setIcon(brokenIce);
-							ms.send("changeBreakIce" + " " + j);
+							MesgSend.send("changeBreakIce" + " " + j);
 							iconName = "broken";
 							soundName = "broken";
 							im.digOutItem(jbNum);
@@ -257,7 +260,7 @@ public class Ices implements MouseListener, MouseMotionListener {
 		}
 
 		if (!iconName.equals("")) {
-			ms.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName + " " + soundName);
+			MesgSend.send("changeIceIcon" + " " + color + " " + jbNum + " " + iconName + " " + soundName);
 		}
 	}
 
@@ -323,6 +326,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 		return brokenIce;
 	}
 
+	public boolean getMoveFlag() {
+		return moveFlag;
+	}
+
 	public void setMoveFlag(boolean moveFlag) {
 		if (this.moveFlag || !moveFlag) {
 			timer.stop();
@@ -339,6 +346,10 @@ public class Ices implements MouseListener, MouseMotionListener {
 
 	public void setShieldFlag(boolean shieldFlag) {
 		this.shieldFlag = shieldFlag;
+	}
+
+	public void setStartFlag(boolean startFlag) {
+		this.startFlag = startFlag;
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -389,9 +400,9 @@ public class Ices implements MouseListener, MouseMotionListener {
 			speed = 0.3;
 			ices.setMoveFlag(true);
 			if (ices.ghFlag) {
-				ices.ms.send("changePenguinIcon" + " " + 3);
+				MesgSend.send("changePenguinIcon" + " " + 3);
 			} else {
-				ices.ms.send("changePenguinIcon" + " " + 1);
+				MesgSend.send("changePenguinIcon" + " " + 1);
 			}
 		}
 
@@ -413,19 +424,17 @@ public class Ices implements MouseListener, MouseMotionListener {
 					x -= speed;
 				}
 				speed = speed < 0 ? 0 : speed - 0.002;
-				ices.ms.send("move" + " " + (int)sendX + " " + (int)sendY);
-				// ↓デバッグ用　のちのち消す
-				// ices.ms.send("move" + " " + (int)x0 + " " + (int)y0);
+				MesgSend.send("move" + " " + (int)sendX + " " + (int)sendY);
 				penguin.penguinFall();
 			} else if (ices.turnFlag) {
-				ices.ms.send("changeTurn");
+				MesgSend.send("changeTurn");
 				ices.turnFlag = false;
 			} else {
 				ices.setMoveFlag(false);
 				if (ices.ghFlag) {
-					ices.ms.send("changePenguinIcon" + " " + 2);
+					MesgSend.send("changePenguinIcon" + " " + 2);
 				} else if (!ices.shieldFlag) {
-					ices.ms.send("changePenguinIcon" + " " + 0);
+					MesgSend.send("changePenguinIcon" + " " + 0);
 				}
 			}
 		}

@@ -3,18 +3,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 class ClientProcThread extends Thread {
-	// private Socket incoming;
-	// private InputStreamReader myIsr;
 	private BufferedReader myIn;
 	private PrintWriter myOut;
 	private int number;
-	private String name;
 
 	public ClientProcThread(BufferedReader in, PrintWriter out, int n) {
-		// incoming = i;
-		// myIsr = ist;
 		myIn = in;
 		myOut = out;
 		number = n;
@@ -23,25 +19,44 @@ class ClientProcThread extends Thread {
 	public void run() {
 		try {
 			myOut.println(number);
-			name = myIn.readLine();
-
 			while (true) {
 				String str = myIn.readLine();
-				System.out.println("Received from client No." + number + "(" + name + "), Messages: " + str);
 				if (str != null) {
-					if (str.toUpperCase().equals("BYE")) {
-						myOut.println("Good bye!");
+					String inputTokens[] = str.split(" ");
+					String cmd = inputTokens[0];
+					switch (cmd) {
+					case "join":
+						Server.setMemNum();
+						break;
+					case "fall":
+						Server.resetMemNum();
+						break;
+					case "cancel":
+						Server.resetMemNum();
+						Server.SetFlag(Integer.parseInt(inputTokens[1]), false);
+						break;
+					case "close":
+						Server.SetFlag(Integer.parseInt(inputTokens[1]), false);
+						break;
+					case "gameOver":
+						Server.setAllFlag();
+						break;
+					default:
 						break;
 					}
-					Server.SendAll(str, name);
+					Server.SendAll(str);
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Disconeect from client No." + number + "(" + name + ")");
+			if (!Server.getFlag(number)) return;
+			if (Server.getIsGame()) {
+				Server.SendAll("disconnect");
+				Server.setAllFlag();
+			}
+			Server.resetMemNum();
 			Server.SetFlag(number, false);
 		}
 	}
-
 }
 
 class Server {
@@ -52,20 +67,71 @@ class Server {
 	private static BufferedReader[] in;
 	private static PrintWriter[] out;
 	private static ClientProcThread[] myClientProcThread;
-	private static int member;
+	private static int member, memNum = 0;
+	private static boolean isGame = false;
 
-	public static void SendAll(String str, String name) {
+	public static void SendAll(String str) {
+		int turn = new Random().nextInt(2);
+		boolean sendFlag = false;
+		String cmd = str.split(" ")[0];
 		for (int i = 1; i <= member; i++) {
 			if (flag[i]) {
+				if (cmd.equals("start")) {
+					if (!sendFlag) {
+						str = cmd + " " + i + " " + turn;
+						sendFlag = true;
+					} else {
+						turn = 1 - turn;
+						str = cmd + " " + i + " " + turn;
+					}
+				}
 				out[i].println(str);
 				out[i].flush();
-				System.out.println("Send Messages to Client No." + i);
 			}
 		}
 	}
 
 	public static void SetFlag(int n, boolean value) {
 		flag[n] = value;
+	}
+
+	public static boolean getFlag(int n) {
+		return flag[n];
+	}
+
+	public static void setAllFlag() {
+		for (int i = 1; i <= member; i++) {
+			flag[i] = false;
+		}
+	}
+
+	public static void setMemNum() {
+		if (memNum >= 2) {
+			Server.SendAll("noVacancy");
+			return;
+		}
+		memNum++;
+		if (memNum == 2) {
+			isGame = true;
+			Server.SendAll("start");
+			System.out.println("start");
+		}
+		System.out.println("now mem  " + memNum);
+	}
+
+	public static void resetMemNum() {
+		if (isGame) {
+			memNum = 0;
+			isGame = false;
+		} else {
+			memNum--;
+			if (memNum < 0) memNum = 0;
+		}
+		System.out.println("now mem  " + memNum);
+	}
+
+	public static boolean getIsGame() {
+		return isGame;
 	}
 
 	public static void main(String[] args) {
@@ -77,14 +143,13 @@ class Server {
 		myClientProcThread = new ClientProcThread[maxConnection];
 		int n = 1;
 		member = 0;
+		ServerSocket serverSocket;
 
 		try {
-			System.out.println("The server has launched!");
-			ServerSocket serverSocket = new ServerSocket(10000);
+			serverSocket = new ServerSocket(10000);
 			while (true) {
 				incoming[n] = serverSocket.accept();
 				flag[n] = true;
-				System.out.println("Accept client No." + n);
 				isr[n] = new InputStreamReader(incoming[n].getInputStream());
 				in[n] = new BufferedReader(isr[n]);
 				out[n] = new PrintWriter(incoming[n].getOutputStream(), true);

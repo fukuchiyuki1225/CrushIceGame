@@ -13,7 +13,7 @@ public class ResourceLoader {
 		return rl;
 	}
 
-	public BufferedImage load(String path) {
+	public static BufferedImage load(String path) {
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(getURL(path));
@@ -23,7 +23,7 @@ public class ResourceLoader {
 		return bi;
 	}
 
-	public URL getURL(String path) {
+	public static URL getURL(String path) {
 		return rl.getClass().getClassLoader().getResource(path);
 	}
 }

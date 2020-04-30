@@ -1,63 +1,58 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class Game {
-	PrintWriter out;
+	private static GameScreen gs;
 
-	public Game() {
-		String myName = "No name";
-		String addr = "localhost";
+	public Game(String ip) {
+		String addr = ip;
+		if (addr.equals("")) addr = "localhost";
 		Socket socket = null;
 
 		try {
 			socket = new Socket(addr, 10000);
-		} catch (UnknownHostException e) {
-			System.err.println("ホストのIPアドレスが判定できません.：" + e);
-		} catch (IOException e) {
-			System.err.println("エラーが発生しました.：" + e);
+		} catch (Exception e) {
+			gs.setConnectLabel(gs.SERVERERROR, true);
 		}
 
-		MesgRecvThread mrt = new MesgRecvThread(socket, myName);
+		MesgRecvThread mrt = new MesgRecvThread(socket);
 		mrt.start();
 	}
 
 	public class MesgRecvThread extends Thread {
 		Socket socket;
-		String myName;
-		MesgSend ms;
-		GameScreen gs;
-		Sound sound;
 
-		public MesgRecvThread(Socket socket, String myName) {
+		public MesgRecvThread(Socket socket) {
 			this.socket = socket;
-			this.myName = myName;
-			ms = MesgSend.getInstance(socket);
 		}
 
 		public void run() {
 			try {
+				MesgSend.getInstance(socket);
 				InputStreamReader sisr = new InputStreamReader(socket.getInputStream());
 				BufferedReader br = new BufferedReader(sisr);
-				out = new PrintWriter(socket.getOutputStream(), true);
-				out.println(myName);
 				String myNumberStr = br.readLine();
 				int myNumber = Integer.parseInt(myNumberStr);
-				gs = GameScreen.getInstance();
-				gs.setVisible(true);
-				sound = Sound.getInstance();
-				sound.loop("bgm");
+				gs.setMyNum(myNumber);
+				MesgSend.send("join");
 				while (true) {
 					String inputLine = br.readLine();
 					if (inputLine != null) {
 						String[] inputTokens = inputLine.split(" ");
 						String cmd = inputTokens[0];
 						switch (cmd) {
-						case "join":
-							gs.setGameScreen(myNumber);
+						case "noVacancy":
+							gs.setConnectLabel(gs.NOVACANCY, true);
+							break;
+						case "start":
+							gs.setGameScreen(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
+							break;
+						case "ghostMove":
+							GhostHammer.getInstance().setHammerLocation(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]));
+							break;
+						case "ghostClick":
+							GhostHammer.getInstance().changeHammerIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
 							break;
 						case "initIces":
 							gs.getIces().initIces(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), Integer.parseInt(inputTokens[3]), Integer.parseInt(inputTokens[4]));
@@ -76,14 +71,14 @@ public class Game {
 							break;
 						case "changeIceIcon":
 							gs.getIces().changeIceIcon(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]), inputTokens[3]);
-							sound.play(inputTokens[4]);
+							Sound.play(inputTokens[4]);
 							break;
 						case "getItem":
 							gs.getItemManager().getItems().get(inputTokens[1]).getItem();
-							sound.play("item");
+							Sound.play("item");
 							break;
 						case "useItem":
-							sound.play("item");
+							Sound.play("item");
 							break;
 						case "move":
 							gs.getPenguin().penguinMove(Integer.parseInt(inputTokens[1]), Integer.parseInt(inputTokens[2]));
@@ -97,8 +92,8 @@ public class Game {
 						case "changeTurn":
 							gs.setMyTurn();
 							break;
-						case "toTitle":
-							gs.setTitleScreen();
+						case "disconnect":
+							gs.setConnectLabel(gs.DISCONNECT, true);
 							break;
 						default:
 							break;
@@ -107,13 +102,15 @@ public class Game {
 						break;
 					}
 				}
-			} catch (IOException e) {
-				System.err.println("エラーが発生しました：" + e);
+			} catch (Exception e) {
+				if (gs.getWaitFlag() || gs.getCurrentScreen().equals("game")) gs.setConnectLabel(gs.SERVERERROR, true);
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		new Game();
+		gs = GameScreen.getInstance();
+		gs.setVisible(true);
+		Sound.loop("bgm");
 	}
 }

@@ -12,13 +12,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
 	private static Sound sound = new Sound();
-	private Map<String, Clip> sounds;
+	private static Map<String, Clip> sounds;
 
 	private Sound() {
 		sounds = new HashMap<String, Clip>();
 		String[] names = new String[] {
 				"bgm",
 				"button",
+				"start",
 				"turn",
 				"pick",
 				"crack",
@@ -30,7 +31,7 @@ public class Sound {
 		};
 		for (String name : names) {
 			try {
-				AudioInputStream ais = AudioSystem.getAudioInputStream(ResourceLoader.getInstance().getURL("sound/" + name + ".wav"));
+				AudioInputStream ais = AudioSystem.getAudioInputStream(ResourceLoader.getURL("sound/" + name + ".wav"));
 				AudioFormat af = ais.getFormat();
 				DataLine.Info info = new DataLine.Info(Clip.class, af);
 				Clip clip = (Clip)AudioSystem.getLine(info);
@@ -50,21 +51,31 @@ public class Sound {
 		return sound;
 	}
 
-	public void play(String name) {
+	public static void play(String name) {
+		if (!GameScreen.getInstance().getSeFlag()) return;
 		Clip clip = sounds.get(name);
 		clip.setFramePosition(0);
 		clip.start();
 	}
 
-	public void loop(String name) {
+	public static void loop(String name) {
+		if (GameScreen.getInstance() != null) {
+			if (!GameScreen.getInstance().getBgmFlag()) return;
+		}
 		Clip clip = sounds.get(name);
 		clip.setFramePosition(0);
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
-	public void stop(String name) {
+	public static void stop(String name) {
 		Clip clip = sounds.get(name);
 		clip.stop();
 		clip.setFramePosition(0);
+	}
+
+	public static void stop() {
+		for (Clip sound : sounds.values()) {
+			sound.stop();
+		}
 	}
 }
