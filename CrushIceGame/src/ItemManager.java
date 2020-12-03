@@ -44,11 +44,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			}
 		}
 
-
-
 		String[] itemName;
-
-		if (random.nextInt(1) == 0) {
+		if (random.nextInt(2) == 0) {
 			itemName = new String[] {
 					"goldenHammer1",
 					"goldenHammer2",
