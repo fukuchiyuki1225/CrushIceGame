@@ -47,9 +47,9 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 				"goldenHammer1",
 				"goldenHammer2",
 				"shield1",
-				"shield2",
 				"warp1",
-				"warp2"
+				"warp2",
+				"ghost1"
 		};
 
 		for (int i = 0; i < itemName.length; i++) {
@@ -64,6 +64,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			items.put(name, new Shield(location));
 		} else if (name.matches("warp.*")) {
 			items.put(name, new Warp(location));
+		} else if (name.matches("ghost.*")) {
+			items.put(name, new Ghost(location));
 		}
 		items.get(name).initItem();
 	}
