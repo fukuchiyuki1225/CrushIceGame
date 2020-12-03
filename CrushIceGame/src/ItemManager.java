@@ -75,7 +75,6 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 
 		for (int i = 0; i < itemName.length; i++) {
 			MesgSend.send("initItems" + " " + itemName[i] + " " + rand[i]);
-			System.out.println(itemName[i] + " : " + rand[i]);
 		}
 	}
 
