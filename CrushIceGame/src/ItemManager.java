@@ -139,7 +139,6 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	public void stolenItems() {
 		if (gs.isMyTurn()) return;
 		Iterator<JButton> it = itemButtons.iterator();
-		int i = 0;
 		while(it.hasNext()) {
 			JButton jb = it.next();
 			MesgSend.send("stolenItem" + " " + jb.getActionCommand());
