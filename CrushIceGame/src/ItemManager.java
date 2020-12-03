@@ -1,4 +1,6 @@
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -11,19 +13,25 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class ItemManager implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
 	private Map<String, Item> items;
 	private List<JButton> itemButtons;
 	private int count;
+	private JLabel ghost;
 
 	public ItemManager() {
 		gs = GameScreen.getInstance();
 		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
+		ghost = new JLabel(new ImageIcon(ResourceLoader.load("img/ghost.png")));
+		GameScreen.getInstance().addComponent(ghost, 500, 1050, 640, 100, 100);
+		ghost.setVisible(false);
 		initLocation();
 	}
 
@@ -137,16 +145,27 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	}
 
 	public void stolenItems() {
-		if (gs.isMyTurn()) return;
-		Iterator<JButton> it = itemButtons.iterator();
-		while(it.hasNext()) {
-			JButton jb = it.next();
-			MesgSend.send("stolenItem" + " " + jb.getActionCommand());
-			jb.setVisible(false);
-			it.remove();
-			count--;
-		}
-		realignItemButtons();
+		ghost.setVisible(true);
+		MesgSend.send("changePenguinIcon" + " " + 6);
+		Timer timer = new Timer(1000,  new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ghost.setVisible(false);
+				MesgSend.send("changePenguinIcon" + " " + 0);
+				Sound.play("item");
+				if (gs.isMyTurn()) return;
+				Iterator<JButton> it = itemButtons.iterator();
+				while(it.hasNext()) {
+					JButton jb = it.next();
+					MesgSend.send("stolenItem" + " " + jb.getActionCommand());
+					jb.setVisible(false);
+					it.remove();
+					count--;
+				}
+				realignItemButtons();
+			}
+		});
+		timer.start();
+		timer.setRepeats(false);
 	}
 
 	public Map<String, Item> getItems() {
