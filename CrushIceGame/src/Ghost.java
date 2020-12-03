@@ -2,7 +2,7 @@
 public class Ghost extends Item {
 
 	public Ghost(String imgPass, String name, int location) {
-		super(imgPass, name, location);
+		super("img/ghost.png", "ghost", location);
 	}
 
 	@Override
