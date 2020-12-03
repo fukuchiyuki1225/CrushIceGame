@@ -24,3 +24,5 @@ hs_err_pid*
 /.metadata/
 /.recommenders/
 /CrushIceGame/bin/
+
+.project
