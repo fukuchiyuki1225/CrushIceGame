@@ -17,14 +17,12 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
 	private Map<String, Item> items;
 	private List<JButton> itemButtons;
-	private List<String> gotItems;
 	private int count;
 
 	public ItemManager() {
 		gs = GameScreen.getInstance();
 		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
-		gotItems = new ArrayList<String>();
 		count = 0;
 		initLocation();
 	}
@@ -88,7 +86,6 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 
 	public void setItemToList(String itemName, boolean stolenFlag) {
 		if (!gs.isMyTurn()) return;
-		gotItems.add(itemName);
 		count++;
 		JButton jb = new JButton(new ImageIcon(ResourceLoader.load("img/" + itemName.split("[0-9]")[0] + ".png")));
 		jb.setActionCommand(itemName);
@@ -132,8 +129,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		Iterator<JButton> it = itemButtons.iterator();
 		while(it.hasNext()) {
 			JButton jb = it.next();
-			jb.setVisible(false);
 			MesgSend.send("stolenItem" + " " + jb.getActionCommand());
+			jb.setVisible(false);
 			it.remove();
 			count--;
 		}
@@ -142,10 +139,6 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 
 	public Map<String, Item> getItems() {
 		return items;
-	}
-
-	public List<String> getGotItems() {
-		return gotItems;
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -166,8 +159,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		itemButtons.remove(jb);
 		MesgSend.send("useItem");
 		items.get(itemName).use();
-		realignItemButtons();
 		count--;
+		realignItemButtons();
 	}
 
 	public void mousePressed(MouseEvent e) {
