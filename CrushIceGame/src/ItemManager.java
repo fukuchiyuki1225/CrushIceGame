@@ -16,12 +16,14 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
 	private Map<String, Item> items;
 	private List<JButton> itemButtons;
+	private List<String> gotItems;
 	private int count;
 
 	public ItemManager() {
 		gs = GameScreen.getInstance();
 		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
+		gotItems = new ArrayList<String>();
 		count = 0;
 		initLocation();
 	}
@@ -32,6 +34,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		int[] rand = new int[6];
 		for (int i = 0; i < 6; i++) {
 			rand[i] = random.nextInt(63);
+			System.out.println(rand[i]);
 		}
 
 		for (int i = 0; i < 5; i++) {
@@ -75,21 +78,28 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		for (String key : items.keySet()) {
 			if (items.get(key).getLocation() == JbNum) {
 				MesgSend.send("getItem" + " " + key);
-				count++;
-				JButton jb = new JButton(new ImageIcon(ResourceLoader.load("img/" + key.split("[0-9]")[0] + ".png")));
-				jb.setActionCommand(key);
-				gs.setButton(jb, this, this);
-				if (count <= 3) {
-					gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
-				} else {
-					gs.addComponent(jb, 500, 775 + (count - 3) * 80, 750, 100, 100);
-				}
-				jb.setVisible(false);
-				itemButtons.add(jb);
+				setItemToList(key, false);
 				Sound.play("item");
 				break;
 			}
 		}
+	}
+
+	public void setItemToList(String itemName, boolean stolenFlag) {
+		if (!gs.isMyTurn()) return;
+		gotItems.add(itemName);
+		count++;
+		JButton jb = new JButton(new ImageIcon(ResourceLoader.load("img/" + itemName.split("[0-9]")[0] + ".png")));
+		jb.setActionCommand(itemName);
+		gs.setButton(jb, this, this);
+		if (count <= 3) {
+			gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
+		} else {
+			gs.addComponent(jb, 500, 775 + (count - 3) * 80, 750, 100, 100);
+		}
+		if (!stolenFlag) jb.setVisible(false);
+		else jb.setVisible(true);
+		itemButtons.add(jb);
 	}
 
 	public void realignItemButtons() {
@@ -117,11 +127,25 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	}
 
 	public void stolenItems() {
-
+		if (gs.isMyTurn()) return;
+		for (JButton jb: itemButtons) {
+			jb.setVisible(false);
+			itemButtons.remove(jb);
+			count--;
+		}
+		realignItemButtons();
+		for (String itemName: gotItems) {
+			MesgSend.send("stolenItem" + " " + itemName);
+		}
+		gotItems = new ArrayList<String>();
 	}
 
 	public Map<String, Item> getItems() {
 		return items;
+	}
+
+	public List<String> getGotItems() {
+		return gotItems;
 	}
 
 	public void mouseDragged(MouseEvent e) {

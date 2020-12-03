@@ -92,8 +92,12 @@ public class Game {
 						case "changeTurn":
 							gs.setMyTurn();
 							break;
-						case "useGhostItem":
+						case "useGhost":
 							gs.getItemManager().stolenItems();
+							break;
+						case "stolenItem":
+							gs.getItemManager().setItemToList(inputTokens[1], true);
+							System.out.println(inputTokens[1]);
 							break;
 						case "disconnect":
 							gs.setConnectLabel(gs.DISCONNECT, true);
@@ -107,6 +111,7 @@ public class Game {
 				}
 			} catch (Exception e) {
 				if (gs.getWaitFlag() || gs.getCurrentScreen().equals("game")) gs.setConnectLabel(gs.SERVERERROR, true);
+				System.out.println(e);
 			}
 		}
 	}
