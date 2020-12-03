@@ -4,6 +4,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -56,6 +57,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 
 		for (int i = 0; i < itemName.length; i++) {
 			MesgSend.send("initItems" + " " + itemName[i] + " " + rand[i]);
+			System.out.println(itemName[i] + " : " + rand[i]);
 		}
 	}
 
@@ -127,16 +129,15 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 
 	public void stolenItems() {
 		if (gs.isMyTurn()) return;
-		for (JButton jb: itemButtons) {
+		Iterator<JButton> it = itemButtons.iterator();
+		while(it.hasNext()) {
+			JButton jb = it.next();
 			jb.setVisible(false);
-			itemButtons.remove(jb);
+			MesgSend.send("stolenItem" + " " + jb.getActionCommand());
+			it.remove();
 			count--;
 		}
 		realignItemButtons();
-		for (String itemName: gotItems) {
-			MesgSend.send("stolenItem" + " " + itemName);
-		}
-		gotItems = new ArrayList<String>();
 	}
 
 	public Map<String, Item> getItems() {
