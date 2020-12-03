@@ -13,7 +13,6 @@ public class Warp extends Item {
 	}
 
 	public void use() {
-		GameScreen.getInstance().getPenguin().changePenguinIcon(5);
 		MesgSend.send("changePenguinIcon" + " " + 5);
 		Ices ices = GameScreen.getInstance().getIces();
 		List<Integer> icesNum = new ArrayList<Integer>();
