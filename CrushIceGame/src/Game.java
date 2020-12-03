@@ -92,6 +92,12 @@ public class Game {
 						case "changeTurn":
 							gs.setMyTurn();
 							break;
+						case "useGhost":
+							gs.getItemManager().stolenItems();
+							break;
+						case "stolenItem":
+							gs.getItemManager().setItemToList(inputTokens[1], true);
+							break;
 						case "disconnect":
 							gs.setConnectLabel(gs.DISCONNECT, true);
 							break;

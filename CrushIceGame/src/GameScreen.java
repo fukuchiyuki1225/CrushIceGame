@@ -26,7 +26,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	private JLayeredPane title, game, gameOver;
 	private String currentScreen, myIp;
 	private Hammer hammer;
-	private GhostHammer ghost;
+	private GhostHammer ghostHammer;
 	private ImageIcon[][] UI, msgIcons;
 	private ImageIcon[] turnIcons, wlIcons, connectIcons;
 	private JButton[] buttons;
@@ -216,8 +216,8 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
-		ghost = GhostHammer.getInstance();
-		addComponent(ghost.getHammerLabel(), 800, 0, 0, 200, 170);
+		ghostHammer = GhostHammer.getInstance();
+		addComponent(ghostHammer.getHammerLabel(), 800, 0, 0, 200, 170);
 		turnLabel = new JLabel(turnIcons[getMyTurn()]);
 		addComponent(turnLabel, 800, 875, 325, 250, 120);
 		addComponent(hammer.getHammerLabel(), 1500, 0, 0, 200, 170);
@@ -488,7 +488,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		turnLabel.setIcon(turnIcons[getMyTurn()]);
 		ices.spinTheRoulette();
 		hammer.cleanHammerIcon();
-		ghost.cleanHammerIcon();
+		ghostHammer.cleanHammerIcon();
 		im.setItemInvisible();
 		im.setItemButtons();
 	}

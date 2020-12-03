@@ -15,7 +15,8 @@ public class Penguin {
 				new ImageIcon(ResourceLoader.load("img/penguin_3.png")),
 				new ImageIcon(ResourceLoader.load("img/penguin_4.png")),
 				new ImageIcon(ResourceLoader.load("img/penguin_5.png")),
-				new ImageIcon(ResourceLoader.load("img/penguin_6.png"))
+				new ImageIcon(ResourceLoader.load("img/penguin_6.png")),
+				new ImageIcon(ResourceLoader.load("img/penguin_7.png"))
 		};
 		penguinLabel = new JLabel(penguinIcons[0]);
 		fallFlag = false;

@@ -1,28 +1,37 @@
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 public class ItemManager implements MouseListener, MouseMotionListener {
 	private GameScreen gs;
 	private Map<String, Item> items;
 	private List<JButton> itemButtons;
 	private int count;
+	private JLabel ghost;
 
 	public ItemManager() {
 		gs = GameScreen.getInstance();
 		items = new HashMap<String, Item>();
 		itemButtons = new ArrayList<JButton>();
 		count = 0;
+		ghost = new JLabel(new ImageIcon(ResourceLoader.load("img/ghost.png")));
+		GameScreen.getInstance().addComponent(ghost, 500, 1050, 640, 100, 100);
+		ghost.setVisible(false);
 		initLocation();
 	}
 
@@ -43,14 +52,26 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			}
 		}
 
-		String[] itemName = new String[] {
-				"goldenHammer1",
-				"goldenHammer2",
-				"shield1",
-				"shield2",
-				"warp1",
-				"warp2"
-		};
+		String[] itemName;
+		if (random.nextInt(2) == 0) {
+			itemName = new String[] {
+					"goldenHammer1",
+					"goldenHammer2",
+					"shield1",
+					"warp1",
+					"warp2",
+					"ghost1"
+			};
+		} else {
+			itemName = new String[] {
+					"goldenHammer1",
+					"shield1",
+					"shield2",
+					"warp1",
+					"ghost1",
+					"ghost2"
+			};
+		}
 
 		for (int i = 0; i < itemName.length; i++) {
 			MesgSend.send("initItems" + " " + itemName[i] + " " + rand[i]);
@@ -64,6 +85,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			items.put(name, new Shield(location));
 		} else if (name.matches("warp.*")) {
 			items.put(name, new Warp(location));
+		} else if (name.matches("ghost.*")) {
+			items.put(name, new Ghost(location));
 		}
 		items.get(name).initItem();
 	}
@@ -73,21 +96,27 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		for (String key : items.keySet()) {
 			if (items.get(key).getLocation() == JbNum) {
 				MesgSend.send("getItem" + " " + key);
-				count++;
-				JButton jb = new JButton(new ImageIcon(ResourceLoader.load("img/" + key.split("[0-9]")[0] + ".png")));
-				jb.setActionCommand(key);
-				gs.setButton(jb, this, this);
-				if (count <= 3) {
-					gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
-				} else {
-					gs.addComponent(jb, 500, 775 + (count - 3) * 80, 750, 100, 100);
-				}
-				jb.setVisible(false);
-				itemButtons.add(jb);
+				setItemToList(key, false);
 				Sound.play("item");
 				break;
 			}
 		}
+	}
+
+	public void setItemToList(String itemName, boolean stolenFlag) {
+		if (!gs.isMyTurn()) return;
+		count++;
+		JButton jb = new JButton(new ImageIcon(ResourceLoader.load("img/" + itemName.split("[0-9]")[0] + ".png")));
+		jb.setActionCommand(itemName);
+		gs.setButton(jb, this, this);
+		if (count <= 3) {
+			gs.addComponent(jb, 500, 775 + count * 80, 675, 100, 100);
+		} else {
+			gs.addComponent(jb, 500, 775 + (count - 3) * 80, 750, 100, 100);
+		}
+		if (!stolenFlag) jb.setVisible(false);
+		else jb.setVisible(true);
+		itemButtons.add(jb);
 	}
 
 	public void realignItemButtons() {
@@ -114,6 +143,30 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	public void stolenItems() {
+		ghost.setVisible(true);
+		MesgSend.send("changePenguinIcon" + " " + 6);
+		Timer timer = new Timer(1000,  new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ghost.setVisible(false);
+				MesgSend.send("changePenguinIcon" + " " + 0);
+				Sound.play("item");
+				if (gs.isMyTurn()) return;
+				Iterator<JButton> it = itemButtons.iterator();
+				while(it.hasNext()) {
+					JButton jb = it.next();
+					MesgSend.send("stolenItem" + " " + jb.getActionCommand());
+					jb.setVisible(false);
+					it.remove();
+					count--;
+				}
+				realignItemButtons();
+			}
+		});
+		timer.start();
+		timer.setRepeats(false);
+	}
+
 	public Map<String, Item> getItems() {
 		return items;
 	}
@@ -136,8 +189,8 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		itemButtons.remove(jb);
 		MesgSend.send("useItem");
 		items.get(itemName).use();
-		realignItemButtons();
 		count--;
+		realignItemButtons();
 	}
 
 	public void mousePressed(MouseEvent e) {
