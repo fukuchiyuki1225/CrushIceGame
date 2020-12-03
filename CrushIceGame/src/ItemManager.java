@@ -44,14 +44,29 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 			}
 		}
 
-		String[] itemName = new String[] {
-				"goldenHammer1",
-				"goldenHammer2",
-				"shield1",
-				"warp1",
-				"warp2",
-				"ghost1"
-		};
+
+
+		String[] itemName;
+
+		if (random.nextInt(1) == 0) {
+			itemName = new String[] {
+					"goldenHammer1",
+					"goldenHammer2",
+					"shield1",
+					"warp1",
+					"warp2",
+					"ghost1"
+			};
+		} else {
+			itemName = new String[] {
+					"goldenHammer1",
+					"shield1",
+					"shield2",
+					"warp1",
+					"ghost1",
+					"ghost2"
+			};
+		}
 
 		for (int i = 0; i < itemName.length; i++) {
 			MesgSend.send("initItems" + " " + itemName[i] + " " + rand[i]);
@@ -127,6 +142,7 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 	public void stolenItems() {
 		if (gs.isMyTurn()) return;
 		Iterator<JButton> it = itemButtons.iterator();
+		int i = 0;
 		while(it.hasNext()) {
 			JButton jb = it.next();
 			MesgSend.send("stolenItem" + " " + jb.getActionCommand());
