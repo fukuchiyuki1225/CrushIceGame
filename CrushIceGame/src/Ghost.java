@@ -7,6 +7,9 @@ public class Ghost extends Item {
 
 	@Override
 	public void use() {
+		MesgSend.send("useGhostItem");
+		GameScreen.getInstance().getItemManager().getItems();
+
 	}
 
 }

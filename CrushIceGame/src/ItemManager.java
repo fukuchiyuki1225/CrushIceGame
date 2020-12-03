@@ -114,6 +114,10 @@ public class ItemManager implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	public void stolenItems() {
+
+	}
+
 	public Map<String, Item> getItems() {
 		return items;
 	}
