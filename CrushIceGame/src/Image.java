@@ -9,7 +9,9 @@ public class Image {
 
 	public Image() {
 		imageIcons = new HashMap<String, ImageIcon>();
-		String[] names = new String[] {
+		final String[] names = new String[] {
+				"cursor",
+
 				"start",
 				"help",
 				"again",
@@ -62,7 +64,7 @@ public class Image {
 
 		for (String name: names) {
 			try {
-				imageIcons.put(name, new ImageIcon(ResourceLoader.load("img/" + name + "png")));
+				imageIcons.put(name, new ImageIcon(ResourceLoader.load("img/" + name + ".png")));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

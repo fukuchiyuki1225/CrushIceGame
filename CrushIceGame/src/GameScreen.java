@@ -55,7 +55,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		bgmFlag = true;
 		seFlag = true;
 		waitFlag = false;
-		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon(ResourceLoader.load("img/cursor.png")).getImage(), new Point(), ""));
+		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(Image.getImageIcon("cursor").getImage(), new Point(), ""));
 		loadImage();
 		setTitleScreen();
 	}
@@ -67,53 +67,53 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	public void loadImage() {
 		UI = new ImageIcon[][] {
 			{
-				new ImageIcon(ResourceLoader.load("img/start.png")),
-				new ImageIcon(ResourceLoader.load("img/help.png")),
-				new ImageIcon(ResourceLoader.load("img/again.png")),
-				new ImageIcon(ResourceLoader.load("img/to_title.png")),
-				new ImageIcon(ResourceLoader.load("img/bgm_off.png")),
-				new ImageIcon(ResourceLoader.load("img/bgm_on.png")),
-				new ImageIcon(ResourceLoader.load("img/se_off.png")),
-				new ImageIcon(ResourceLoader.load("img/se_on.png")),
-				new ImageIcon(ResourceLoader.load("img/cancel.png")),
-				new ImageIcon(ResourceLoader.load("img/decide.png"))
+				Image.getImageIcon("start"),
+				Image.getImageIcon("help"),
+				Image.getImageIcon("again"),
+				Image.getImageIcon("to_title"),
+				Image.getImageIcon("bgm_off"),
+				Image.getImageIcon("bgm_on"),
+				Image.getImageIcon("se_off"),
+				Image.getImageIcon("se_on"),
+				Image.getImageIcon("cancel"),
+				Image.getImageIcon("decide")
 			},
 			{
-				new ImageIcon(ResourceLoader.load("img/start_2.png")),
-				new ImageIcon(ResourceLoader.load("img/help_2.png")),
-				new ImageIcon(ResourceLoader.load("img/again_2.png")),
-				new ImageIcon(ResourceLoader.load("img/to_title_2.png")),
-				new ImageIcon(ResourceLoader.load("img/bgm_off_2.png")),
-				new ImageIcon(ResourceLoader.load("img/bgm_on_2.png")),
-				new ImageIcon(ResourceLoader.load("img/se_off_2.png")),
-				new ImageIcon(ResourceLoader.load("img/se_on_2.png")),
-				new ImageIcon(ResourceLoader.load("img/cancel_2.png")),
-				new ImageIcon(ResourceLoader.load("img/decide_2.png"))
+				Image.getImageIcon("start_2"),
+				Image.getImageIcon("help_2"),
+				Image.getImageIcon("again_2"),
+				Image.getImageIcon("to_title_2"),
+				Image.getImageIcon("bgm_off_2"),
+				Image.getImageIcon("bgm_on_2"),
+				Image.getImageIcon("se_off_2"),
+				Image.getImageIcon("se_on_2"),
+				Image.getImageIcon("cancel_2"),
+				Image.getImageIcon("decide_2")
 			}
 		};
 		msgIcons = new ImageIcon[][] {
 			{
-				new ImageIcon(ResourceLoader.load("img/win_msg.png")),
-				new ImageIcon(ResourceLoader.load("img/win_msg_2.png"))
+				Image.getImageIcon("win_msg"),
+				Image.getImageIcon("win_msg_2")
 			},
 			{
-				new ImageIcon(ResourceLoader.load("img/lose_msg.png")),
-				new ImageIcon(ResourceLoader.load("img/lose_msg_2.png"))
+				Image.getImageIcon("lose_msg"),
+				Image.getImageIcon("lose_msg_2")
 			}
 		};
 		turnIcons = new ImageIcon[] {
-				new ImageIcon(ResourceLoader.load("img/your_turn.png")),
-				new ImageIcon(ResourceLoader.load("img/my_turn.png"))
+				Image.getImageIcon("your_turn"),
+				Image.getImageIcon("my_turn")
 		};
 		wlIcons = new ImageIcon[] {
-				new ImageIcon(ResourceLoader.load("img/win.png")),
-				new ImageIcon(ResourceLoader.load("img/lose.png"))
+				Image.getImageIcon("win"),
+				Image.getImageIcon("lose")
 		};
 		connectIcons = new ImageIcon[] {
-				new ImageIcon(ResourceLoader.load("img/wait.png")),
-				new ImageIcon(ResourceLoader.load("img/disconnect.png")),
-				new ImageIcon(ResourceLoader.load("img/server_error.png")),
-				new ImageIcon(ResourceLoader.load("img/no_vacancy.png"))
+				Image.getImageIcon("wait"),
+				Image.getImageIcon("disconnect"),
+				Image.getImageIcon("server_error"),
+				Image.getImageIcon("no_vacancy")
 		};
 	}
 
@@ -131,7 +131,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			title = new JLayeredPane();
 			title.addMouseMotionListener(this);
 			c.add(title);
-			addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/title.png"))), 0, 0, 0, 1200, 900);
+			addComponent(new JLabel(Image.getImageIcon("title")), 0, 0, 0, 1200, 900);
 			buttons = new JButton[TOTITLE + 1];
 			for (int i = START; i <= HELP; i++) {
 				buttons[i] = new JButton(UI[NOMAL][i]);
@@ -144,12 +144,12 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 			se = new JButton(UI[NOMAL][SEON]);
 			setButton(se, this, this);
 			addComponent(se, 100, 345, 650, 213, 93);
-			helpLabel = new JLabel(new ImageIcon(ResourceLoader.load("img/help_dialog.png")));
+			helpLabel = new JLabel(Image.getImageIcon("help_dialog"));
 			addComponent(helpLabel, 200, 145, 125, 900, 654);
-			helpClose = new JButton(new ImageIcon(ResourceLoader.load("img/help_close.png")));
+			helpClose = new JButton(Image.getImageIcon("help_close"));
 			setButton(helpClose, this, this);
 			addComponent(helpClose, 210, 900, 120, 117, 100);
-			inputLabel = new JLabel(new ImageIcon(ResourceLoader.load("img/input_ip.png")));
+			inputLabel = new JLabel(Image.getImageIcon("input_ip"));
 			addComponent(inputLabel, 120, 100, 490, 458, 213);
 			decideButton = new JButton(UI[NOMAL][DECIDE]);
 			setButton(decideButton, this, this);
@@ -210,9 +210,9 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 		game = new JLayeredPane();
 		game.addMouseMotionListener(this);
 		c.add(game);
-		addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/sea.png"))), 0, 0, 0, 1200, 900);
-		addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/logo.png"))), 900, 760, 25, 400, 315);
-		addComponent(new JLabel(new ImageIcon(ResourceLoader.load("img/item_ice.png"))), 450, 805, 640, 359, 212);
+		addComponent(new JLabel(Image.getImageIcon("sea")), 0, 0, 0, 1200, 900);
+		addComponent(new JLabel(Image.getImageIcon("logo")), 900, 760, 25, 400, 315);
+		addComponent(new JLabel(Image.getImageIcon("item_ice")), 450, 805, 640, 359, 212);
 		penguin = new Penguin();
 		im = new ItemManager();
 		ices = new Ices();
@@ -226,7 +226,7 @@ public class GameScreen extends JFrame implements MouseListener, MouseMotionList
 	}
 
 	public void setGameStart() {
-		JLabel gameStart = new JLabel(new ImageIcon(ResourceLoader.load("img/game_start.png")));
+		JLabel gameStart = new JLabel(Image.getImageIcon("game_start"));
 		addComponent(gameStart, 2000, 70, 400, 650, 121);
 		Sound.play("start");
 		Timer timer = new Timer(2000, new ActionListener() {
