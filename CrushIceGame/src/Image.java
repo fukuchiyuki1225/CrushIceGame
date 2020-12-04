@@ -62,7 +62,7 @@ public class Image {
 
 		for (String name: names) {
 			try {
-				imageIcons.put(name, new ImageIcon(ResourceLoader.load(name)));
+				imageIcons.put(name, new ImageIcon(ResourceLoader.load("img/" + name + "png")));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
