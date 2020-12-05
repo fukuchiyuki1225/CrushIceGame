@@ -16,7 +16,7 @@ public class Sound {
 
 	private Sound() {
 		sounds = new HashMap<String, Clip>();
-		String[] names = new String[] {
+		final String[] names = new String[] {
 				"bgm",
 				"button",
 				"start",
